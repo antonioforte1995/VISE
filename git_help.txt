@@ -1,0 +1,48 @@
+------------------------
+ADD ID_RSA.PUB ON GITHUB
+------------------------
+cd
+cd .ssh/
+cat id_rsa.pub
+
+
+
+---------------
+INITIALIZE REPO
+---------------
+mkdir VIS3
+cd VIS3/
+echo "# VIS3" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin git@github.com:antonioforte1995/VIS3.git
+git push -u origin master
+ 
+
+
+----------
+CLONE REPO
+----------
+git clone git@github.com:antonioforte1995/VIS3.git
+
+
+
+-------------
+MAKE A COMMIT
+-------------
+mkdir prova
+cd prova/
+nano prova.txt
+cd ..
+git add prova/
+git commit -m "primo push di prova"
+git push
+
+
+
+-----------------------------------------------------
+CANCEL LOCAL CHANGES AND SYNCHRONIZE WITH REMOTE REPO
+-----------------------------------------------------
+git stash
+git pull
