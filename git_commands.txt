@@ -4,31 +4,31 @@
 - repository
 
 
-INITIALIZE A NEW REPOSITORY 														-> git init
-VIEW DIFFERENCES BETWEEN WORKING DIRECTORY E THE LAST COMMIT TO THE REPOSITORY		-> git status
-ADD FILE TO THE STAGING AREA														-> git add nome_file
-COMMIT FILE TO REPOSITORY															-> git commit -m "commit_message"
-CREATE A .gitignore FILE TO IGNORE FILE WITH .tmp extension							-> echo "*.tmp" >> .gitignore
-																					   git add .gitignore
-																					   git commit -m "gitignore file"
-COMPARE CHANGES IN THE WORKING DIRECTORY AGAINST HEAD COMMIT						-> git diff
-COMPARE CHANGES OF A PARTICULAR FILE IN THE WORKING DIRECTORY AGAINST HEAD COMMIT	-> git diff file
-COMPARE CHANGES IN THE WORKING DIRECTORY AGAINST AN OLDER COMMIT					-> git diff commit_hash
-COMPARE THE CHANGES IN THE STAGING AREA AGAINST HEAD COMMIT							-> git diff --staged
-VIEW THE HISTORY OF THE REPOSITORY AND THE COMMIT LOG								-> git log
-VIEW THE CHANGES MADE IN THE HEAD COMMIT											-> git show
-VIEW OLDER CHANGES																	-> git show commit_hash
-ADD REMOTE REPOSITORY WITH A FRIENDLY NAME											-> git remote add friendly_repository_name remote_repository_location
-PUSH COMMITS TO A REMOTE REPOSITORY													-> git push friendly_repository_name branch								  
-SYNC CHANGES FROM A REMOTE REPOSITORY												-> git pull friendly_repository_name branch
-VIEW THE CHANGES WITHOUT AFFECTING CURRENT LOCAL BRANCH								-> git fetch
-MERGE THE FETCHED CHANGES INTO MASTER												-> git merge remote-name master
-VIEW A LIST OF ALL THE REMOTE BRANCHES												-> git branch -r
-CLEAR ANY CHANGES IN THE WORKING DIRECTORY											-> git checkout
-MOVE FILES BACK FROM THE STAGING AREA TO THE WORKING DIRECTORY						-> git reset
-RETURN TO LAST COMMIT																-> git reset --hard
-RETURN TO A PARTICULAR LAST COMMIT)													-> git reset --hard commit_hash
-UNDO COMMITS (revert to HEAD)														-> git revert
-UNDO COMMITS (revert to n commit before)											-> git revert HEAD~n
-UNDO COMMITS (revert commits between HEAD and HEAD~n)								-> git revert HEAD...HEAD~2
-SHOW GLOBAL CONFIGURATIONS 															-> git config --global --list
+INITIALIZE A NEW REPOSITORY                                                         -> git init
+VIEW DIFFERENCES BETWEEN WORKING DIRECTORY E THE LAST COMMIT TO THE REPOSITORY      -> git status
+ADD FILE TO THE STAGING AREA                                                        -> git add nome_file
+COMMIT FILE TO REPOSITORY                                                           -> git commit -m "commit_message"
+CREATE A .gitignore FILE TO IGNORE FILE WITH .tmp extension                         -> echo "*.tmp" >> .gitignore
+                                                                                    git add .gitignore
+                                                                                    git commit -m "gitignore file"
+COMPARE CHANGES IN THE WORKING DIRECTORY AGAINST HEAD COMMIT                        -> git diff
+COMPARE CHANGES OF A PARTICULAR FILE IN THE WORKING DIRECTORY AGAINST HEAD COMMIT   -> git diff file
+COMPARE CHANGES IN THE WORKING DIRECTORY AGAINST AN OLDER COMMIT                    -> git diff commit_hash
+COMPARE THE CHANGES IN THE STAGING AREA AGAINST HEAD COMMIT                         -> git diff --staged
+VIEW THE HISTORY OF THE REPOSITORY AND THE COMMIT LOG                               -> git log
+VIEW THE CHANGES MADE IN THE HEAD COMMIT                                            -> git show
+VIEW OLDER CHANGES                                                                  -> git show commit_hash
+ADD REMOTE REPOSITORY WITH A FRIENDLY NAME                                          -> git remote add friendly_repository_name remote_repository_location
+PUSH COMMITS TO A REMOTE REPOSITORY                                                 -> git push friendly_repository_name branch								  
+SYNC CHANGES FROM A REMOTE REPOSITORY                                               -> git pull friendly_repository_name branch
+VIEW THE CHANGES WITHOUT AFFECTING CURRENT LOCAL BRANCH                             -> git fetch
+MERGE THE FETCHED CHANGES INTO MASTER                                               -> git merge remote-name master
+VIEW A LIST OF ALL THE REMOTE BRANCHES                                              -> git branch -r
+CLEAR ANY CHANGES IN THE WORKING DIRECTORY                                          -> git checkout
+MOVE FILES BACK FROM THE STAGING AREA TO THE WORKING DIRECTORY                      -> git reset
+RETURN TO LAST COMMIT                                                               -> git reset --hard
+RETURN TO A PARTICULAR LAST COMMIT)                                                 -> git reset --hard commit_hash
+UNDO COMMITS (revert to HEAD)                                                       -> git revert
+UNDO COMMITS (revert to n commit before)                                            -> git revert HEAD~n
+UNDO COMMITS (revert commits between HEAD and HEAD~n)                               -> git revert HEAD...HEAD~2
+SHOW GLOBAL CONFIGURATIONS                                                          -> git config --global --list
