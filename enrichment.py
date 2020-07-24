@@ -1,0 +1,36 @@
+#!/usr/bin/python3
+import requests
+import cve_searchsploit
+import sys
+import os
+
+
+def edbid_from_cve(cve):
+    return list(iter_edbid_from_cve(cve))
+
+def iter_cve_from_edbid(edb):
+    edb = str(int(edb))
+
+    for cve in cve_map:
+        if edb in cve_map[cve]:
+            yield cve.upper()
+
+def searchExploits(cve_id):
+    HIGH_CVSS_BOUND = 7.0
+
+    #cve_searchsploit.update_db()
+
+    cve_exploits = set()
+    
+    edbids = cve_searchsploit.edbid_from_cve(cve_id)
+    
+    for i in edbids:
+        cve_exploits.add(i)
+
+
+    print("Number of exploits for the {0}: {1}".format(cve_id, len(edbids)))
+    
+    print()
+    
+    return edbids
+    

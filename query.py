@@ -39,7 +39,7 @@ def ricercaCVE(cpe):
     }, size=10000)
     #pprint(res)
     cves = res['hits']['hits']
-    print(len(cves))
+    print("Number of CVE: {0}".format(len(cves)))
     return cves
 
 def stampaInfo(cve_all):
