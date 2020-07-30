@@ -22,13 +22,13 @@ class CPE:
         self.current = -1
         self.rh_data = None
 
-    def add(self, i):
+    def add(self, i, id):
         cpeURI = i['cpe23Uri']
         #cpeName = i['cpe_name']
         cve_bulk = {
                     "_op_type": "update",
                     "_index":   "cpe-index",
-                    "_id":      cpeURI,
+                    "_id":      id,
                     "doc_as_upsert": True,
                     "doc":  i
                    }
@@ -140,10 +140,11 @@ def main():
 
     the_cpes = CPE()
 
-
+    id = 0
     for i in json_data['matches']:
         # ['CVE_Items'][0]['cve']['CVE_data_meta']['ID']
-        the_cpes.add(i)
+        id = id + 1
+        the_cpes.add(i, id)
         #es.update(id=cve_id, index="cve-index", body={'doc' : cve, 'doc_as_upsert': True})
 
 
