@@ -3,9 +3,9 @@
 from pprint import pprint
 from elasticsearch import Elasticsearch
 
-es_url = "http://elastic:changeme@52.73.205.249:9200"
+es_url = "http://elastic:changeme@3.225.242.97:9200"
 
-def ricercaCVE(cpe):
+def search_all_CVE(cpe):
     es = Elasticsearch(hosts=[es_url])
     t = cpe.split(":", 13)
     if t[2] not in "aoh":
@@ -21,15 +21,20 @@ def ricercaCVE(cpe):
             t[i] = "\\*"
         if (i == 5 or i >= 9) and t[i] != "\\*":
             t[i] = "(\\*|(" + t[i] + "))"
+        elif (i >= 6 and t[i] == "\\*"):
+            t[i] = "(\\*|(" + "[^:]+" + "))"
     #print(':'.join(t))
     if len(t) != 13:
         #print(len(t))
         t.append(".*")
     cpe_without_version = ':'.join(t)
     #toCheck = "cpe:2\\.3:a:paloaltonetworks:globalprotect:(\\*|(5\\.0\\.0)):\\*:\\*:\\*:\\*:(\\*|(windows)):\\*:\\*"
+    #toCheck = "cpe:2\\.3:a:paloaltonetworks:globalprotect:(\\*|(5\\.0\\.0)):\\*:\\*:\\*:\\*:(\\*|(windows)):\\*:\\*"
     print(cpe_without_version)
     #print(toCheck)
     #return []
+    #GET cve-index/_search
+    #"query"...
     res = es.search(index="cve-index", body={
         "query": {
             "regexp": {
@@ -72,6 +77,6 @@ def stampaInfo(cve_all):
 if __name__ == "__main__":
     #demoCPE = "cpe:2.3:a:paloaltonetworks:globalprotect:5.0.0:*:*:*:*:windows:*:*"
     #demoCPE = "cpe:2.3:*:*:easycreate:3.2.1:*"
-    cves = ricercaCVE(demoCPE)
+    cves = search_all_CVE(demoCPE)
     for cve_all in cves:
         stampaInfo(cve_all)

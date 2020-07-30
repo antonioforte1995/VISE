@@ -16,15 +16,16 @@ def search_exploits(row):
     os.system('searchsploit '+ worksheet.cell_value(row,3) + ' ' + worksheet.cell_value(row,1) +  ' ' + 'Multiple -w')
     
 
-for row in range(worksheet.nrows-2, worksheet.nrows-1):
+for row in range(worksheet.nrows-1, worksheet.nrows):
     #print('cpe:2.3:{0}:{1}:{2}:{3}:*'.format('*', '*', worksheet.cell_value(1,col), worksheet.cell_value(2,col)))
-    cves = ricercaCVE('cpe:2.3:{0}:{1}:{2}:{3}:*'.format('*', '*', worksheet.cell_value(row,0), worksheet.cell_value(row,1)))
+    cves = search_all_CVE('cpe:2.3:{0}:{1}:{2}:{3}:*'.format('*', '*', worksheet.cell_value(row,0), worksheet.cell_value(row,1)))
     #search_exploits(row)
     
     
     for cve_all in cves:
         #print(cve_all["_id"])
         #stampaInfo(cve_all)
+    """
         cve_edbids = searchExploits(cve_all["_id"])
         for i in cve_edbids:
             cve_all_edbids.add(i)
@@ -36,3 +37,4 @@ for row in range(worksheet.nrows-2, worksheet.nrows-1):
             os.system('searchsploit '+ str(i) + ' -w')
     print()
     pass
+    """
