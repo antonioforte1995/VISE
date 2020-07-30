@@ -8,6 +8,7 @@ import os
 workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
 worksheet = workbook.sheet_by_index(0)
 
+cves = []
 cve_all_edbids = set()
 
 
@@ -28,44 +29,64 @@ for row in range(worksheet.nrows-3, worksheet.nrows-2):
 
 
     if (len(cpes) > 0):
-        for i in [0, len(cpes)-1]:
+        for i in range(0, len(cpes)):
+            not_null_version_types = 0
+            versions_types = []
+            versions_types_values = []
+
             print("")
             vett_cpe23Uri[i] = cpes[i]["_source"]["cpe23Uri"]
+            print('cpe23Uri: {0}'.format(vett_cpe23Uri[i]))
+            
             if "versionStartIncluding" in cpes[i]["_source"]:
                 vett_versionStartIncluding[i] = cpes[i]["_source"]["versionStartIncluding"]
-            else:
-                vett_versionStartIncluding[i] = ""
+                not_null_version_types = not_null_version_types + 1
+                versions_types.append("versionStartIncluding") 
+                versions_types_values.append(cpes[i]["_source"]["versionStartIncluding"])
+
             if "versionStartExcluding" in cpes[i]["_source"]:
                 vett_versionStartExcluding[i] = cpes[i]["_source"]["versionStartExcluding"]
-            else: 
-                vett_versionStartExcluding[i] = ""
+                not_null_version_types = not_null_version_types + 1
+                versions_types.append("versionStartExcluding")
+                versions_types_values.append(cpes[i]["_source"]["versionStartExcluding"])
+
             if "versionEndIncluding" in cpes[i]["_source"]:
                 vett_versionEndIncluding[i] = cpes[i]["_source"]["versionEndIncluding"]
-            else:
-                vett_versionEndIncluding[i] = ""
+                not_null_version_types = not_null_version_types + 1
+                versions_types.append("versionEndIncluding")
+                versions_types_values.append(cpes[i]["_source"]["versionEndIncluding"])
             
             if "versionEndExcluding" in cpes[i]["_source"]:
                 vett_versionEndExcluding[i] = cpes[i]["_source"]["versionEndExcluding"]
+                not_null_version_types = not_null_version_types + 1
+                versions_types.append("versionEndExcluding")
+                versions_types_values.append(cpes[i]["_source"]["versionEndExcluding"])
+
+            #print('cpe23Uri: {0}'.format(vett_cpe23Uri[i]))   
+            #print('NotNullVersionTypes: {0}'.format(not_null_version_types)) 
+            #print('VersionTypes: {0}'.format(versions_types)) 
+
+            if (len(versions_types) == 1):
+                cves.append(search_CVE_from_single_limit(vett_cpe23Uri[i], versions_types[0], versions_types_values[0]))
+            elif (len(versions_types) == 2):
+                cves.append(search_CVE_from_interval(vett_cpe23Uri[i], versions_types, versions_types_values[0], versions_types_values[1]))
             else:
-                vett_versionEndExcluding[i] = ""
+                cves.append(search_CVE(vett_cpe23Uri[i]))
             
-            print('cpe23Uri: {0}'.format(vett_cpe23Uri[i]) )     
-            print('VersionStartIncluding: {0}'.format(vett_versionStartIncluding[i]))
-            print('VersionStartExcluding: {0}'.format(vett_versionStartExcluding[i]))
-            print('vett_versionEndIncluding: {0}'.format(vett_versionEndIncluding[i]))
-            print('vett_versionEndExcluding: {0}'.format(vett_versionEndExcluding[i]))
+            
 
 
-            cves = search_CVE( vett_cpe23Uri[i], vett_versionStartIncluding[i], vett_versionStartExcluding[i], vett_versionEndIncluding[i], vett_versionEndExcluding[i])
+            #cves = search_CVE( vett_cpe23Uri[i], vett_versionStartIncluding[i], vett_versionStartExcluding[i], vett_versionEndIncluding[i], vett_versionEndExcluding[i])
         #search_exploits(row)
     
+
     
-    for cve_all in cves:
-        #print(cve_all["_id"])
-        stampaInfo(cve_all)
+    for cve in cves:
+        print(cve[0]["_id"])
+        #stampaInfo(cve[0])
         
-    """
-        cve_edbids = searchExploits(cve_all["_id"])
+    
+        cve_edbids = searchExploits(cve[0]["_id"])
         for i in cve_edbids:
             cve_all_edbids.add(i)
     
@@ -75,5 +96,5 @@ for row in range(worksheet.nrows-3, worksheet.nrows-2):
     for i in cve_all_edbids:
             os.system('searchsploit '+ str(i) + ' -w')
     print()
-    """
+    
     pass

@@ -50,7 +50,7 @@ def search_CPE(vendor, product, version, target_software):
 
 
 
-def search_CVE_from_single_limit(cpe23Uri, versionStartIncluding, versionStartExcluding, versionEndIncluding, versionEndExcluding):
+def search_CVE_from_single_limit(cpe23Uri, version_type, version):
     es = Elasticsearch(hosts=[es_url])
 
     res = es.search(index="cve-index", body={
@@ -67,8 +67,8 @@ def search_CVE_from_single_limit(cpe23Uri, versionStartIncluding, versionStartEx
                     },
                     {
                         "term": {
-                            "vuln.nodes.cpe_match.versionStartIncluding.keyword": {
-                            "value": versionStartIncluding,
+                            "vuln.nodes.cpe_match.{0}.keyword".format(version_type): {
+                            "value": version,
                             "boost": 1.0
                             }
                         }
@@ -84,7 +84,7 @@ def search_CVE_from_single_limit(cpe23Uri, versionStartIncluding, versionStartEx
 
 
 
-def search_CVE_from_interval(cpe23Uri, versionStartIncluding, versionStartExcluding, versionEndIncluding, versionEndExcluding):
+def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_end):
     es = Elasticsearch(hosts=[es_url])
 
     res = es.search(index="cve-index", body={
@@ -101,8 +101,16 @@ def search_CVE_from_interval(cpe23Uri, versionStartIncluding, versionStartExclud
                     },
                     {
                         "term": {
-                            "vuln.nodes.cpe_match.versionEndIncluding.keyword": {
-                            "value": versionEndIncluding,
+                            "vuln.nodes.cpe_match.{0}.keyword".format(versions_types[0]): {
+                            "value": version_start,
+                            "boost": 1.0
+                            }
+                        }
+                    },
+                    {
+                        "term": {
+                            "vuln.nodes.cpe_match.{0}.keyword".format(versions_types[1]): {
+                            "value": version_end,
                             "boost": 1.0
                             }
                         }
@@ -117,11 +125,40 @@ def search_CVE_from_interval(cpe23Uri, versionStartIncluding, versionStartExclud
     return cves
 
 
-def stampaInfo(cve_all):
-    print(cve_all['_id'])
+def search_CVE(cpe23Uri):
+    es = Elasticsearch(hosts=[es_url])
+
+    res = es.search(index="cve-index", body={
+        "query": {
+            "bool": {
+                "must": [
+                    {
+                        "term": {
+                            "vuln.nodes.cpe_match.cpe23Uri.keyword": {
+                            "value": cpe23Uri,
+                            "boost": 1.0
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }, size=10000)
+    #pprint(res)
+    cves = res['hits']['hits']
+    print("Number of CVE: {0}".format(len(cves)))
+    return cves
+
+
+
+def stampaInfo(cve):
+    print("")
+    print("")
+    print("--------------")
+    print(cve['_id'])
     #return
     print("Metrics:")
-    cve = cve_all['_source']
+    cve = cve['_source']
     #pprint(cve['baseMetricV2']['cvssV2'])
     for key, val in cve['baseMetricV2'].items():
         if "obtain" in key:
@@ -143,8 +180,3 @@ def stampaInfo(cve_all):
     pprint(cve['vuln'])
     print("--------------")
     print("")
-
-if __name__ == "__main__":
-    cves = search_all_CVE(demoCPE)
-    for cve_all in cves:
-        stampaInfo(cve_all)
