@@ -10,11 +10,6 @@ worksheet = workbook.sheet_by_index(0)
 
 cves = []
 cve_all_edbids = set()
-
-
-def search_exploits(row):
-    os.system('searchsploit '+ worksheet.cell_value(row,3) + ' ' + worksheet.cell_value(row,1) +  ' ' + worksheet.cell_value(row,5) + ' -w')
-    os.system('searchsploit '+ worksheet.cell_value(row,3) + ' ' + worksheet.cell_value(row,1) +  ' ' + 'Multiple -w')
     
 
 for row in range(worksheet.nrows-3, worksheet.nrows-2):
@@ -78,23 +73,26 @@ for row in range(worksheet.nrows-3, worksheet.nrows-2):
 
             #cves = search_CVE( vett_cpe23Uri[i], vett_versionStartIncluding[i], vett_versionStartExcluding[i], vett_versionEndIncluding[i], vett_versionEndExcluding[i])
         #search_exploits(row)
+"""    
+for cve in cves:
+    if (len(cve) > 0):
+        print(cve[0]["_id"]) 
+"""
+  
+for cve in cves:
+    #print(cve[0]["_id"])
+    #stampaInfo(cve[0])
     
-
-    
-    for cve in cves:
-        print(cve[0]["_id"])
-        #stampaInfo(cve[0])
-        
-    
+    if (len(cve) > 0):
         cve_edbids = searchExploits(cve[0]["_id"])
         for i in cve_edbids:
             cve_all_edbids.add(i)
-    
-    print("All Edbids for all CVE: {0}".format(cve_all_edbids)) 
-    
-
-    for i in cve_all_edbids:
-            os.system('searchsploit '+ str(i) + ' -w')
-    print()
-    
     pass
+
+
+print("All Edbids for all CVE: {0}".format(cve_all_edbids))
+print()
+for i in cve_all_edbids:
+        os.system('searchsploit '+ str(i) + ' -w')
+
+
