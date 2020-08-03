@@ -3,25 +3,95 @@ import xlrd
 from queries import *
 from enrichment import *
 import os
-from prettytable import PrettyTable
+import prettytable
+from prettytable import ALL as ALL
   
 
-#workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
-workbook = xlrd.open_workbook('/home/giampaolo/Desktop/VIS3/VIS3/SearchingCard.xlsx', on_demand = True)
+workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
+#workbook = xlrd.open_workbook('/home/giampaolo/Desktop/VIS3/VIS3/SearchingCard.xlsx', on_demand = True)
 worksheet = workbook.sheet_by_index(0)
 
 cves = []
 cve_all_edbids = set()
 
 
-x = PrettyTable()
+x = prettytable.PrettyTable(hrules=ALL)
+x.field_names = ["CPE", "CVE", "CVSS", "CWE", "URLs"]
 
-x.field_names = ["CPE", "CVE", "CVSS", "CWE"]
 
-def add_cli_row(CPE, CVE, CVSS, CWE):
-    x.add_row(["Brisbane", 5905, 1857594, 1146.4])
-    return x
-   
+def setup_cli_table():
+    for f in x.field_names:
+        x.align[f] = "l"
+
+def format_description(description, max_line_length):
+    #accumulated line length
+    ACC_length = 0
+    words = description.split(" ")
+    formatted_description = ""
+    for word in words:
+        #if ACC_length + len(word) and a space is <= max_line_length 
+        if ACC_length + (len(word) + 1) <= max_line_length:
+            #append the word and a space
+            formatted_description = formatted_description + word + " "
+            #length = length + length of word + length of space
+            ACC_length = ACC_length + len(word) + 1
+        else:
+            #append a line break, then the word and a space
+            formatted_description = formatted_description + "\n" + word + " "
+            #reset counter of length to the length of a word and a space
+            ACC_length = len(word) + 1
+    return formatted_description
+
+def colorize(string, color=None, highlight=None, attrs=None):
+    """Apply style on a string"""
+    # Colors list: https://pypi.org/project/colored/
+    return colored.stylize(
+        string,
+        (colored.fg(color) if color else "")
+        + (colored.bg(highlight) if highlight else "")
+        + (colored.attr(attrs) if attrs else ""),
+    )
+
+def color_cvss(cvss):
+    """Attribute a color to the CVSS score"""
+    cvss = float(cvss)
+    if cvss < 3:
+        color = "green_3b"
+    elif cvss <= 5:
+        color = "yellow_1"
+    elif cvss <= 7:
+        color = "orange_1"
+    elif cvss <= 8.5:
+        color = "dark_orange"
+    else:
+        color = "red"
+    return color
+
+
+def format_URLs(URLs, max_line_length):
+    #accumulated line length
+    URLs = URLs.replace("[", '')
+    URLs = URLs.replace("'", '')
+    URLs = URLs.replace("]", '')
+    ACC_length = 0
+    words = URLs.split(", ")
+    formatted_URLs = ""
+    for word in words:
+        #if ACC_length + len(word) and a space is <= max_line_length 
+        if ACC_length + (len(word) + 1) <= max_line_length:
+            #append the word and a space
+            formatted_URLs = formatted_URLs + word + " "
+            #length = length + length of word + length of space
+            ACC_length = ACC_length + len(word) + 1
+        else:
+            #append a line break, then the word and a space
+            formatted_URLs = formatted_URLs + "\n" + word + " "
+            #reset counter of length to the length of a word and a space
+            ACC_length = len(word) + 1
+    return formatted_URLs
+
+
+setup_cli_table()
 
 for row in range(worksheet.nrows-3, worksheet.nrows-2):
     cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
@@ -91,8 +161,17 @@ for cve in cves:
 """
   
 for cve in cves:
-    #print(cve[0]["_id"])
-    x = add_cli_row(cve[0]['vuln']['nodes']['cpe_match']['cpe23Uri'], cve[0]["_id"], cve[0]['baseMetricV2']['impactScore'], cve[0]['description']['description_data'], cve[0]['references']['reference_data'])
+    vett_URLs = []
+
+    description = format_description(cve[0]['_source']['description']['description_data'][0]['value'], 60)
+
+    for obj in cve[0]['_source']['references']['reference_data']:
+        vett_URLs.append(obj["url"])
+
+    URLs = format_URLs(str(vett_URLs), 10)
+    #print(URLs)
+
+    x.add_row([cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'], cve[0]["_id"], cve[0]['_source']['baseMetricV2']['impactScore'], description, URLs])
     #stampaInfo(cve[0])
     
     if (len(cve) > 0):
@@ -109,5 +188,6 @@ for i in cve_all_edbids:
 
 """
 
-    
-print (x)
+for r in x:
+    colorize(r["CVSS"], color=color_cvss(r["CVSS"]), attrs="bold") 
+print(x)
