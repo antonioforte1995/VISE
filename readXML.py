@@ -3,14 +3,25 @@ import xlrd
 from queries import *
 from enrichment import *
 import os
+from prettytable import PrettyTable
   
 
-workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
+#workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
+workbook = xlrd.open_workbook('/home/giampaolo/Desktop/VIS3/VIS3/SearchingCard.xlsx', on_demand = True)
 worksheet = workbook.sheet_by_index(0)
 
 cves = []
 cve_all_edbids = set()
-    
+
+
+x = PrettyTable()
+
+x.field_names = ["CPE", "CVE", "CVSS", "CWE"]
+
+def add_cli_row(CPE, CVE, CVSS, CWE):
+    x.add_row(["Brisbane", 5905, 1857594, 1146.4])
+    return x
+   
 
 for row in range(worksheet.nrows-3, worksheet.nrows-2):
     cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
@@ -81,6 +92,7 @@ for cve in cves:
   
 for cve in cves:
     #print(cve[0]["_id"])
+    x = add_cli_row(cve[0]['vuln']['nodes']['cpe_match']['cpe23Uri'], cve[0]["_id"], cve[0]['baseMetricV2']['impactScore'], cve[0]['description']['description_data'], cve[0]['references']['reference_data'])
     #stampaInfo(cve[0])
     
     if (len(cve) > 0):
@@ -89,10 +101,13 @@ for cve in cves:
             cve_all_edbids.add(i)
     pass
 
-
+"""
 print("All Edbids for all CVE: {0}".format(cve_all_edbids))
 print()
 for i in cve_all_edbids:
         os.system('searchsploit '+ str(i) + ' -w')
 
+"""
 
+    
+print (x)
