@@ -54,6 +54,17 @@ def format_description(description, max_line_length):
     return formatted_description
 
 
+def format_URLs(URLs):
+    formatted_URLs = URLs[0]
+    i = 0
+    for URL in URLs:
+        if i == 0:
+            i = i+1
+        else:
+            formatted_URLs = formatted_URLs + "\n" + URL + " "
+    return formatted_URLs
+
+
 def delete_commas(URLs):
     #accumulated line length
     URLs = URLs.replace("[", '')
@@ -76,9 +87,9 @@ def format_URL(URLs, max_line_length):
 
     return formatted_URLs
 
+
 def format_CPE(CPE, max_line_length):
     formatted_CPE = "\n".join(textwrap.wrap(CPE, max_line_length))
-    #formatted_CPE = formatted_CPE.replace("\n", '')
 
     return formatted_CPE
 
@@ -180,7 +191,9 @@ for cve in cves:
             vett_URLs.append(obj["url"])
 
         URLs_witouth_commas = delete_commas(str(vett_URLs))
-        URLs = format_URL(URLs_witouth_commas, 70)
+        #print(URLs_witouth_commas)
+        #URLs = format_URL(URLs_witouth_commas, 70)
+        URLs = format_URLs(URLs_witouth_commas)
 
         data.append(
             [
