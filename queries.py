@@ -7,12 +7,6 @@ es_url = "http://elastic:changeme@3.225.242.97:9200"
 
 
 def search_CPE(vendor, product, version, target_software):
-    """
-    print('VENDOR: {0}'.format(vendor))
-    print('PRODUCT: {0}'.format(product))
-    print('VERSION: {0}'.format(version))
-    print('TARGET_SOFTWARE: {0}'.format(target_software))
-    """
 
     if (target_software == ""):
         target_software = ".*"
@@ -43,9 +37,7 @@ def search_CPE(vendor, product, version, target_software):
             }
         }
     }, size=10000)
-    #pprint(res)
     cpes = res['hits']['hits']
-    print("Number of CPE: {0}".format(len(cpes)))
     return cpes
 
 
@@ -77,9 +69,7 @@ def search_CVE_from_single_limit(cpe23Uri, version_type, version):
             }
         }
     }, size=10000)
-    #pprint(res)
     cves = res['hits']['hits']
-    print("Number of CVE: {0}".format(len(cves)))
     return cves
 
 
@@ -119,9 +109,7 @@ def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_en
             }
         }
     }, size=10000)
-    #pprint(res)
     cves = res['hits']['hits']
-    print("Number of CVE: {0}".format(len(cves)))
     return cves
 
 
@@ -144,9 +132,7 @@ def search_CVE(cpe23Uri):
             }
         }
     }, size=10000)
-    #pprint(res)
     cves = res['hits']['hits']
-    print("Number of CVE: {0}".format(len(cves)))
     return cves
 
 

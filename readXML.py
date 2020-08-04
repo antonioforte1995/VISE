@@ -3,8 +3,11 @@ import xlrd
 from queries import *
 from enrichment import *
 import os
+import colored
 import prettytable
 from prettytable import ALL as ALL
+import textwrap
+
   
 
 workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
@@ -12,16 +15,24 @@ workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx',
 worksheet = workbook.sheet_by_index(0)
 
 cves = []
+data = list()
 cve_all_edbids = set()
 
 
-x = prettytable.PrettyTable(hrules=ALL)
-x.field_names = ["CPE", "CVE", "CVSS", "CWE", "URLs"]
+columns = ["CPE", "CVE", "CVSS", "CWE", "URLs"]
 
+def cli_table(columns, data, hrules=True):
+    """Print a table"""
+    columns = map(lambda x: colorize(x, attrs="bold"), columns)
+    table = prettytable.PrettyTable(
+        hrules=prettytable.ALL if hrules else prettytable.FRAME, field_names=columns
+    )
+    for row in data:
+        table.add_row(row)
+    table.align = "l"
+    print(table)
+   
 
-def setup_cli_table():
-    for f in x.field_names:
-        x.align[f] = "l"
 
 def format_description(description, max_line_length):
     #accumulated line length
@@ -41,6 +52,38 @@ def format_description(description, max_line_length):
             #reset counter of length to the length of a word and a space
             ACC_length = len(word) + 1
     return formatted_description
+
+
+def delete_commas(URLs):
+    #accumulated line length
+    URLs = URLs.replace("[", '')
+    URLs = URLs.replace("'", '')
+    URLs = URLs.replace("]", '')
+    ACC_length = 0
+    URLs = URLs.split(", ")
+    return URLs
+
+
+def format_URL(URLs, max_line_length):
+    formatted_URLs = URLs[0]
+    i = 0
+    for URL in URLs:
+        if i == 0:
+            i = i+1
+        else:   
+            formatted_URL = "\n".join(textwrap.wrap(URL, max_line_length))
+            formatted_URLs = formatted_URLs + "\n" + formatted_URL + " "
+
+    return formatted_URLs
+
+def format_CPE(CPE, max_line_length):
+    formatted_CPE = "\n".join(textwrap.wrap(CPE, max_line_length))
+    #formatted_CPE = formatted_CPE.replace("\n", '')
+
+    return formatted_CPE
+
+
+    
 
 def colorize(string, color=None, highlight=None, attrs=None):
     """Apply style on a string"""
@@ -68,32 +111,7 @@ def color_cvss(cvss):
     return color
 
 
-def format_URLs(URLs, max_line_length):
-    #accumulated line length
-    URLs = URLs.replace("[", '')
-    URLs = URLs.replace("'", '')
-    URLs = URLs.replace("]", '')
-    ACC_length = 0
-    words = URLs.split(", ")
-    formatted_URLs = ""
-    for word in words:
-        #if ACC_length + len(word) and a space is <= max_line_length 
-        if ACC_length + (len(word) + 1) <= max_line_length:
-            #append the word and a space
-            formatted_URLs = formatted_URLs + word + " "
-            #length = length + length of word + length of space
-            ACC_length = ACC_length + len(word) + 1
-        else:
-            #append a line break, then the word and a space
-            formatted_URLs = formatted_URLs + "\n" + word + " "
-            #reset counter of length to the length of a word and a space
-            ACC_length = len(word) + 1
-    return formatted_URLs
-
-
-setup_cli_table()
-
-for row in range(worksheet.nrows-3, worksheet.nrows-2):
+for row in range(2, worksheet.nrows):
     cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
     vett_cpe23Uri = [0]*len(cpes)
     vett_versionStartIncluding = [0]*len(cpes)
@@ -101,7 +119,6 @@ for row in range(worksheet.nrows-3, worksheet.nrows-2):
     vett_versionEndIncluding = [0]*len(cpes)
     vett_versionEndExcluding = [0]*len(cpes)
 
-    #pprint(cpes)
 
 
     if (len(cpes) > 0):
@@ -110,9 +127,7 @@ for row in range(worksheet.nrows-3, worksheet.nrows-2):
             versions_types = []
             versions_types_values = []
 
-            print("")
             vett_cpe23Uri[i] = cpes[i]["_source"]["cpe23Uri"]
-            print('cpe23Uri: {0}'.format(vett_cpe23Uri[i]))
             
             if "versionStartIncluding" in cpes[i]["_source"]:
                 vett_versionStartIncluding[i] = cpes[i]["_source"]["versionStartIncluding"]
@@ -138,9 +153,6 @@ for row in range(worksheet.nrows-3, worksheet.nrows-2):
                 versions_types.append("versionEndExcluding")
                 versions_types_values.append(cpes[i]["_source"]["versionEndExcluding"])
 
-            #print('cpe23Uri: {0}'.format(vett_cpe23Uri[i]))   
-            #print('NotNullVersionTypes: {0}'.format(not_null_version_types)) 
-            #print('VersionTypes: {0}'.format(versions_types)) 
 
             if (len(versions_types) == 1):
                 cves.append(search_CVE_from_single_limit(vett_cpe23Uri[i], versions_types[0], versions_types_values[0]))
@@ -154,40 +166,45 @@ for row in range(worksheet.nrows-3, worksheet.nrows-2):
 
             #cves = search_CVE( vett_cpe23Uri[i], vett_versionStartIncluding[i], vett_versionStartExcluding[i], vett_versionEndIncluding[i], vett_versionEndExcluding[i])
         #search_exploits(row)
-"""    
-for cve in cves:
-    if (len(cve) > 0):
-        print(cve[0]["_id"]) 
-"""
+
   
 for cve in cves:
+
     vett_URLs = []
 
-    description = format_description(cve[0]['_source']['description']['description_data'][0]['value'], 60)
-
-    for obj in cve[0]['_source']['references']['reference_data']:
-        vett_URLs.append(obj["url"])
-
-    URLs = format_URLs(str(vett_URLs), 10)
-    #print(URLs)
-
-    x.add_row([cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'], cve[0]["_id"], cve[0]['_source']['baseMetricV2']['impactScore'], description, URLs])
-    #stampaInfo(cve[0])
-    
     if (len(cve) > 0):
+        description = format_description(cve[0]['_source']['description']['description_data'][0]['value'], 60)
+        cpe = format_CPE(cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'], 40)
+
+        for obj in cve[0]['_source']['references']['reference_data']:
+            vett_URLs.append(obj["url"])
+
+        URLs_witouth_commas = delete_commas(str(vett_URLs))
+        URLs = format_URL(URLs_witouth_commas, 70)
+
+        data.append(
+            [
+                colorize(cpe),
+                colorize(cve[0]["_id"]),
+                colorize(cve[0]['_source']['baseMetricV2']['impactScore'], color=color_cvss(cve[0]['_source']['baseMetricV2']['impactScore']), attrs="bold"),
+                colorize(description),
+                colorize(URLs)
+            ]
+        )
+
+        #stampaInfo(cve[0])
+    
+    
         cve_edbids = searchExploits(cve[0]["_id"])
         for i in cve_edbids:
             cve_all_edbids.add(i)
     pass
 
-"""
-print("All Edbids for all CVE: {0}".format(cve_all_edbids))
-print()
+
 for i in cve_all_edbids:
-        os.system('searchsploit '+ str(i) + ' -w')
+        #os.system('searchsploit '+ str(i) + ' -w 2> /dev/null')
+        os.system('searchsploit '+ str(i) + ' -w >/dev/null 2>&1')
 
-"""
 
-for r in x:
-    colorize(r["CVSS"], color=color_cvss(r["CVSS"]), attrs="bold") 
-print(x)
+ 
+cli_table(columns, data, hrules=True)

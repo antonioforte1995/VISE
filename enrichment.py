@@ -27,10 +27,6 @@ def searchExploits(cve_id):
     for i in edbids:
         cve_exploits.add(i)
 
-
-    print("Number of exploits for the {0}: {1}".format(cve_id, len(edbids)))
-    
-    print()
     
     return edbids
     
