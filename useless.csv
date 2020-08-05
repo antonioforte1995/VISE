@@ -1,0 +1,239 @@
+CPE,CVE,IMPACT SCORE,DESCRIPTION,URLs
+cpe:2.3:a:haxx:curl:*:*:*:*:*:*:*:*,CVE-2019-5482,6.4,"Heap buffer overflow in the TFTP protocol handler in cURL 
+7.19.4 to 7.65.3. ","http://lists.opensuse.org/opensuse-security-announce/2019-09/msg00048.html
+http://lists.opensuse.org/opensuse-security-announce/2019-09/msg00055.html 
+https://curl.haxx.se/docs/CVE-2019-5482.html 
+https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/6CI4QQ2RSZX4VCFM76SIWGKY6BY7UWIC/ 
+https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/RGDVKSLY5JUNJRLYRUA6CXGQ2LM63XC3/ 
+https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/UA7KDM2WPM5CJDDGOEGFV6SSGD2J7RNT/ 
+https://seclists.org/bugtraq/2020/Feb/36 
+https://security.gentoo.org/glsa/202003-29 
+https://security.netapp.com/advisory/ntap-20191004-0003/ 
+https://security.netapp.com/advisory/ntap-20200416-0003/ 
+https://www.debian.org/security/2020/dsa-4633 
+https://www.oracle.com/security-alerts/cpuapr2020.html 
+https://www.oracle.com/security-alerts/cpujan2020.html "
+cpe:2.3:a:haxx:curl:*:*:*:*:*:*:*:*,CVE-2018-1000300,6.4,"curl version curl 7.54.1 to and including curl 7.59.0 
+contains a CWE-122: Heap-based Buffer Overflow 
+vulnerability in denial of service and more that can result 
+in curl might overflow a heap based memory buffer when 
+closing down an FTP connection with very long server 
+command replies.. This vulnerability appears to have been 
+fixed in curl < 7.54.1 and curl >= 7.60.0. ","http://www.oracle.com/technetwork/security-advisory/cpujul2018-4258247.html
+http://www.oracle.com/technetwork/security-advisory/cpuoct2018-4428296.html 
+http://www.securityfocus.com/bid/104207 
+http://www.securitytracker.com/id/1040933 
+https://curl.haxx.se/docs/adv_2018-82c2.html 
+https://security.gentoo.org/glsa/201806-05 
+https://usn.ubuntu.com/3648-1/ 
+https://www.oracle.com/technetwork/security-advisory/cpujan2019-5072801.html "
+cpe:2.3:a:haxx:curl:*:*:*:*:*:*:*:*,CVE-2018-16842,4.9,"Curl versions 7.14.1 through 7.61.1 are vulnerable to a 
+heap-based buffer over-read in the tool_msgs.c:voutf() 
+function that may result in information exposure and denial 
+of service. ","http://www.securitytracker.com/id/1042014
+https://access.redhat.com/errata/RHSA-2019:2181 
+https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2018-16842 
+https://curl.haxx.se/docs/CVE-2018-16842.html 
+https://github.com/curl/curl/commit/d530e92f59ae9bb2d47066c3c460b25d2ffeb211 
+https://lists.debian.org/debian-lts-announce/2018/11/msg00005.html 
+https://security.gentoo.org/glsa/201903-03 
+https://usn.ubuntu.com/3805-1/ 
+https://usn.ubuntu.com/3805-2/ 
+https://www.debian.org/security/2018/dsa-4331 
+https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html "
+cpe:2.3:o:debian:debian_linux:7.0:*:*:*:*:*:*:*,CVE-2018-1000122,4.9,"A buffer over-read exists in curl 7.20.0 to and including 
+curl 7.58.0 in the RTSP+RTP handling code that allows an 
+attacker to cause a denial of service or information 
+leakage ","http://www.oracle.com/technetwork/security-advisory/cpujul2018-4258247.html
+http://www.oracle.com/technetwork/security-advisory/cpuoct2018-4428296.html 
+http://www.securityfocus.com/bid/103436 
+http://www.securitytracker.com/id/1040530 
+https://access.redhat.com/errata/RHBA-2019:0327 
+https://access.redhat.com/errata/RHSA-2018:3157 
+https://access.redhat.com/errata/RHSA-2018:3558 
+https://access.redhat.com/errata/RHSA-2019:1543 
+https://access.redhat.com/errata/RHSA-2020:0544 
+https://access.redhat.com/errata/RHSA-2020:0594 
+https://curl.haxx.se/docs/adv_2018-b047.html 
+https://lists.debian.org/debian-lts-announce/2018/03/msg00012.html 
+https://usn.ubuntu.com/3598-1/ 
+https://usn.ubuntu.com/3598-2/ 
+https://www.debian.org/security/2018/dsa-4136 
+https://www.oracle.com/technetwork/security-advisory/cpujan2019-5072801.html 
+https://www.oracle.com/technetwork/security-advisory/cpujul2019-5072835.html "
+cpe:2.3:o:debian:debian_linux:7.0:*:*:*:*:*:*:*,CVE-2018-1000301,4.9,"curl version curl 7.20.0 to and including curl 7.59.0 
+contains a CWE-126: Buffer Over-read vulnerability in 
+denial of service that can result in curl can be tricked 
+into reading data beyond the end of a heap based buffer 
+used to store downloaded RTSP content.. This vulnerability 
+appears to have been fixed in curl < 7.20.0 and curl >= 
+7.60.0. ","http://www.oracle.com/technetwork/security-advisory/cpujul2018-4258247.html
+http://www.oracle.com/technetwork/security-advisory/cpuoct2018-4428296.html 
+http://www.securityfocus.com/bid/104225 
+http://www.securitytracker.com/id/1040931 
+https://access.redhat.com/errata/RHBA-2019:0327 
+https://access.redhat.com/errata/RHSA-2018:3157 
+https://access.redhat.com/errata/RHSA-2018:3558 
+https://access.redhat.com/errata/RHSA-2020:0544 
+https://access.redhat.com/errata/RHSA-2020:0594 
+https://curl.haxx.se/docs/adv_2018-b138.html 
+https://lists.debian.org/debian-lts-announce/2018/05/msg00010.html 
+https://security.gentoo.org/glsa/201806-05 
+https://usn.ubuntu.com/3598-2/ 
+https://usn.ubuntu.com/3648-1/ 
+https://www.debian.org/security/2018/dsa-4202 
+https://www.oracle.com/technetwork/security-advisory/cpujan2019-5072801.html 
+https://www.oracle.com/technetwork/security-advisory/cpujul2019-5072835.html "
+cpe:2.3:a:haxx:curl:*:*:*:*:*:*:*:*,CVE-2018-16839,6.4,"Curl versions 7.33.0 through 7.61.1 are vulnerable to a 
+buffer overrun in the SASL authentication code that may 
+lead to denial of service. ","http://www.securitytracker.com/id/1042012
+https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2018-16839 
+https://curl.haxx.se/docs/CVE-2018-16839.html 
+https://github.com/curl/curl/commit/f3a24d7916b9173c69a3e0ee790102993833d6c5 
+https://lists.apache.org/thread.html/8338a0f605bdbb3a6098bb76f666a95fc2b2f53f37fa1ecc89f1146f@%3Cdevnull.infra.apache.org%3E 
+https://lists.debian.org/debian-lts-announce/2018/11/msg00005.html 
+https://security.gentoo.org/glsa/201903-03 
+https://usn.ubuntu.com/3805-1/ 
+https://www.debian.org/security/2018/dsa-4331 "
+cpe:2.3:a:haxx:curl:*:*:*:*:*:*:*:*,CVE-2018-0500,6.4,"Curl_smtp_escape_eob in lib/smtp.c in curl 7.54.1 to and 
+including curl 7.60.0 has a heap-based buffer overflow that 
+might be exploitable by an attacker who can control the 
+data that curl transmits over SMTP with certain settings 
+(i.e., use of a nonstandard --limit-rate argument or 
+CURLOPT_BUFFERSIZE value). ","http://www.securitytracker.com/id/1041280
+https://access.redhat.com/errata/RHSA-2018:2486 
+https://curl.haxx.se/docs/adv_2018-70a2.html 
+https://github.com/curl/curl/commit/ba1dbd78e5f1ed67c1b8d37ac89d90e5e330b628 
+https://security.gentoo.org/glsa/201807-04 
+https://usn.ubuntu.com/3710-1/ "
+cpe:2.3:o:debian:debian_linux:7.0:*:*:*:*:*:*:*,CVE-2018-1000120,6.4,"A buffer overflow exists in curl 7.12.3 to and including 
+curl 7.58.0 in the FTP URL handling that allows an attacker 
+to cause a denial of service or worse. ","http://www.oracle.com/technetwork/security-advisory/cpujul2018-4258247.html
+http://www.oracle.com/technetwork/security-advisory/cpuoct2018-4428296.html 
+http://www.securityfocus.com/bid/103414 
+http://www.securitytracker.com/id/1040531 
+https://access.redhat.com/errata/RHBA-2019:0327 
+https://access.redhat.com/errata/RHSA-2018:3157 
+https://access.redhat.com/errata/RHSA-2018:3558 
+https://access.redhat.com/errata/RHSA-2019:1543 
+https://access.redhat.com/errata/RHSA-2020:0544 
+https://access.redhat.com/errata/RHSA-2020:0594 
+https://curl.haxx.se/docs/adv_2018-9cd6.html 
+https://lists.debian.org/debian-lts-announce/2018/03/msg00012.html 
+https://usn.ubuntu.com/3598-1/ 
+https://usn.ubuntu.com/3598-2/ 
+https://www.debian.org/security/2018/dsa-4136 
+https://www.oracle.com/technetwork/security-advisory/cpujan2019-5072801.html 
+https://www.oracle.com/technetwork/security-advisory/cpujul2019-5072835.html 
+https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html "
+cpe:2.3:o:debian:debian_linux:7.0:*:*:*:*:*:*:*,CVE-2018-1000121,2.9,"A NULL pointer dereference exists in curl 7.21.0 to and 
+including curl 7.58.0 in the LDAP code that allows an 
+attacker to cause a denial of service ","http://www.oracle.com/technetwork/security-advisory/cpujul2018-4258247.html
+http://www.oracle.com/technetwork/security-advisory/cpuoct2018-4428296.html 
+http://www.securityfocus.com/bid/103415 
+http://www.securitytracker.com/id/1040529 
+https://access.redhat.com/errata/RHBA-2019:0327 
+https://access.redhat.com/errata/RHSA-2018:3157 
+https://access.redhat.com/errata/RHSA-2018:3558 
+https://access.redhat.com/errata/RHSA-2020:0544 
+https://access.redhat.com/errata/RHSA-2020:0594 
+https://curl.haxx.se/docs/adv_2018-97a2.html 
+https://lists.debian.org/debian-lts-announce/2018/03/msg00012.html 
+https://usn.ubuntu.com/3598-1/ 
+https://usn.ubuntu.com/3598-2/ 
+https://www.debian.org/security/2018/dsa-4136 
+https://www.oracle.com/technetwork/security-advisory/cpujan2019-5072801.html 
+https://www.oracle.com/technetwork/security-advisory/cpujul2019-5072835.html "
+cpe:2.3:a:haxx:curl:*:*:*:*:*:*:*:*,CVE-2019-5481,6.4,"Double-free vulnerability in the FTP-kerberos code in cURL 
+7.52.0 to 7.65.3. ","http://lists.opensuse.org/opensuse-security-announce/2019-09/msg00048.html
+http://lists.opensuse.org/opensuse-security-announce/2019-09/msg00055.html 
+https://curl.haxx.se/docs/CVE-2019-5481.html 
+https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/6CI4QQ2RSZX4VCFM76SIWGKY6BY7UWIC/ 
+https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/RGDVKSLY5JUNJRLYRUA6CXGQ2LM63XC3/ 
+https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/UA7KDM2WPM5CJDDGOEGFV6SSGD2J7RNT/ 
+https://seclists.org/bugtraq/2020/Feb/36 
+https://security.gentoo.org/glsa/202003-29 
+https://security.netapp.com/advisory/ntap-20191004-0003/ 
+https://www.debian.org/security/2020/dsa-4633 
+https://www.oracle.com/security-alerts/cpuapr2020.html 
+https://www.oracle.com/security-alerts/cpujan2020.html "
+cpe:2.3:a:10-strike:network_monitor:5.4:*:*:*:*:*:*:*,CVE-2018-6016,6.4,"Unquoted Windows search path vulnerability in the 
+srvInventoryWebServer service in 10-Strike Network Monitor 
+5.4 allows local users to gain privileges via a malicious 
+artefact. ",http://seclists.org/fulldisclosure/2018/Mar/21
+cpe:2.3:a:iscripts:easycreate:3.2.1:*:*:*:*:*:*:*,CVE-2018-9236,2.9,"iScripts EasyCreate 3.2.1 has Stored Cross-Site Scripting 
+in the ""Site title"" field. ","https://pastebin.com/Amw08sAj
+https://www.exploit-db.com/exploits/44436/ "
+cpe:2.3:a:paloaltonetworks:globalprotect:*:*:*:*:*:*:*:*,CVE-2012-6606,4.9,"Palo Alto Networks GlobalProtect before 1.1.7, and 
+NetConnect, does not verify X.509 certificates from SSL 
+servers, which allows man-in-the-middle attackers to spoof 
+portal servers and obtain sensitive information via a 
+crafted certificate. ","http://archives.neohapsis.com/archives/bugtraq/2012-10/0100.html
+https://security.paloaltonetworks.com/CVE-2012-6606 "
+cpe:2.3:a:trendmicro:interscan_web_security_virtual_appliance:6.5:sp2:*:*:*:*:*:*,CVE-2019-9490,2.9,"A vulnerability in Trend Micro InterScan Web Security 
+Virtual Appliance version 6.5 SP2 could allow an 
+non-authorized user to disclose administrative credentials. 
+An attacker must be an authenticated user in order to 
+exploit the vulnerability. ","http://www.securityfocus.com/bid/107848
+https://success.trendmicro.com/solution/1122326 "
+cpe:2.3:a:trendmicro:interscan_web_security_virtual_appliance:6.5:*:*:*:*:*:*:*,CVE-2020-8603,2.9,"A cross-site scripting vulnerability (XSS) in Trend Micro 
+InterScan Web Security Virtual Appliance 6.5 may allow a 
+remote attacker to tamper with the web interface of 
+affected installations. User interaction is required to 
+exploit this vulnerability in that the target must visit a 
+malicious page or open a malicious file. ","https://success.trendmicro.com/solution/000253095
+https://www.zerodayinitiative.com/advisories/ZDI-20-675/ "
+cpe:2.3:a:trendmicro:interscan_web_security_virtual_appliance:*:*:*:*:*:*:*:*,CVE-2017-6339,2.9,"Trend Micro InterScan Web Security Virtual Appliance 
+(IWSVA) 6.5 before CP 1746 mismanages certain key and 
+certificate data. Per IWSVA documentation, by default, 
+IWSVA acts as a private Certificate Authority (CA) and 
+dynamically generates digital certificates that are sent to 
+client browsers to complete a secure passage for HTTPS 
+connections. It also allows administrators to upload their 
+own certificates signed by a root CA. An attacker with low 
+privileges can download the current CA certificate and 
+Private Key (either the default ones or ones uploaded by 
+administrators) and use those to decrypt HTTPS traffic, 
+thus compromising confidentiality. Also, the default 
+Private Key on this appliance is encrypted with a very weak 
+passphrase. If an appliance uses the default Certificate 
+and Private Key provided by Trend Micro, an attacker can 
+simply download these and decrypt the Private Key using the 
+default/weak passphrase. ","http://www.securityfocus.com/bid/97492
+https://success.trendmicro.com/solution/1116960 
+https://www.qualys.com/2017/01/12/qsa-2017-01-12/qsa-2017-01-12.pdf "
+cpe:2.3:a:citrix:metaframe:1.8:sp3:*:*:*:*:*:*,CVE-2001-0716,2.9,"Citrix MetaFrame 1.8 Server with Service Pack 3, and XP 
+Server Service Pack 1 and earlier, allows remote attackers 
+to cause a denial of service (crash) via a large number of 
+incomplete connections to the server. ","http://www.securityfocus.com/bid/3440
+http://xforce.iss.net/alerts/advise99.php 
+https://exchange.xforce.ibmcloud.com/vulnerabilities/7068 "
+cpe:2.3:a:citrix:metaframe:1.8:*:*:*:*:*:*:*,CVE-2001-0908,6.4,"CITRIX Metaframe 1.8 logs the Client Address (IP address) 
+that is provided by the client instead of obtaining it from 
+the packet headers, which allows clients to spoof their 
+public IP address, e.g. through Network Address Translation 
+(NAT). ","http://marc.info/?l=bugtraq&m=100638693315933&w=2
+http://www.securityfocus.com/bid/3566 
+https://exchange.xforce.ibmcloud.com/vulnerabilities/7538 "
+cpe:2.3:a:citrix:metaframe:1.8:sp3:*:*:*:*:*:*,CVE-2001-0716,2.9,"Citrix MetaFrame 1.8 Server with Service Pack 3, and XP 
+Server Service Pack 1 and earlier, allows remote attackers 
+to cause a denial of service (crash) via a large number of 
+incomplete connections to the server. ","http://www.securityfocus.com/bid/3440
+http://xforce.iss.net/alerts/advise99.php 
+https://exchange.xforce.ibmcloud.com/vulnerabilities/7068 "
+cpe:2.3:a:citrix:metaframe:1.8:*:microsoft_nt_4.0_server_terminal_server:*:*:*:*:*,CVE-2006-3779,6.4,"Citrix MetaFrame up to XP 1.0 Feature 1, except when 
+running on Windows Server 2003, installs a registry key 
+with an insecure ACL, which allows remote authenticated 
+users to gain privileges. ","http://secunia.com/advisories/21076
+http://securitytracker.com/id?1016526 
+http://support.citrix.com/article/CTX110492 
+http://www.securityfocus.com/bid/19056 
+http://www.vupen.com/english/advisories/2006/2862 "
+cpe:2.3:a:citrix:metaframe:1.8:*:microsoft_nt_4.0_server_terminal_server:*:*:*:*:*,CVE-2006-3779,6.4,"Citrix MetaFrame up to XP 1.0 Feature 1, except when 
+running on Windows Server 2003, installs a registry key 
+with an insecure ACL, which allows remote authenticated 
+users to gain privileges. ","http://secunia.com/advisories/21076
+http://securitytracker.com/id?1016526 
+http://support.citrix.com/article/CTX110492 
+http://www.securityfocus.com/bid/19056 
+http://www.vupen.com/english/advisories/2006/2862 "

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-import textwrap
+import csv
 
-URL = "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/6CI4QQ2RSZX4VCFM76SIWGKY6BY7UWIC/"
-print("\n".join(textwrap.wrap(URL,80)))
+def create_csv(row_data):
+    with open('useless.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(row_data)

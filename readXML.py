@@ -7,6 +7,7 @@ import colored
 import prettytable
 from prettytable import ALL as ALL
 import textwrap
+from prova import *
 
   
 
@@ -16,6 +17,7 @@ worksheet = workbook.sheet_by_index(0)
 
 cves = []
 data = list()
+csv_data = list()
 cve_all_edbids = set()
 
 
@@ -178,6 +180,17 @@ for row in range(2, worksheet.nrows):
             #cves = search_CVE( vett_cpe23Uri[i], vett_versionStartIncluding[i], vett_versionStartExcluding[i], vett_versionEndIncluding[i], vett_versionEndExcluding[i])
         #search_exploits(row)
 
+csv_data.append(
+            [   
+                "CPE",
+                "CVE",
+                "IMPACT SCORE",
+                "DESCRIPTION",
+                "URLs"  
+            ]
+        )
+
+
   
 for cve in cves:
 
@@ -205,6 +218,16 @@ for cve in cves:
             ]
         )
 
+        csv_data.append(
+            [   
+                cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
+                cve[0]["_id"],
+                cve[0]['_source']['baseMetricV2']['impactScore'],
+                description,
+                URLs  
+            ]
+        )
+
         #stampaInfo(cve[0])
     
     
@@ -221,3 +244,5 @@ for i in cve_all_edbids:
 
  
 cli_table(columns, data, hrules=True)
+
+create_csv(csv_data)
