@@ -7,7 +7,7 @@ import colored
 import prettytable
 from prettytable import ALL as ALL
 import textwrap
-from prova import *
+import csv
 
   
 
@@ -21,7 +21,7 @@ csv_data = list()
 cve_all_edbids = set()
 
 
-columns = ["CPE", "CVE", "CVSS", "CWE", "URLs"]
+columns = ["CPE", "CVE", "SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
 
 def cli_table(columns, data, hrules=True):
     """Print a table"""
@@ -124,6 +124,12 @@ def color_cvss(cvss):
     return color
 
 
+def create_csv(row_data):
+    with open('output.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(row_data)
+
+
 for row in range(2, worksheet.nrows):
     cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
     vett_cpe23Uri = [0]*len(cpes)
@@ -184,9 +190,12 @@ csv_data.append(
             [   
                 "CPE",
                 "CVE",
-                "IMPACT SCORE",
+                "SCORE",
+                "SEVERITY",
                 "DESCRIPTION",
-                "URLs"  
+                "URLs",
+                "REMEDIATIONS",
+                "CWE"  
             ]
         )
 
@@ -195,24 +204,40 @@ csv_data.append(
 for cve in cves:
 
     vett_URLs = []
+    vett_remediations = []
+    severity = ""
+    impactScore = 0
 
     if (len(cve) > 0):
         description = format_description(cve[0]['_source']['description']['description_data'][0]['value'], 60)
         cpe = format_CPE(cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'], 40)
 
         for obj in cve[0]['_source']['references']['reference_data']:
+            if("Vendor Advisory" in obj["tags"]):
+                vett_remediations.append(obj["url"])
             vett_URLs.append(obj["url"])
 
         URLs_witouth_commas = delete_commas(str(vett_URLs))
         #print(URLs_witouth_commas)
         #URLs = format_URL(URLs_witouth_commas, 70)
+        remediations_witouth_commas = delete_commas(str(vett_remediations))
         URLs = format_URLs(URLs_witouth_commas)
+        remediations = format_URLs(remediations_witouth_commas)
+
+
+        if ("baseMetricV3" in cve[0]['_source']):
+            severity = cve[0]['_source']['baseMetricV3']['cvssV3']['baseSeverity']
+            impactScore = cve[0]['_source']['baseMetricV3']['cvssV3']['baseScore']
+        else:
+            severity = severity = cve[0]['_source']['baseMetricV2']['severity']
+            impactScore = cve[0]['_source']['baseMetricV2']['impactScore']
 
         data.append(
             [
                 colorize(cpe),
                 colorize(cve[0]["_id"]),
-                colorize(cve[0]['_source']['baseMetricV2']['impactScore'], color=color_cvss(cve[0]['_source']['baseMetricV2']['impactScore']), attrs="bold"),
+                colorize(impactScore, color=color_cvss(impactScore), attrs="bold"),
+                colorize(severity),
                 colorize(description),
                 colorize(URLs)
             ]
@@ -222,9 +247,12 @@ for cve in cves:
             [   
                 cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
                 cve[0]["_id"],
-                cve[0]['_source']['baseMetricV2']['impactScore'],
+                impactScore,
+                severity,
                 description,
-                URLs  
+                URLs,
+                remediations,
+                cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value']
             ]
         )
 
