@@ -1,4 +1,9 @@
 #!/usr/bin/python3
+
+'''
+This script creates cpe-match index on Elasticsearch
+'''
+
 import sys
 import json
 import os

@@ -1,31 +1,43 @@
 #!/usr/bin/env python3
-import xlrd
+
+# --------------------------------------------------------
+# This is the main file: 
+# --------------------------------------------------------
+
+
+# ---------------------- IMPORTS -------------------------
 from queries import *
 from enrichment import *
-import os
-import colored
-import prettytable
 from prettytable import ALL as ALL
-import textwrap
-import csv
+import csv	                #to read the csv file			
+import os
+import textwrap             #to split long strings in more lines
+import prettytable			#to make the cli
+import colored				#to colorize the "score" field
+import xlrd				    #to read xls
 
-  
 
-workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
-#workbook = xlrd.open_workbook('/home/giampaolo/Desktop/VIS3/VIS3/SearchingCard.xlsx', on_demand = True)
-worksheet = workbook.sheet_by_index(0)
-
+# -------------------- DECLARATIONS ----------------------
 cves = []
 data = list()
 csv_data = list()
-cve_all_edbids = set()
-
-
+cve_all_edbids = set()  
 columns = ["CPE", "CVE", "SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
 
+#to read the searching cards
+#workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
+#workbook = xlrd.open_workbook('/home/giampaolo/Desktop/VIS3/VIS3/SearchingCard.xlsx', on_demand = True)
+workbook = xlrd.open_workbook('/home/fabio/Desktop/VIS3/SearchingCard.xlsx', on_demand = True)
+worksheet = workbook.sheet_by_index(0)
+
+
+# --------------------- FUNCTIONS ------------------------
+
+# to create and print a formatted and colorized cli table
 def cli_table(columns, data, hrules=True):
-    """Print a table"""
     columns = map(lambda x: colorize(x, attrs="bold"), columns)
+    
+    #to create the structure (raw and column lines) of the cli table
     table = prettytable.PrettyTable(
         hrules=prettytable.ALL if hrules else prettytable.FRAME, field_names=columns
     )
@@ -35,27 +47,24 @@ def cli_table(columns, data, hrules=True):
     print(table)
    
 
-
+# to split the description based on "max_line_lenght"
 def format_description(description, max_line_length):
     #accumulated line length
     ACC_length = 0
     words = description.split(" ")
     formatted_description = ""
     for word in words:
-        #if ACC_length + len(word) and a space is <= max_line_length 
-        if ACC_length + (len(word) + 1) <= max_line_length:
-            #append the word and a space
-            formatted_description = formatted_description + word + " "
-            #length = length + length of word + length of space
-            ACC_length = ACC_length + len(word) + 1
+        if ACC_length + (len(word) + 1) <= max_line_length:                     #if ACC_length + len(word) and a space is <= max_line_length
+            formatted_description = formatted_description + word + " "          #append the word and a space
+            ACC_length = ACC_length + len(word) + 1                             #length = length + length of word + length of space
         else:
-            #append a line break, then the word and a space
-            formatted_description = formatted_description + "\n" + word + " "
-            #reset counter of length to the length of a word and a space
-            ACC_length = len(word) + 1
+            formatted_description = formatted_description + "\n" + word + " "   #append a line break, then the word and a space
+            ACC_length = len(word) + 1                                          #reset counter of length to the length of a word and a space
     return formatted_description
 
 
+#the first URL (i=0) is placed in the first row, the next URLs are placed in new lines
+#without this "if" there is an empty line before the URLs
 def format_URLs(URLs):
     formatted_URLs = URLs[0]
     i = 0
@@ -67,40 +76,24 @@ def format_URLs(URLs):
     return formatted_URLs
 
 
+#to remove special chars
 def delete_commas(URLs):
-    #accumulated line length
     URLs = URLs.replace("[", '')
     URLs = URLs.replace("'", '')
     URLs = URLs.replace("]", '')
-    ACC_length = 0
     URLs = URLs.split(", ")
     return URLs
 
 
-def format_URL(URLs, max_line_length):
-    formatted_URLs = URLs[0]
-    i = 0
-    for URL in URLs:
-        if i == 0:
-            i = i+1
-        else:   
-            formatted_URL = "\n".join(textwrap.wrap(URL, max_line_length))
-            formatted_URLs = formatted_URLs + "\n" + formatted_URL + " "
-
-    return formatted_URLs
-
-
+#to split the string based on "max_line_lenght"
 def format_CPE(CPE, max_line_length):
     formatted_CPE = "\n".join(textwrap.wrap(CPE, max_line_length))
-
     return formatted_CPE
 
 
-    
-
+#to color the score, ref: https://pypi.org/project/colored/
 def colorize(string, color=None, highlight=None, attrs=None):
     """Apply style on a string"""
-    # Colors list: https://pypi.org/project/colored/
     return colored.stylize(
         string,
         (colored.fg(color) if color else "")
@@ -108,20 +101,37 @@ def colorize(string, color=None, highlight=None, attrs=None):
         + (colored.attr(attrs) if attrs else ""),
     )
 
-def color_cvss(cvss):
-    """Attribute a color to the CVSS score"""
-    cvss = float(cvss)
-    if cvss < 3:
+
+
+
+#to attribute color and severity to the CVSS score, based on the reference: https://nvd.nist.gov/vuln-metrics/cvss
+# 0.0       None 	 -> White
+# 0.1-3.9   Low      -> Green
+# 4.0-6.9   Medium 	 -> Yellow
+# 7.0-8.9   High 	 -> DarkOrange
+# 9.0-10.0  Critical -> Red
+
+def color_score(score):
+    score = float(score)
+    severity = ""
+
+    if score == 0.0:
+        color = "white"
+        severity = "NONE"
+    elif (score >= 0.1) and (score <= 3.9):
         color = "green_3b"
-    elif cvss <= 5:
+        severity = "LOW"
+    elif (score >= 4.0) and (score <= 6.9):
         color = "yellow_1"
-    elif cvss <= 7:
+        severity = "MEDIUM"
+    elif (score >= 7.0) and (score <= 8.9):
         color = "orange_1"
-    elif cvss <= 8.5:
-        color = "dark_orange"
-    else:
+        severity = "HIGH"
+    elif (score >= 9.0) and (score <= 10.0):
         color = "red"
-    return color
+        severity = "CRITICAL"
+
+    return color, severity
 
 
 def create_csv(row_data):
@@ -130,6 +140,8 @@ def create_csv(row_data):
         writer.writerows(row_data)
 
 
+
+# ---------------------------- MAIN ------------------------------
 for row in range(2, worksheet.nrows):
     cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
     vett_cpe23Uri = [0]*len(cpes)
@@ -183,9 +195,6 @@ for row in range(2, worksheet.nrows):
             
 
 
-            #cves = search_CVE( vett_cpe23Uri[i], vett_versionStartIncluding[i], vett_versionStartExcluding[i], vett_versionEndIncluding[i], vett_versionEndExcluding[i])
-        #search_exploits(row)
-
 csv_data.append(
             [   
                 "CPE",
@@ -218,25 +227,26 @@ for cve in cves:
             vett_URLs.append(obj["url"])
 
         URLs_witouth_commas = delete_commas(str(vett_URLs))
-        #print(URLs_witouth_commas)
-        #URLs = format_URL(URLs_witouth_commas, 70)
+        
         remediations_witouth_commas = delete_commas(str(vett_remediations))
         URLs = format_URLs(URLs_witouth_commas)
         remediations = format_URLs(remediations_witouth_commas)
 
 
         if ("baseMetricV3" in cve[0]['_source']):
-            severity = cve[0]['_source']['baseMetricV3']['cvssV3']['baseSeverity']
+            #severity = cve[0]['_source']['baseMetricV3']['cvssV3']['baseSeverity']
             impactScore = cve[0]['_source']['baseMetricV3']['cvssV3']['baseScore']
         else:
-            severity = severity = cve[0]['_source']['baseMetricV2']['severity']
+            #severity = cve[0]['_source']['baseMetricV2']['severity']
             impactScore = cve[0]['_source']['baseMetricV2']['impactScore']
+
+        [color, severity] = color_score(impactScore)
 
         data.append(
             [
                 colorize(cpe),
                 colorize(cve[0]["_id"]),
-                colorize(impactScore, color=color_cvss(impactScore), attrs="bold"),
+                colorize(impactScore, color, attrs="bold"),
                 colorize(severity),
                 colorize(description),
                 colorize(URLs)
