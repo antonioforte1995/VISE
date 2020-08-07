@@ -164,7 +164,7 @@ artefact. ",http://seclists.org/fulldisclosure/2018/Mar/21,,CWE-428
 cpe:2.3:a:iscripts:easycreate:3.2.1:*:*:*:*:*:*:*,CVE-2018-9236,5.4,MEDIUM,"iScripts EasyCreate 3.2.1 has Stored Cross-Site Scripting 
 in the ""Site title"" field. ","https://pastebin.com/Amw08sAj
 https://www.exploit-db.com/exploits/44436/ ",,CWE-79
-cpe:2.3:a:paloaltonetworks:globalprotect:*:*:*:*:*:*:*:*,CVE-2012-6606,4.9,MEDIUM,"Palo Alto Networks GlobalProtect before 1.1.7, and 
+cpe:2.3:a:paloaltonetworks:globalprotect:*:*:*:*:*:*:*:*,CVE-2012-6606,5.8,MEDIUM,"Palo Alto Networks GlobalProtect before 1.1.7, and 
 NetConnect, does not verify X.509 certificates from SSL 
 servers, which allows man-in-the-middle attackers to spoof 
 portal servers and obtain sensitive information via a 
@@ -202,34 +202,20 @@ simply download these and decrypt the Private Key using the
 default/weak passphrase. ","http://www.securityfocus.com/bid/97492
 https://success.trendmicro.com/solution/1116960 
 https://www.qualys.com/2017/01/12/qsa-2017-01-12/qsa-2017-01-12.pdf ",https://success.trendmicro.com/solution/1116960,CWE-269
-cpe:2.3:a:citrix:metaframe:1.8:sp3:*:*:*:*:*:*,CVE-2001-0716,2.9,LOW,"Citrix MetaFrame 1.8 Server with Service Pack 3, and XP 
+cpe:2.3:a:citrix:metaframe:1.8:sp3:*:*:*:*:*:*,CVE-2001-0716,5.0,MEDIUM,"Citrix MetaFrame 1.8 Server with Service Pack 3, and XP 
 Server Service Pack 1 and earlier, allows remote attackers 
 to cause a denial of service (crash) via a large number of 
 incomplete connections to the server. ","http://www.securityfocus.com/bid/3440
 http://xforce.iss.net/alerts/advise99.php 
 https://exchange.xforce.ibmcloud.com/vulnerabilities/7068 ",http://xforce.iss.net/alerts/advise99.php,NVD-CWE-Other
-cpe:2.3:a:citrix:metaframe:1.8:*:*:*:*:*:*:*,CVE-2001-0908,6.4,MEDIUM,"CITRIX Metaframe 1.8 logs the Client Address (IP address) 
+cpe:2.3:a:citrix:metaframe:1.8:*:*:*:*:*:*:*,CVE-2001-0908,7.5,HIGH,"CITRIX Metaframe 1.8 logs the Client Address (IP address) 
 that is provided by the client instead of obtaining it from 
 the packet headers, which allows clients to spoof their 
 public IP address, e.g. through Network Address Translation 
 (NAT). ","http://marc.info/?l=bugtraq&m=100638693315933&w=2
 http://www.securityfocus.com/bid/3566 
 https://exchange.xforce.ibmcloud.com/vulnerabilities/7538 ",http://www.securityfocus.com/bid/3566,NVD-CWE-Other
-cpe:2.3:a:citrix:metaframe:1.8:sp3:*:*:*:*:*:*,CVE-2001-0716,2.9,LOW,"Citrix MetaFrame 1.8 Server with Service Pack 3, and XP 
-Server Service Pack 1 and earlier, allows remote attackers 
-to cause a denial of service (crash) via a large number of 
-incomplete connections to the server. ","http://www.securityfocus.com/bid/3440
-http://xforce.iss.net/alerts/advise99.php 
-https://exchange.xforce.ibmcloud.com/vulnerabilities/7068 ",http://xforce.iss.net/alerts/advise99.php,NVD-CWE-Other
-cpe:2.3:a:citrix:metaframe:1.8:*:microsoft_nt_4.0_server_terminal_server:*:*:*:*:*,CVE-2006-3779,6.4,MEDIUM,"Citrix MetaFrame up to XP 1.0 Feature 1, except when 
-running on Windows Server 2003, installs a registry key 
-with an insecure ACL, which allows remote authenticated 
-users to gain privileges. ","http://secunia.com/advisories/21076
-http://securitytracker.com/id?1016526 
-http://support.citrix.com/article/CTX110492 
-http://www.securityfocus.com/bid/19056 
-http://www.vupen.com/english/advisories/2006/2862 ",http://secunia.com/advisories/21076,NVD-CWE-Other
-cpe:2.3:a:citrix:metaframe:1.8:*:microsoft_nt_4.0_server_terminal_server:*:*:*:*:*,CVE-2006-3779,6.4,MEDIUM,"Citrix MetaFrame up to XP 1.0 Feature 1, except when 
+cpe:2.3:a:citrix:metaframe:1.8:*:microsoft_nt_4.0_server_terminal_server:*:*:*:*:*,CVE-2006-3779,6.5,MEDIUM,"Citrix MetaFrame up to XP 1.0 Feature 1, except when 
 running on Windows Server 2003, installs a registry key 
 with an insecure ACL, which allows remote authenticated 
 users to gain privileges. ","http://secunia.com/advisories/21076

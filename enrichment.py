@@ -5,6 +5,8 @@ import sys
 import os
 
 
+
+#the yield returned is converted to the "list" type
 def edbid_from_cve(cve):
     return list(iter_edbid_from_cve(cve))
 
@@ -15,6 +17,8 @@ def iter_cve_from_edbid(edb):
         if edb in cve_map[cve]:
             yield cve.upper()
 
+
+#
 def searchExploits(cve_id):
     HIGH_CVSS_BOUND = 7.0
 
