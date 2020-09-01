@@ -15,6 +15,8 @@ import textwrap             #to split long strings in more lines
 import prettytable			#to make the cli
 import colored				#to colorize the "score" field
 import xlrd				    #to read xls
+import re
+import subprocess
 
 
 # -------------------- DECLARATIONS ----------------------
@@ -25,6 +27,12 @@ cve_all_edbids = set()
 columns = ["CPE", "CVE", "SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
 tempCVE = set()
 
+
+def escape_ansi(line):
+    ansi_escape = re.compile(r'(?:\x1B[@-_]|[\x80-\x9F])[0-?]*[ -/]*[@-~]')
+    return ansi_escape.sub('', line)
+
+
 def valid(cve):
     if cve['_id'] in tempCVE:
         return False
@@ -32,9 +40,9 @@ def valid(cve):
     return True
 
 #to read the searching cards
-#workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
+workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
 #workbook = xlrd.open_workbook('/home/giampaolo/Desktop/VIS3/VIS3/SearchingCard.xlsx', on_demand = True)
-workbook = xlrd.open_workbook('/home/fabio/Desktop/VIS3/SearchingCard.xlsx', on_demand = True)
+#workbook = xlrd.open_workbook('/home/fabio/Desktop/VIS3/SearchingCard.xlsx', on_demand = True)
 worksheet = workbook.sheet_by_index(0)
 
 
@@ -236,7 +244,8 @@ csv_data.append(
                 "DESCRIPTION",
                 "URLs",
                 "REMEDIATIONS",
-                "CWE"  
+                "CWE",
+                "EXPLOIT" 
             ]
         )
 
@@ -296,6 +305,24 @@ for cve in cves:
             ]
         )
 
+        exploit_URLs = []
+
+        #reasearching on the ExploitDB for the enrichment, each cve found is added to the "cve_all_edbids" set (in this way there are no duplicates)
+        cve_edbids = searchExploits(cve[0]["_id"])
+        for i in cve_edbids:
+            output = subprocess.check_output('searchsploit '+ str(i) + ' -w', shell=True)
+
+            string_output = output.decode('utf-8')
+            splitted_string = string_output.split("\n")
+    
+
+            for i in range(3, len(splitted_string)-4):
+                exploit_URLs.append(escape_ansi(splitted_string[i].split('|')[-1]))
+            #cve_all_edbids.add(i)
+
+        exploit_URLs_witouth_commas = delete_commas(str(exploit_URLs))
+        exploit_URLs = format_URLs(exploit_URLs_witouth_commas)
+
         #add data in CSV's rows
         csv_data.append(
             [   
@@ -306,23 +333,16 @@ for cve in cves:
                 description,
                 URLs,
                 remediations,
-                cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value']
+                cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
+                exploit_URLs
             ]
         )
 
         #stampaInfo(cve[0])
     
-        #reasearching on the ExploitDB for the enrichment, each cve found is added to the "cve_all_edbids" set (in this way there are no duplicates)
-        cve_edbids = searchExploits(cve[0]["_id"])
-        for i in cve_edbids:
-            cve_all_edbids.add(i)
+        
+
     pass
-
-
-for i in cve_all_edbids:
-        #os.system('searchsploit '+ str(i) + ' -w 2> /dev/null')
-        os.system('searchsploit '+ str(i) + ' -w >/dev/null 2>&1')      # the "-w" flag shows the URL to Exploit-DB rather than the local path
-                                                                        # 2>&1 allows to redirect from std error to std output
 
 
 cli_table(columns, data, hrules=True)                                   # "hrules" creates the structure (raw and column lines) of the cli table

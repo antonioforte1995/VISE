@@ -27,7 +27,8 @@ def searchExploits(cve_id):
     cve_exploits = set()
     
     edbids = cve_searchsploit.edbid_from_cve(cve_id)
-    
+    #print(len(edbids))
+
     for i in edbids:
         cve_exploits.add(i)
 
