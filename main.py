@@ -257,7 +257,7 @@ for cve in cves:
     vett_URLs = []
     vett_remediations = []
     severity = ""
-    impactScore = 0
+    baseScore = 0
 
     #add value in table, splitting in new lines the description and cpe
     if (len(cve) > 0):
@@ -266,7 +266,7 @@ for cve in cves:
 
 
         #enrichment, the "Vendor Advisory URL" will be placed in the "URL" field (CLI) and in the "Remediation" one (CSV)
-        #[SHOULD] actually we have to control more than the "VendorAdvisory" tag and return a better result
+        #[SHOULD] actually we should control more than the "VendorAdvisory" tag and return a better result
         for obj in cve[0]['_source']['references']['reference_data']:
             if("Vendor Advisory" in obj["tags"]):
                 vett_remediations.append(obj["url"])
@@ -280,17 +280,17 @@ for cve in cves:
         remediations = format_URLs(remediations_witouth_commas)
 
 
-        #[SHOULD] here we have a "base score" that is different from the score reported in the site. We should calcute this second one too.
+        #"impactScore" is a subpart of "baseScore", this last one is reported by NIST. 
         if ("baseMetricV3" in cve[0]['_source']):
             #severity = cve[0]['_source']['baseMetricV3']['cvssV3']['baseSeverity']
-            impactScore = cve[0]['_source']['baseMetricV3']['cvssV3']['baseScore']
+            baseScore = cve[0]['_source']['baseMetricV3']['cvssV3']['baseScore']
         else:
             #severity = cve[0]['_source']['baseMetricV2']['severity']
-            impactScore = cve[0]['_source']['baseMetricV2']['cvssV2']['baseScore']
+            baseScore = cve[0]['_source']['baseMetricV2']['cvssV2']['baseScore']
 
 
         #the function color_score returns 2 values, color and severity
-        [color, severity] = color_score(impactScore)
+        [color, severity] = color_score(baseScore)
 
 
         #add data in the CLI
@@ -298,7 +298,7 @@ for cve in cves:
             [
                 colorize(cpe),
                 colorize(cve[0]["_id"]),
-                colorize(impactScore, color, attrs="bold"),
+                colorize(baseScore, color, attrs="bold"),
                 colorize(severity),
                 colorize(description),
                 colorize(URLs)
@@ -328,7 +328,7 @@ for cve in cves:
             [   
                 cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
                 cve[0]["_id"],
-                impactScore,
+                baseScore,
                 severity,
                 description,
                 URLs,
