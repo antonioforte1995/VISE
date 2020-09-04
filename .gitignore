@@ -3,3 +3,5 @@ nvdcve-1.1-2020.json
 official-cpe-dictionary_v2.3.xml
 __pycache__/
 .~lock.*
+output.*
+*.pyc
