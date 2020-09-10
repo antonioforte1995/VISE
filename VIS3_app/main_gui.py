@@ -18,14 +18,15 @@ import xlrd				    #to read xls
 import re
 import subprocess
 from elasticsearch import Elasticsearch
+import json
+import time
+import sys
 
 
 # -------------------- DECLARATIONS ----------------------
 cves = []
 data = list()
-csv_data = list()
 cve_all_edbids = set()  
-columns = ["CPE", "CVE", "SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
 tempCVE = set()
 
 
@@ -47,25 +48,10 @@ def valid(cve):
 
 #to read the searching cards
 workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
-#workbook = xlrd.open_workbook('/home/giampaolo/Desktop/VIS3/VIS3/SearchingCard.xlsx', on_demand = True)
-#workbook = xlrd.open_workbook('/home/fabio/Desktop/VIS3/SearchingCard.xlsx', on_demand = True)
 worksheet = workbook.sheet_by_index(0)
 
 
 # --------------------- FUNCTIONS ------------------------
-
-# to create and print a formatted and colorized cli table
-def cli_table(columns, data, hrules=True):
-    columns = map(lambda x: colorize(x, attrs="bold"), columns)
-    
-    #to create the structure (raw and column lines) of the cli table
-    table = prettytable.PrettyTable(
-        hrules=prettytable.ALL if hrules else prettytable.FRAME, field_names=columns
-    )
-    for row in data:
-        table.add_row(row)
-    table.align = "l"
-    print(table)
    
 
 # to split the description based on "max_line_lenght"
@@ -112,19 +98,6 @@ def format_CPE(CPE, max_line_length):
     return formatted_CPE
 
 
-#to color the score, ref: https://pypi.org/project/colored/
-def colorize(string, color=None, highlight=None, attrs=None):
-    """Apply style on a string"""
-    return colored.stylize(
-        string,
-        (colored.fg(color) if color else "")
-        + (colored.bg(highlight) if highlight else "")
-        + (colored.attr(attrs) if attrs else ""),
-    )
-
-
-
-
 #to attribute color and severity to the CVSS score, based on the reference: https://nvd.nist.gov/vuln-metrics/cvss
 # 0.0       None 	 -> White
 # 0.1-3.9   Low      -> Green
@@ -155,17 +128,11 @@ def color_score(score):
     return color, severity
 
 
-def create_csv(row_data):
-    with open('output.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerows(row_data)
-
-
 
 # ---------------------------- MAIN ------------------------------
 
 #[SHOULD]control on children should be added!
-def start():
+def start(index_name):
     for row in range(2, worksheet.nrows):
         
         #result of the query
@@ -239,24 +206,6 @@ def start():
                 cves.append(tempList)
 
 
-
-    #fields used in CSV
-    csv_data.append(
-                [   
-                    "CPE",
-                    "CVE",
-                    "SCORE",
-                    "SEVERITY",
-                    "DESCRIPTION",
-                    "URLs",
-                    "REMEDIATIONS",
-                    "CWE",
-                    "EXPLOIT" 
-                ]
-            )
-
-
-
     #building each rows and columns of CLI and CSV
     for cve in cves:
 
@@ -299,18 +248,6 @@ def start():
             [color, severity] = color_score(baseScore)
 
 
-            #add data in the CLI
-            data.append(
-                [
-                    colorize(cpe),
-                    colorize(cve[0]["_id"]),
-                    colorize(baseScore, color, attrs="bold"),
-                    colorize(severity),
-                    colorize(description),
-                    colorize(URLs)
-                ]
-            )
-
             exploit_URLs = []
 
             #reasearching on the ExploitDB for the enrichment, each cve found is added to the "cve_all_edbids" set (in this way there are no duplicates)
@@ -329,24 +266,9 @@ def start():
             exploit_URLs_witouth_commas = delete_commas(str(exploit_URLs))
             exploit_URLs = format_URLs(exploit_URLs_witouth_commas)
 
-            #add data in CSV's rows
-            csv_data.append(
-                [   
-                    cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
-                    cve[0]["_id"],
-                    baseScore,
-                    severity,
-                    description,
-                    URLs,
-                    remediations,
-                    cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
-                    exploit_URLs
-                ]
-            )
 
-            #stampaInfo(cve[0])
-            if es.exists(index="results_index", id=cve[0]["_id"]) is False:
-                result = es.create(index="results_index", id=cve[0]["_id"],body={
+            if es.exists(index=index_name, id=cve[0]["_id"]) is False:
+                result = es.create(index=index_name, id=cve[0]["_id"],body={
                     "CPE": cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
                     "CVE": cve[0]["_id"],
                     "SCORE": baseScore,
@@ -358,7 +280,7 @@ def start():
                     "EXPLOIT": exploit_URLs
                 })
             else:  
-                result = es.update(index="results_index", id=cve[0]["_id"],body={
+                result = es.update(index=index_name, id=cve[0]["_id"],body={
                     "doc": {
                         "CPE": cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
                         "CVE": cve[0]["_id"],
@@ -371,14 +293,27 @@ def start():
                         "EXPLOIT": exploit_URLs
                     }, "doc_as_upsert": True   
                 })  
+
+            HEADERS = {
+            'Content-Type': 'application/json'
+            }
+
+            uri = "http://elastic:changeme@3.225.242.97:9200/.kibana/_doc/index-pattern:{0}".format(index_name)
+
+            query = json.dumps(
+                {
+                    "type": "index-pattern",
+                    "index-pattern": {
+                        "title": index_name
+                        #"timeFieldName": time.strftime("%Y%m%d-%H%M%S")
+                    }
+                }
+            )
+
+            r = requests.put(uri, headers=HEADERS, data=query).json()
+            print(r)
             
 
         pass
 
-
-    cli_table(columns, data, hrules=True)                                   # "hrules" creates the structure (raw and column lines) of the cli table
-
-    create_csv(csv_data)
-
-
-start()
+start(sys.argv[1])
