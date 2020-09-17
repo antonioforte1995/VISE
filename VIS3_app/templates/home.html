@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>VIS3</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
+    <link rel="stylesheet" href="static/assets/css/smoothproducts.css">
+</head>
+
+<body>
+    <main class="page landing-page">
+        <section class="clean-block features" style ="border-color: rgb(201,190,201);">
+            <div class="container">
+                <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
+                    <div id="title" class="carousel-item active"><img class="card-img-top w-100 d-block" height="300" width="800" src="static/scenery/VIS3.png"/></div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <p> VIS3 è un tool che raccoglie informazioni da piattaforme di pubblico accesso (NVD, CVE Details, Exploit DB) con il fine di aggregare vulnerabilità note e fornire enrichment legati ad esse. <br><br>
+                        Le informazioni possono essere ricercate attraverso:<br>
+                        &emsp;- il completamento manuale di alcuni parametri di una form HTML<br> 
+                        &emsp;- l'inserimento di una searching card<br><br>
+                        Come risultato della ricerca in entrambi i casi si otterranno i seguenti 3 file: un PDF, un CVS, un Excell.<br>  
+                        Per ognuno di questi è prevista la funzionalità di export.<br> 
+                        VIS3 può essere anche utilizzato da linea di comando, mostrando come risultato una cli minimal ed efficace. <br><br></p>
+                </div>
+                
+                <div class="row justify-content-center">
+                    <div class="col-md-5 feature-box">    
+                        <a href="{{ url_for('.form')}}"> 
+                            <button id="formButton" type="button"  class="button button4">Form</button>
+                        </a>
+                    </div>
+
+                    <div class="col-md-5 feature-box">    
+                        <a href="{{ url_for('.searchingCard')}}"> 
+                            <button id="searchingCardButton" type="button"  class="button button4">Searching Card</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    <footer class="page-footer dark">
+        <div class="footer-copyright">
+            <p></p>
+            <p></p>
+            <p></p>
+            <p align="middle">© 2020 Copyright Text</p>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+    <script src="static/assets/js/smoothproducts.min.js"></script>
+    <script src="static/assets/js/theme.js"></script>
+</body>
+
+<style>
+    .button4{
+        border-radius: 8px;
+    }
+    #uploadIconTitle{
+            font-weight:    bold;
+        }
+    #downloadIconTitle{
+            font-weight:    bold;
+        }
+    .col-xs-24,
+    .col-sm-24,
+    .col-md-24,
+    .col-lg-24 {
+        position: relative;
+        min-height: 1px;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+    .col-xs-24 {
+        width: 20%;
+        float: left;
+    }
+    @media (min-width: 768px) {
+    .col-sm-24 {
+            width: 20%;
+            float: left;
+        }
+    }
+    @media (min-width: 992px) {
+        .col-md-24 {
+            width: 20%;
+            float: left;
+        }
+    }
+    @media (min-width: 1200px) {
+        .col-lg-24 {
+            width: 20%;
+            float: left;
+        }
+    }
+</style>
+
+</html>
