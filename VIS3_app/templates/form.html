@@ -15,6 +15,13 @@
 <body>
 
     <script>
+        function deleteRow(r) {
+            var i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("tableID").deleteRow(i);
+        }
+    </script>
+
+    <script>
         function addRow() {
             var table = document.getElementById("tableID");
             var row = table.insertRow(1);
@@ -25,13 +32,17 @@
             var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4);
             var cell6 = row.insertCell(5);
+            var cell7 = row.insertCell(6);
 
             cell1.innerHTML = document.getElementById("PackageInput").value;
             cell2.innerHTML = document.getElementById("VersionInput").value;
             cell3.innerHTML = document.getElementById("SoftwareInput").value;
             cell4.innerHTML = document.getElementById("ProductInput").value;
             cell5.innerHTML = document.getElementById("VendorInput").value;
-            cell6.innerHTML =  document.getElementById("PlatformInput").value;
+            cell6.innerHTML = document.getElementById("PlatformInput").value;
+
+            var deleteElement = '<input type="button" style="font-family: helvetica; color:red;" onclick="deleteRow(this)" value="x">'
+            cell7.innerHTML = deleteElement;
     }
     </script>
 
@@ -50,9 +61,11 @@
                             <input id="ProductInput" type="text" name="inputBox" placeholder="Product Name"><br>
                             <input id="VendorInput" type="text" name="inputBox" placeholder="Vendor Name"><br>
                             <input id="PlatformInput" type="text" name="inputBox" placeholder="Platform"><br><br>
-                            <button id="formButton" type="button" onclick="addRow()">ADD ROW</button>                       
+                            <button id="formButton" type="button"  class="button button4" onclick="addRow()">ADD ROW</button>                       
                         </form> 
                     </div>
+
+                    <div style='margin-right:100px;'></div>
 
                     <div>
                         <table id="tableID" width=”400″ border=”1″> 
@@ -62,67 +75,42 @@
                                 <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Software Type</th>
                                 <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Product Name</th>
                                 <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Vendor Name</th> 
-                                <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Platform</th> 
+                                <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Platform</th>
                             <tr> 
                         </table>
+
+                        <div style='margin-top:50px;'></div>
+
+                        <div class="row justify-content-center">
+                            <a href="{{ url_for('.createIndex')}}"> 
+                                <button id="createIndexButton" type="button"  class="button button4">SUBMIT</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
+       
+        <div style='margin-top:30px;'></div>
+
         <!--
-        <section class="clean-block about-us">
-            <div class="container">
-                <div class="block-heading">
-                    <p></p>
-                    <p></p>
-                    <h2 class="text-info" align="middle">About Us</h2>
-                    <p></p>
-                </div>
-                    <div class="card-columns mx-auto d-flex col-12">
-                        <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" src="static/avatars/Fabio.jpg">
-                            <div class="card-body info">
-                                <h4 class="card-title">Fabio Maresca</h4>
-                                <p class="card-text"></p>
-                                <div class="icons"><a href="https://www.facebook.com/fabiolion1995"><i class="icon-social-facebook"></i></a><a href="https://www.instagram.com/fabiomar95/"><i class="icon-social-instagram"></i></a><a href="https://twitter.com/FabioMaresca2"><i class="icon-social-twitter"></i></a></div>
-                            </div>
-                        </div>
-        
-                        <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" src="static/avatars/Antonio.jpg">
-                            <div class="card-body info">
-                                <h4 class="card-title">Antonio Forte</h4>
-                                <p class="card-text"></p>
-                                <div class="icons"><a href="https://www.facebook.com/antonioforte1995/"><i class="icon-social-facebook"></i></a><a href="https://www.instagram.com/antonioforte1995/"><i class="icon-social-instagram"></i></a><a href="https://twitter.com/antonioforte95"><i class="icon-social-twitter"></i></a></div>
-                            </div>
-                        </div>
-    
-                        <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" src="static/avatars/Giampaolo.jpg">
-                            <div class="card-body info">
-                                <h4 class="card-title">Giampaolo La Rosa</h4>
-                                <p class="card-text"></p>
-                                <div class="icons"><a href="https://www.facebook.com/giampaolo.larosa.5"><i class="icon-social-facebook"></i></a><a href="https://www.instagram.com/giampaololarosa/"><i class="icon-social-instagram"></i></a><a href="#"><i class="icon-social-twitter"></i></a></div>
-                            </div>
-                        </div>
-                    
-                        <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" src="static/avatars/Giuseppe.jpg">
-                            <div class="card-body info">
-                                <h4 class="card-title">Giuseppe Siani</h4>
-                                <p class="card-text"></p>
-                                <div class="icons"><a href="https://www.facebook.com/Beppe.Siani"><i class="icon-social-facebook"></i></a><a href="https://www.instagram.com/giuseppe_siani/"><i class="icon-social-instagram"></i></a><a href="#"><i class="icon-social-twitter"></i></a></div>
-                            </div>
-                        </div>
-                          
-                        <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" src="static/avatars/Salvatore.png">
-                            <div class="card-body info">
-                                <h4 class="card-title">Salvatore Scotto di Perta</h4>
-                                <p class="card-text"></p>
-                                <div class="icons"><a href="https://www.facebook.com/icesalvo1992"><i class="icon-social-facebook"></i></a><a href="https://www.instagram.com/d1l3mm4/"><i class="icon-social-instagram"></i></a><a href="#"><i class="icon-social-twitter"></i></a></div>
-                            </div>
-                        </div>        
-                    </div>
-                </div>
+        <section>
+            <div class="row justify-content-center">
+                <a href="{{ url_for('.exportPDF')}}"> 
+                    <button id="exportPDFButton" type="button"  class="button button4">Export to PDF</button>
+                </a>
+
+                <div style='margin-right:100px;'></div>
+
+                <a href="{{ url_for('.exportCSV')}}"> 
+                    <button id="exportCSVButton" type="button"  class="button button4">Export to CSV</button>
+                </a>
             </div>
         </section>
-    -->
+        -->
+
+        <div style='margin-top:50px;'></div>
+
     </main>
     <footer class="page-footer dark">
         <div class="footer-copyright">

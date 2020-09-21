@@ -30,21 +30,38 @@
                         VIS3 può essere anche utilizzato da linea di comando, mostrando come risultato una cli minimal ed efficace. <br><br></p>
                 </div>
                 
-                <div class="row justify-content-center">
-                    <div class="col-md-5 feature-box">    
-                        <a href="{{ url_for('.form')}}"> 
-                            <button id="formButton" type="button"  class="button button4">Form</button>
-                        </a>
-                    </div>
+                <div class="row justify-content-center">    
+                    <a href="{{ url_for('.form')}}"> 
+                        <button id="formButton" type="button"  class="button button4">FORM</button>
+                    </a>
 
-                    <div class="col-md-5 feature-box">    
-                        <a href="{{ url_for('.searchingCard')}}"> 
-                            <button id="searchingCardButton" type="button"  class="button button4">Searching Card</button>
-                        </a>
-                    </div>
+                    <div style='margin-right:100px;'></div>
+
+                    <a href="{{ url_for('.searchingCard')}}"> 
+                        <button id="searchingCardButton" type="button"  class="button button4">SEARCHING CARD</button>
+                    </a>
                 </div>
+
             </div>
         </section>
+
+        
+        <section>
+            <div class="row justify-content-center">
+                <a href="{{ url_for('.exportPDF')}}"> 
+                    <button id="exportPDFButton" type="button"  class="button button4">Export to PDF</button>
+                </a>
+
+                <div style='margin-right:100px;'></div>
+
+                <a href="{{ url_for('.exportCSV')}}"> 
+                    <button id="exportCSVButton" type="button"  class="button button4">Export to CSV</button>
+                </a>
+            </div>
+        </section>
+        
+
+        <div style='margin-top:50px;'></div>
         
     </main>
     <footer class="page-footer dark">

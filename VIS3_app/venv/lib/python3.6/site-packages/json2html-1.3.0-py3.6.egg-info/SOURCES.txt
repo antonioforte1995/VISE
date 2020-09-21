@@ -1,0 +1,11 @@
+LICENSE.txt
+MANIFEST.in
+README.rst
+setup.cfg
+setup.py
+json2html/__init__.py
+json2html/jsonconv.py
+json2html.egg-info/PKG-INFO
+json2html.egg-info/SOURCES.txt
+json2html.egg-info/dependency_links.txt
+json2html.egg-info/top_level.txt

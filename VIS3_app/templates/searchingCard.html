@@ -25,14 +25,16 @@
                             <p>Click the button below to upload the searching card.<br>As a result of the uploading of the searching card, some links will be shown to view the analysis results graphically.</p>    
                             <input type="file" id="myFile" name="filename" onchange="myFunction()">
                             <a href="{{ url_for('.createIndex')}}"> 
-                                <button id="createIndexButton" type="button"  class="button button4">Submit</button>
+                                <button id="createIndexButton" type="button"  class="button button4">SUBMIT</button>
                             </a>
-                            </div>
+                        </div>
+
+                        <div style='margin-right:100px;'></div>
     
                         <div class="col-md-5 feature-box"><i id = downloadIconTitle class="icon-arrow-down-circle icon"> Searching Card sample</i>
                             <p>Click the button below to download a sample of a searching card.</p>
                             <a href="{{ url_for('.downloadFunction') }}" download> 
-                                <button id="submitButton" type="button" class="button button4">Download</button>
+                                <button id="submitButton" type="button" class="button button4">DOWNLOAD</button>
                             </a> 
                             <p></p>
                             <p>If you want to create a your own searching card be carefull, it must have the green fields in the image: package and version.<br>A correct example of a searching card is the following.</p>
@@ -42,60 +44,27 @@
                 </div>
             </div>
         </section>
-        <!--
-        <section class="clean-block about-us">
-            <div class="container">
-                <div class="block-heading">
-                    <p></p>
-                    <p></p>
-                    <h2 class="text-info" align="middle">About Us</h2>
-                    <p></p>
-                </div>
-                    <div class="card-columns mx-auto d-flex col-12">
-                        <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" src="static/avatars/Fabio.jpg">
-                            <div class="card-body info">
-                                <h4 class="card-title">Fabio Maresca</h4>
-                                <p class="card-text"></p>
-                                <div class="icons"><a href="https://www.facebook.com/fabiolion1995"><i class="icon-social-facebook"></i></a><a href="https://www.instagram.com/fabiomar95/"><i class="icon-social-instagram"></i></a><a href="https://twitter.com/FabioMaresca2"><i class="icon-social-twitter"></i></a></div>
-                            </div>
-                        </div>
         
-                        <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" src="static/avatars/Antonio.jpg">
-                            <div class="card-body info">
-                                <h4 class="card-title">Antonio Forte</h4>
-                                <p class="card-text"></p>
-                                <div class="icons"><a href="https://www.facebook.com/antonioforte1995/"><i class="icon-social-facebook"></i></a><a href="https://www.instagram.com/antonioforte1995/"><i class="icon-social-instagram"></i></a><a href="https://twitter.com/antonioforte95"><i class="icon-social-twitter"></i></a></div>
-                            </div>
-                        </div>
-    
-                        <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" src="static/avatars/Giampaolo.jpg">
-                            <div class="card-body info">
-                                <h4 class="card-title">Giampaolo La Rosa</h4>
-                                <p class="card-text"></p>
-                                <div class="icons"><a href="https://www.facebook.com/giampaolo.larosa.5"><i class="icon-social-facebook"></i></a><a href="https://www.instagram.com/giampaololarosa/"><i class="icon-social-instagram"></i></a><a href="#"><i class="icon-social-twitter"></i></a></div>
-                            </div>
-                        </div>
-                    
-                        <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" src="static/avatars/Giuseppe.jpg">
-                            <div class="card-body info">
-                                <h4 class="card-title">Giuseppe Siani</h4>
-                                <p class="card-text"></p>
-                                <div class="icons"><a href="https://www.facebook.com/Beppe.Siani"><i class="icon-social-facebook"></i></a><a href="https://www.instagram.com/giuseppe_siani/"><i class="icon-social-instagram"></i></a><a href="#"><i class="icon-social-twitter"></i></a></div>
-                            </div>
-                        </div>
-                          
-                        <div class="card clean-card text-center"><img class="card-img-top w-100 d-block" src="static/avatars/Salvatore.png">
-                            <div class="card-body info">
-                                <h4 class="card-title">Salvatore Scotto di Perta</h4>
-                                <p class="card-text"></p>
-                                <div class="icons"><a href="https://www.facebook.com/icesalvo1992"><i class="icon-social-facebook"></i></a><a href="https://www.instagram.com/d1l3mm4/"><i class="icon-social-instagram"></i></a><a href="#"><i class="icon-social-twitter"></i></a></div>
-                            </div>
-                        </div>        
-                    </div>
-                </div>
+        <div style='margin-top:50px;'></div>
+
+        <!--
+        <section>
+            <div class="row justify-content-center">
+                <a href="{{ url_for('.exportPDF')}}"> 
+                    <button id="exportPDFButton" type="button"  class="button button4">Export to PDF</button>
+                </a>
+
+                <div style='margin-right:100px;'></div>
+
+                <a href="{{ url_for('.exportCSV')}}"> 
+                    <button id="exportCSVButton" type="button"  class="button button4">Export to CSV</button>
+                </a>
             </div>
         </section>
-    -->
+        -->
+
+        <div style='margin-top:50px;'></div>
+
     </main>
     <footer class="page-footer dark">
         <div class="footer-copyright">
