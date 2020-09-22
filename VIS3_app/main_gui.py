@@ -133,6 +133,8 @@ def color_score(score):
 # ---------------------------- MAIN ------------------------------
 
 #[SHOULD]control on children should be added!
+#TODO: Modificare in modo da rendere compatibile con i differenti tipi di input
+#TODO - Sal: Copiare quindi le modifiche presenti in stash con id 7344cf4
 def start(index_name):
     for row in range(2, worksheet.nrows):
 
