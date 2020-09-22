@@ -6,6 +6,7 @@
 
 
 # ---------------------- IMPORTS -------------------------
+from create_dashboards import *
 from queries import *
 from enrichment import *
 from prettytable import ALL as ALL
@@ -21,7 +22,7 @@ from elasticsearch import Elasticsearch
 import json
 import time
 import sys
-
+import uuid 
 
 # -------------------- DECLARATIONS ----------------------
 cves = []
@@ -134,6 +135,8 @@ def color_score(score):
 #[SHOULD]control on children should be added!
 def start(index_name):
     for row in range(2, worksheet.nrows):
+
+        randomic_id = uuid.uuid1()
         
         #result of the query
         cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
@@ -311,9 +314,10 @@ def start(index_name):
             )
 
             r = requests.put(uri, headers=HEADERS, data=query).json()
-            print(r)
-            
+            #print(r)
 
         pass
+     
+    create_dashboards(index_name)
 
 start(sys.argv[1])

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
     <link rel="stylesheet" href="static/assets/css/smoothproducts.css">
 </head>
@@ -19,6 +20,8 @@
                 <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
                     <div id="title" class="carousel-item active"><img class="card-img-top w-100 d-block" height="300" width="800" src="static/scenery/VIS3.png"/></div>
                 </div>
+
+                <div style='margin-top:50px;'></div>
 
                 <div class="row justify-content-center">
                     <p> VIS3 è un tool che raccoglie informazioni da piattaforme di pubblico accesso (NVD, CVE Details, Exploit DB) con il fine di aggregare vulnerabilità note e fornire enrichment legati ad esse. <br><br>
@@ -44,24 +47,9 @@
 
             </div>
         </section>
-
-        
-        <section>
-            <div class="row justify-content-center">
-                <a href="{{ url_for('.exportPDF')}}"> 
-                    <button id="exportPDFButton" type="button"  class="button button4">Export to PDF</button>
-                </a>
-
-                <div style='margin-right:100px;'></div>
-
-                <a href="{{ url_for('.exportCSV')}}"> 
-                    <button id="exportCSVButton" type="button"  class="button button4">Export to CSV</button>
-                </a>
-            </div>
-        </section>
         
 
-        <div style='margin-top:50px;'></div>
+        <div style='margin-top:100px;'></div>
         
     </main>
     <footer class="page-footer dark">

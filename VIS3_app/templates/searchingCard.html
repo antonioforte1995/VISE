@@ -19,13 +19,15 @@
                     <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
                         <div id="title" class="carousel-item active"><img class="card-img-top w-100 d-block" height="300" width="800" src="static/scenery/VIS3.png"/></div>
                     </div>
+
+                    <div style='margin-top:50px;'></div>
                 
                     <div class="row justify-content-center">
                         <div class="col-md-5 feature-box"><i id = uploadIconTitle class="icon-folder-alt icon"> Import Searching Card</i>
                             <p>Click the button below to upload the searching card.<br>As a result of the uploading of the searching card, some links will be shown to view the analysis results graphically.</p>    
                             <input type="file" id="myFile" name="filename" onchange="myFunction()">
-                            <a href="{{ url_for('.createIndex')}}"> 
-                                <button id="createIndexButton" type="button"  class="button button4">SUBMIT</button>
+                            <a href="{{ url_for('.returnLinks')}}"> 
+                                <button id="returnLinksButton" type="button"  class="button button4">SUBMIT</button>
                             </a>
                         </div>
 
@@ -45,7 +47,7 @@
             </div>
         </section>
         
-        <div style='margin-top:50px;'></div>
+        <div style='margin-top:100px;'></div>
 
         <!--
         <section>
