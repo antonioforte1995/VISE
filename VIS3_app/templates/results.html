@@ -24,11 +24,11 @@
                 <div style='margin-top:50px;'></div>
 
                 <div>
-                    <p> Di seguito sono riportati i risultati della ricerca.&emsp;<ul><li>DASHBOARDS:</li>&emsp;<a href="http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/"> Vulnerability Summary Dashboard </a> <br> 
-                        &emsp;<a href="http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/"> Vulnerability Technical Description Dashboard </a> <br>  &emsp;<a href="http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/"> Exploit View Dashboard </a><br><br><li>CSV:</li>&emsp;<i class="fas fa-file-csv"  style="font-size:24px;color:mediumseagreen"></i><a href="{{ url_for('.exportCSV')}}"> Export to CSV</a></ul><br>
+                    <p> Di seguito sono riportati i risultati della ricerca.&emsp;<ul><li>DASHBOARDS:</li>&emsp;<a href="{{ summaryDashboardLink }}"> Vulnerability Summary Dashboard </a> <br> 
+                        &emsp;<a href="{{ vulnerabilityReportLink }}"> Vulnerability Technical Description Dashboard </a> <br>  &emsp;<a href="{{ exploitViewLink }}"> Exploit View Dashboard </a><br><br><li>CSV:</li>&emsp;<i class="fas fa-file-csv"  style="font-size:24px;color:mediumseagreen"></i><a href="{{ url_for('.exportCSV')}}"> Export to CSV</a></ul><br>
                     </p> 
                 </div>
-
+                
             </div>
         </section>
         
