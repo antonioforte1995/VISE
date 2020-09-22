@@ -6,7 +6,7 @@ import subprocess
 from random import randint
 import pdfkit
 
-index = 0
+index = 11
 
 app = Flask(__name__)
 
@@ -52,11 +52,24 @@ def exportPDF():
     return send_file(path, as_attachment=True)
 
 
-@app.route('/returnLinks')
+@app.route('/returnLinks', methods=['POST'])
 def returnLinks():
     global index
     index = index + 1
+    #Indice attuale, necessario trovare un modo per generarlo univocamente
+    #(magari effettuare una get dell'ultimo index creato)
     kibana_index = 'index' + str(index)
-    #os.system("./main_gui.py {0}".format(kibana_index))
-    #path = "SearchingCard.xlsx"
-    return render_template("results.html", summaryDashboardLink="http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/", vulnerabilityReportLink="http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/", exploitViewLink="http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/")
+    try:
+        from main_gui import start
+        from json import loads as jld
+        #Recupero i dati del form
+        dati = request.form["res"]
+        #Effettuo il parse da JSON
+        parsedData = jld(dati)
+        #Lancio la funzione di ricerca passando l'array del Form
+        resCve = start(kibana_index)
+        #Effettuo il render della pagina con i valori generati
+        render_template("results.html", summaryDashboardLink="http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/", vulnerabilityReportLink="http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/", exploitViewLink="http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/", res=resCve)
+    except Exception as e:
+        return e
+    

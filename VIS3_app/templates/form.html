@@ -22,28 +22,38 @@
     </script>
 
     <script>
+        //Valore da inviare in post (e serializzato in JSON)
+        var valueToSubmit = [];
+
         function addRow() {
             var table = document.getElementById("tableID");
             var row = table.insertRow(1);
+            
+            //Strutturata come for in modo da alleggerire il codice
+            var cellNames = ["PackageInput","VersionInput","SoftwareInput","ProductInput","VendorInput","PlatformInput"];
+            var i;
+            var tempDict = {};
+            for(i=0; i<cellNames.length; i++){
+                var key = cellNames[i];
+                var value = document.getElementById(key).value;
+                var tCell = row.insertCell(i);
+                tCell.innerHTML = valueToSubmit;
+                tempDict[key] = value;
+            }
+            valueToSubmit.push(tempDict);
 
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            var cell4 = row.insertCell(3);
-            var cell5 = row.insertCell(4);
-            var cell6 = row.insertCell(5);
             var cell7 = row.insertCell(6);
-
-            cell1.innerHTML = document.getElementById("PackageInput").value;
-            cell2.innerHTML = document.getElementById("VersionInput").value;
-            cell3.innerHTML = document.getElementById("SoftwareInput").value;
-            cell4.innerHTML = document.getElementById("ProductInput").value;
-            cell5.innerHTML = document.getElementById("VendorInput").value;
-            cell6.innerHTML = document.getElementById("PlatformInput").value;
-
             var deleteElement = '<input type="button" style="font-family: helvetica; color:red;" onclick="deleteRow(this)" value="x">'
             cell7.innerHTML = deleteElement;
-    }
+        }
+
+        //Funzione per inviare i dati del form come POST e strutturati in JSON
+        function sendFormData(){
+            var form = document.getElementById("searchingCardForm");
+            var input = document.getElementById("searchingCardField");
+            input.setAttribute("value", JSON.stringify(valueToSubmit));
+            form.submit();
+        }
     </script>
 
     <main class="page landing-page">
@@ -71,24 +81,25 @@
                     <div style='margin-right:100px;'></div>
 
                     <div>
-                        <table id="tableID" width=”400″ border=”1″> 
-                            <tr> 
-                                <th style="font-family: helvetica; background-color:lightgreen; color: black;">Package</th>
-                                <th style="font-family: helvetica; background-color: lightgreen; color: black;">Version</th>
-                                <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Software Type</th>
-                                <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Product Name</th>
-                                <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Vendor Name</th> 
-                                <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Platform</th>
-                            <tr> 
-                        </table>
+                        <form id="searchingCardForm" action="{{ url_for('.returnLinks') }}">
+                            <input type="hidden" name="res" id="searchingCardField" />
+                            <table id="tableID" width="400" border="1"> 
+                                <tr> 
+                                    <th style="font-family: helvetica; background-color:lightgreen; color: black;">Package</th>
+                                    <th style="font-family: helvetica; background-color: lightgreen; color: black;">Version</th>
+                                    <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Software Type</th>
+                                    <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Product Name</th>
+                                    <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Vendor Name</th> 
+                                    <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Platform</th>
+                                <tr> 
+                            </table>
 
-                        <div style='margin-top:100px;'></div>
+                            <div style='margin-top:100px;'></div>
 
-                        <div class="row justify-content-center">
-                            <a href="{{ url_for('.returnLinks')}}"> 
-                                <button id="returnLinksButton" type="button"  class="button button4">SUBMIT</button>
-                            </a>
-                        </div>
+                            <div class="row justify-content-center">
+                                <button id="returnLinksButton" type="button"  class="button button4" onclick="sendFormData()">SUBMIT</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
