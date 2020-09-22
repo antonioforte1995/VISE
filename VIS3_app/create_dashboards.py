@@ -17,9 +17,9 @@ def create_dashboards(index):
     with open('vsd.json') as json_file:
         data = json.load(json_file)
 
-        randomic_id = uuid.uuid1()
+        vsd_randomic_id = uuid.uuid1()
 
-        data['objects'][0]['id'] = str(randomic_id)
+        data['objects'][0]['id'] = str(vsd_randomic_id)
         data['objects'][0]['attributes']['title'] ="VULNERABILITY SUMMARY DASHBOARD_{0}".format(index_number)
 
         for i in range(2,5):
@@ -40,9 +40,9 @@ def create_dashboards(index):
 
     with open('vtd.json') as json_file:
         data = json.load(json_file)
-        randomic_id = uuid.uuid1()
+        vtd_randomic_id = uuid.uuid1()
 
-        data['objects'][0]['id'] = str(randomic_id)
+        data['objects'][0]['id'] = str(vtd_randomic_id)
         data['objects'][0]['attributes']['title'] ="VULNERABILITY TECHNICAL DESCRIPTION DASHBOARD_{0}".format(index_number)
         
         for i in range(2,4):
@@ -62,9 +62,9 @@ def create_dashboards(index):
 
     with open('ev.json') as json_file:
         data = json.load(json_file)
-        randomic_id = uuid.uuid1()
+        ev_randomic_id = uuid.uuid1()
 
-        data['objects'][0]['id'] = str(randomic_id)
+        data['objects'][0]['id'] = str(ev_randomic_id)
 
         data['objects'][0]['attributes']['title'] ="EXPLOIT VIEW DASHBOARD_{0}".format(index_number)
         
@@ -82,4 +82,7 @@ def create_dashboards(index):
     os.system('curl -u elastic:changeme -k -XPOST \'http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import\' -H \'Content-Type: application/json\' -H "kbn-xsrf: true" -d @vsd.json')
     os.system('curl -u elastic:changeme -k -XPOST \'http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import\' -H \'Content-Type: application/json\' -H "kbn-xsrf: true" -d @vtd.json')
     os.system('curl -u elastic:changeme -k -XPOST \'http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import\' -H \'Content-Type: application/json\' -H "kbn-xsrf: true" -d @ev.json')
-    
+
+
+    vett_dashboards_links = ['http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(vsd_randomic_id), 'http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(vtd_randomic_id), 'http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(ev_randomic_id)]
+    return vett_dashboards_links

@@ -318,6 +318,6 @@ def start(index_name):
 
         pass
      
-    create_dashboards(index_name)
+    vett_dashboards_links = create_dashboards(index_name)
 
 start(sys.argv[1])
