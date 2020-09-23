@@ -25,15 +25,7 @@ import sys
 import uuid 
 
 # -------------------- DECLARATIONS ----------------------
-cves = []
-data = list()
-cve_all_edbids = set()  
 tempCVE = set()
-
-
-es_url = "http://elastic:changeme@3.225.242.97:9200"
-
-es = Elasticsearch(hosts=[es_url])
 
 
 def escape_ansi(line):
@@ -47,9 +39,6 @@ def valid(cve):
     tempCVE.add(cve['_id'])
     return True
 
-#to read the searching cards
-workbook = xlrd.open_workbook('/home/antonio/Scrivania/VIS3/SearchingCard.xlsx', on_demand = True)
-worksheet = workbook.sheet_by_index(0)
 
 
 # --------------------- FUNCTIONS ------------------------
@@ -135,13 +124,30 @@ def color_score(score):
 #[SHOULD]control on children should be added!
 #TODO: Modificare in modo da rendere compatibile con i differenti tipi di input
 #TODO - Sal: Copiare quindi le modifiche presenti in stash con id 7344cf4
-def start(index_name):
-    for row in range(2, worksheet.nrows):
+def start(index_name, worksheet = None, usingXLS = True):
+    #Variabili iniziali, spostate dall'esterno così da non dare problemi nell'import
+    cves = []
+    data = list()
+    cve_all_edbids = set()
+    es_url = "http://elastic:changeme@3.225.242.97:9200"
+    es = Elasticsearch(hosts=[es_url])
+
+    #Definizione condizionata del range
+    #per usare sia xls che liste
+    rowRange = range(2, worksheet.nrows) if usingXLS else range(len(worksheet))
+
+    for row in rowRange:
 
         randomic_id = uuid.uuid1()
         
         #result of the query
-        cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
+        #Anche in questo caso condizioniamo la generazione dell'array
+        #così da renderne dinamico l'utilizzo
+        cpes = []
+        if usingXLS:
+            cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
+        else:
+            cpes = search_CPE(worksheet[row]['VendorInput'], worksheet[row]['ProductInput'], worksheet[row]['VersionInput'], worksheet[row]['SoftwareInput'])
         
 
         #four arrays are declared, they will contain information about the type and the number of version
@@ -321,5 +327,14 @@ def start(index_name):
         pass
      
     vett_dashboards_links = create_dashboards(index_name)
+    return vett_dashboards_links
 
-start(sys.argv[1])
+
+
+if __name__ == "__main__":
+    #to read the searching cards
+    workbook = xlrd.open_workbook('SearchingCard.xlsx', on_demand = True)
+    worksheet = workbook.sheet_by_index(0)
+    idx = sys.argv[1] if (len(sys.argv) > 1) else uuid.uuid1()
+    res = start(idx, worksheet, True)
+    print(res)

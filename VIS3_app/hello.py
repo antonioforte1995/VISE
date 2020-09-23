@@ -69,7 +69,13 @@ def returnLinks():
         #Lancio la funzione di ricerca passando l'array del Form
         resCve = start(kibana_index)
         #Effettuo il render della pagina con i valori generati
-        render_template("results.html", summaryDashboardLink="http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/", vulnerabilityReportLink="http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/", exploitViewLink="http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/", res=resCve)
+        return render_template("results.html",
+            summaryDashboardLink="http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
+            vulnerabilityReportLink="http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
+            exploitViewLink="http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
+            res=resCve
+        )
     except Exception as e:
+        print(e)
         return e
     
