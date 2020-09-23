@@ -37,7 +37,7 @@
                 var key = cellNames[i];
                 var value = document.getElementById(key).value;
                 var tCell = row.insertCell(i);
-                tCell.innerHTML = valueToSubmit;
+                tCell.innerHTML = value;
                 tempDict[key] = value;
             }
             valueToSubmit.push(tempDict);
