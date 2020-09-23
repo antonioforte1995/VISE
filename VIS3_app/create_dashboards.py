@@ -32,6 +32,7 @@ def create_dashboards(index):
         print("Failed to load JSON Summary file!!!")
     
     summaryData['objects'][0]['id'] = summaryID
+    summaryData['objects'][0]['attributes']['title'] += "_" + index_number
 
     for i in range(len(summaryPanels)):
         summaryData['objects'][0]['references'][i]['id'] = summaryPanels[i]
@@ -58,6 +59,7 @@ def create_dashboards(index):
         print("Failed to load JSON technical file!!!")
     
     technicalData['objects'][0]['id'] = technicalID
+    technicalData['objects'][0]['attributes']['title'] += "_" + index_number
 
     for i in range(len(technicalPanels)):
         technicalData['objects'][0]['references'][i]['id'] = technicalPanels[i]
@@ -84,6 +86,7 @@ def create_dashboards(index):
         print("Failed to load JSON exploit file!!!")
     
     exploitData['objects'][0]['id'] = exploitID
+    exploitData['objects'][0]['attributes']['title'] += "_" + index_number
 
     for i in range(len(exploitPanels)):
         exploitData['objects'][0]['references'][i]['id'] = exploitPanels[i]

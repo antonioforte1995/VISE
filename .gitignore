@@ -6,3 +6,10 @@ __pycache__/
 output.*
 *.pyc
 .vscode/*
+venv/*
+**/vsd.json
+**/vtd.json
+**/ev.json
+vsd.json
+vtd.json
+ev.json
