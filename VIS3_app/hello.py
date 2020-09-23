@@ -58,7 +58,7 @@ def returnLinks():
     index = index + 1
     #Indice attuale, necessario trovare un modo per generarlo univocamente
     #(magari effettuare una get dell'ultimo index creato)
-    kibana_index = 'index' + str(index)
+    kibana_index = 'index_' + uuid.uuid1()#str(index)
     try:
         from main_gui import start
         from json import loads as jld

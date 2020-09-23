@@ -134,6 +134,7 @@ def start(index_name, worksheet = None, usingXLS = True):
 
     #Definizione condizionata del range
     #per usare sia xls che liste
+    print(len(worksheet))
     rowRange = range(2, worksheet.nrows) if usingXLS else range(len(worksheet))
 
     for row in rowRange:
