@@ -2,6 +2,7 @@
 import os
 import json
 from pprint import pprint
+import requests
 import uuid
 
 def create_dashboards(index):
@@ -9,9 +10,93 @@ def create_dashboards(index):
     #VULNERABILITY SUMMARY DASHBOARD
     #-------------------------------
     x = index.split("_")
-    index_number = x[1]
+    index_number = x[1] if len(x)>1 else index
 
+    #urlzDashboardFatteBene = [""]
+
+    #Dashboard Vulnerability Summary
+    summaryID = index_number + "_s"
+    summaryPanels = [ (summaryID + str(i)) for i in range(4)]
+    summaryIndexPattern = summaryID + "_ip"
+
+    summaryData = None
+
+    import os
+    cwd = os.getcwd()
+    print(cwd)
+
+    with open("summary.json") as sumFile:
+        summaryData = json.load(sumFile)
     
+    if summaryData == None:
+        print("Failed to load JSON Summary file!!!")
+    
+    summaryData['objects'][0]['id'] = summaryID
+
+    for i in range(len(summaryPanels)):
+        summaryData['objects'][0]['references'][i]['id'] = summaryPanels[i]
+        summaryData['objects'][i+1]['id'] = summaryPanels[i]
+    
+    for i in range(1,len(summaryPanels)):
+        summaryData['objects'][i+1]['references'][0]['id'] = summaryIndexPattern
+    
+    summaryData['objects'][5]['id'] = summaryIndexPattern
+    summaryData['objects'][5]['attributes']['title'] = index
+    # summaryID coincide con l'id da concatenare al link per la dashboard di Kibana
+
+    #Dashboard Vulnerability Technical Description
+    technicalID = index_number + "_t"
+    technicalPanels = [ (technicalID + str(i)) for i in range(3)]
+    technicalIndexPattern = technicalID + "_ip"
+
+    technicalData = None
+    
+    with open("technical.json") as technicalFile:
+        technicalData = json.load(technicalFile)
+    
+    if technicalData == None:
+        print("Failed to load JSON technical file!!!")
+    
+    technicalData['objects'][0]['id'] = technicalID
+
+    for i in range(len(technicalPanels)):
+        technicalData['objects'][0]['references'][i]['id'] = technicalPanels[i]
+        technicalData['objects'][i+1]['id'] = technicalPanels[i]
+    
+    for i in range(1,len(technicalPanels)):
+        technicalData['objects'][i+1]['references'][0]['id'] = technicalIndexPattern
+    
+    technicalData['objects'][4]['id'] = technicalIndexPattern
+    technicalData['objects'][4]['attributes']['title'] = index
+    # technicalID coincide con l'id da concatenare al link per la dashboard di Kibana
+
+    #Dashboard Vulnerability exploit Description
+    exploitID = index_number + "_e"
+    exploitPanels = [ (exploitID + str(i)) for i in range(3)]
+    exploitIndexPattern = exploitID + "_ip"
+
+    exploitData = None
+    
+    with open("exploit.json") as exploitFile:
+        exploitData = json.load(exploitFile)
+    
+    if exploitData == None:
+        print("Failed to load JSON exploit file!!!")
+    
+    exploitData['objects'][0]['id'] = exploitID
+
+    for i in range(len(exploitPanels)):
+        exploitData['objects'][0]['references'][i]['id'] = exploitPanels[i]
+        exploitData['objects'][i+1]['id'] = exploitPanels[i]
+    
+    for i in range(1,len(exploitPanels)):
+        exploitData['objects'][i+1]['references'][0]['id'] = exploitIndexPattern
+    
+    exploitData['objects'][4]['id'] = exploitIndexPattern
+    exploitData['objects'][4]['attributes']['title'] = index
+    # exploitID coincide con l'id da concatenare al link per la dashboard di Kibana
+
+    """
     os.system('curl -k -XGET \'http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/export?dashboard=4500b700-f341-11ea-950f-fba5732a37f6\' -u elastic:changeme 1> vsd.json')
 
     with open('vsd.json') as json_file:
@@ -82,7 +167,20 @@ def create_dashboards(index):
     os.system('curl -u elastic:changeme -k -XPOST \'http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import\' -H \'Content-Type: application/json\' -H "kbn-xsrf: true" -d @vsd.json')
     os.system('curl -u elastic:changeme -k -XPOST \'http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import\' -H \'Content-Type: application/json\' -H "kbn-xsrf: true" -d @vtd.json')
     os.system('curl -u elastic:changeme -k -XPOST \'http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import\' -H \'Content-Type: application/json\' -H "kbn-xsrf: true" -d @ev.json')
+    """
 
+    r1 = requests.post("http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=technicalData)
+    print(r1)
 
-    vett_dashboards_links = ['http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(vsd_randomic_id), 'http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(vtd_randomic_id), 'http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(ev_randomic_id)]
+    r2 = requests.post("http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=summaryData)
+    print(r2)
+
+    r3 = requests.post("http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=exploitData)
+    print(r3)
+
+    vett_dashboards_links = ['http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(summaryID), 'http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(technicalID), 'http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(exploitID)]
     return vett_dashboards_links
+
+
+if __name__ == "__main__":
+    pprint(create_dashboards("index_12345"))

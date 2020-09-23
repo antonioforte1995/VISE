@@ -58,7 +58,8 @@ def returnLinks():
     index = index + 1
     #Indice attuale, necessario trovare un modo per generarlo univocamente
     #(magari effettuare una get dell'ultimo index creato)
-    kibana_index = 'index_' + uuid.uuid1()#str(index)
+    from uuid import uuid1
+    kibana_index = 'index_' + str(uuid1())#str(index)
     try:
         from main_gui import start
         from json import loads as jld
@@ -69,11 +70,12 @@ def returnLinks():
         #Lancio la funzione di ricerca passando l'array del Form
         resCve = start(kibana_index, parsedData, False)
         #Effettuo il render della pagina con i valori generati
+        print(resCve)
         return render_template("results.html",
-            summaryDashboardLink="http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
-            vulnerabilityReportLink="http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
-            exploitViewLink="http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
-            res=resCve
+            summaryDashboardLink=resCve[0],#"http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
+            vulnerabilityReportLink=resCve[1],#"http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
+            exploitViewLink=resCve[2]#"http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
+            #res=resCve
         )
     except Exception as e:
         print(e)
