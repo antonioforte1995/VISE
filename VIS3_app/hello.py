@@ -78,6 +78,7 @@ def returnLinks():
             #res=resCve
         )
     except Exception as e:
+        print("AAAA")
         print(e)
         return e
     

@@ -5,11 +5,12 @@ __pycache__/
 .~lock.*
 output.*
 *.pyc
-.vscode/*
-venv/*
+**/.vscode/*
+**/venv/**
 **/vsd.json
 **/vtd.json
 **/ev.json
 vsd.json
 vtd.json
 ev.json
+**/myVenv/**
