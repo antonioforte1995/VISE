@@ -67,7 +67,7 @@ def returnLinks():
         #Effettuo il parse da JSON
         parsedData = jld(dati)
         #Lancio la funzione di ricerca passando l'array del Form
-        resCve = start(kibana_index)
+        resCve = start(kibana_index, parsedData, False)
         #Effettuo il render della pagina con i valori generati
         return render_template("results.html",
             summaryDashboardLink="http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",

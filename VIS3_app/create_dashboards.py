@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import json
-from prettyprinter import pprint
+from pprint import pprint
 import uuid
 
 def create_dashboards(index):
