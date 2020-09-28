@@ -28,7 +28,7 @@
 
                 <div>
                     <p> Di seguito sono riportati i risultati della ricerca.&emsp;<ul><li>DASHBOARDS:</li>&emsp;<a href="{{ summaryDashboardLink }}"> Vulnerability Summary Dashboard </a> <br> 
-                        &emsp;<a href="{{ vulnerabilityReportLink }}"> Vulnerability Technical Description Dashboard </a> <br>  &emsp;<a href="{{ exploitViewLink }}"> Exploit View Dashboard </a><br><br><li>CSV:</li>&emsp;<i class="fas fa-file-csv"  style="font-size:24px;color:mediumseagreen"></i><a href="{{ url_for('.exportCSV')}}"> Export to CSV</a></ul><br>
+                        &emsp;<a href="{{ vulnerabilityReportLink }}"> Vulnerability Technical Description Dashboard </a> <br>  &emsp;<a href="{{ exploitViewLink }}"> Exploit View Dashboard </a><br><br><li>CSV:</li>&emsp;<i class="fas fa-file-csv"  style="font-size:24px;color:mediumseagreen"></i><a href="{{ url_for('.exportCSV') }}?csv_name={{ csvLink }}"> Export to CSV</a></ul><br>
                     </p> 
                 </div>
                 

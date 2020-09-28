@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # --------------------------------------------------------
-# This is the main file.
+# This is the main file. Used for the webapp
 # --------------------------------------------------------
 
 
@@ -23,7 +23,7 @@ import json
 import time
 import sys
 import uuid 
-
+from pprint import pprint
 # -------------------- DECLARATIONS ----------------------
 tempCVE = set()
 
@@ -42,6 +42,7 @@ def valid(cve):
 
 
 # --------------------- FUNCTIONS ------------------------
+
    
 
 # to split the description based on "max_line_lenght"
@@ -117,7 +118,12 @@ def color_score(score):
 
     return color, severity
 
-
+def create_csv(name, row_data):
+    fname = 'VIS3_app/'+name+'_output.csv'
+    with open(fname, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(row_data)
+        return name+'_output.csv'
 
 # ---------------------------- MAIN ------------------------------
 
@@ -131,16 +137,21 @@ def start(index_name, worksheet = None, usingXLS = True):
     cve_all_edbids = set()
     es_url = "http://elastic:changeme@3.225.242.97:9200"
     es = Elasticsearch(hosts=[es_url])
+    tempCVE.clear()
+    csv_data = list()
 
     #Definizione condizionata del range
     #per usare sia xls che liste
-    print(len(worksheet))
+    if usingXLS and type(worksheet) is str:
+        workbook = xlrd.open_workbook(worksheet, on_demand = True)
+        worksheet = workbook.sheet_by_index(0)
+    else:
+        print(len(worksheet))
+    
     rowRange = range(2, worksheet.nrows) if usingXLS else range(len(worksheet))
 
     for row in rowRange:
 
-        randomic_id = uuid.uuid1()
-        
         #result of the query
         #Anche in questo caso condizioniamo la generazione dell'array
         #così da renderne dinamico l'utilizzo
@@ -214,10 +225,31 @@ def start(index_name, worksheet = None, usingXLS = True):
                     tempList = search_CVE(vett_cpe23Uri[i])
 
                 #check on the duplicates
+                #temp2List = list(dict(tempList))
+                a = 1
                 tempList = [item for item in tempList if valid(item)]
-                cves.append(tempList)
+                if len(tempList) == 1:
+                    cves.append(tempList)
+                elif len(tempList) > 1:
+                    for t in tempList:
+                        cves.append([t])
+                else:
+                    print("Ops, scartate tutte")
 
-
+    #fields used in CSV
+    csv_data.append(
+        [   
+            "CPE",
+            "CVE",
+            "SCORE",
+            "SEVERITY",
+            "DESCRIPTION",
+            "URLs",
+            "REMEDIATIONS",
+            "CWE",
+            "EXPLOIT" 
+        ]
+    )
     #building each rows and columns of CLI and CSV
     for cve in cves:
 
@@ -265,20 +297,38 @@ def start(index_name, worksheet = None, usingXLS = True):
             #reasearching on the ExploitDB for the enrichment, each cve found is added to the "cve_all_edbids" set (in this way there are no duplicates)
             cve_edbids = searchExploits(cve[0]["_id"])
             for i in cve_edbids:
-                output = subprocess.check_output('searchsploit '+ str(i) + ' -w', shell=True)
+                try:
+                    output = subprocess.check_output('searchsploit '+ str(i) + ' -w', shell=True)
 
-                string_output = output.decode('utf-8')
-                splitted_string = string_output.split("\n")
-        
+                    string_output = output.decode('utf-8')
+                    splitted_string = string_output.split("\n")
+            
 
-                for i in range(3, len(splitted_string)-4):
-                    exploit_URLs.append(escape_ansi(splitted_string[i].split('|')[-1]))
+                    for i in range(3, len(splitted_string)-4):
+                        exploit_URLs.append(escape_ansi(splitted_string[i].split('|')[-1]))
+                except Exception as e:
+                    print(e)
                 #cve_all_edbids.add(i)
 
             exploit_URLs_witouth_commas = delete_commas(str(exploit_URLs))
             exploit_URLs = format_URLs(exploit_URLs_witouth_commas)
 
+            csv_data.append(
+                [   
+                    cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
+                    cve[0]["_id"],
+                    baseScore,
+                    severity,
+                    description,
+                    URLs,
+                    remediations,
+                    cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
+                    exploit_URLs
+                ]
+            )
 
+
+            print("----")
             if es.exists(index=index_name, id=cve[0]["_id"]) is False:
                 result = es.create(index=index_name, id=cve[0]["_id"],body={
                     "CPE": cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
@@ -291,6 +341,8 @@ def start(index_name, worksheet = None, usingXLS = True):
                     "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
                     "EXPLOIT": exploit_URLs
                 })
+                print("Insert result", cve[0]["_id"])
+                print(result)
             else:  
                 result = es.update(index=index_name, id=cve[0]["_id"],body={
                     "doc": {
@@ -304,30 +356,36 @@ def start(index_name, worksheet = None, usingXLS = True):
                         "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
                         "EXPLOIT": exploit_URLs
                     }, "doc_as_upsert": True   
-                })  
+                })
+                print("Update result", cve[0]["_id"])
+                print(result)
 
-            HEADERS = {
-            'Content-Type': 'application/json'
-            }
-
-            uri = "http://elastic:changeme@3.225.242.97:9200/.kibana/_doc/index-pattern:{0}".format(index_name)
-
-            query = json.dumps(
-                {
-                    "type": "index-pattern",
-                    "index-pattern": {
-                        "title": index_name
-                        #"timeFieldName": time.strftime("%Y%m%d-%H%M%S")
-                    }
-                }
-            )
-
-            r = requests.put(uri, headers=HEADERS, data=query).json()
-            #print(r)
+            
 
         pass
-     
+
+    HEADERS = {
+        'Content-Type': 'application/json'
+    }
+
+    uri = "http://elastic:changeme@3.225.242.97:9200/.kibana/_doc/index-pattern:{0}".format(index_name)
+
+    query = json.dumps(
+        {
+            "type": "index-pattern",
+            "index-pattern": {
+                "title": index_name
+                #"timeFieldName": time.strftime("%Y%m%d-%H%M%S")
+            }
+        }
+    )
+
+    r = requests.put(uri, headers=HEADERS, data=query).json()
+    pprint(r)
+
+    csvName = create_csv(index_name, csv_data)
     vett_dashboards_links = create_dashboards(index_name)
+    vett_dashboards_links.append(csvName)
     return vett_dashboards_links
 
 

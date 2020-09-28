@@ -5,10 +5,13 @@ import os
 import subprocess 
 from random import randint
 import pdfkit
+from werkzeug.utils import secure_filename
 
 index = 11
+uploadFolder = "/tmp/upload"
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = uploadFolder
 
 @app.route('/')
 def main():
@@ -41,8 +44,9 @@ def downloadFunction():
 
 @app.route('/exportCSV')
 def exportCSV():
-	path = "output.csv"
-	return send_file(path, as_attachment=True)
+    filename = request.args.get("csv_name", default="output.csv", type=str)
+    path = filename
+    return send_file(path, as_attachment=True)
 
 
 @app.route('/exportPDF')
@@ -58,8 +62,29 @@ def returnLinks():
     index = index + 1
     #Indice attuale, necessario trovare un modo per generarlo univocamente
     #(magari effettuare una get dell'ultimo index creato)
-    from uuid import uuid1
-    kibana_index = 'index_' + str(uuid1())#str(index)
+    #from uuid import uuid1
+    import re
+    from time import time
+    identifier = str(int(time()))
+    kibana_index = 'index_' + identifier
+    if 'searchingCard' in request.files:
+        f = request.files['searchingCard']
+        if f.filename == '':
+            print("File caricato invalido")
+            return "Invalid file"
+        if f and re.compile("^.*(\\.xlsx?)$").match(f.filename):
+            fName = secure_filename(identifier + "_" + f.filename)
+            temp = os.path.join(app.config['UPLOAD_FOLDER'], fName)
+            f.save(temp)
+            from main_gui import start
+            resCve = start(kibana_index, temp, True)
+            print(resCve)
+            return render_template("results.html",
+                summaryDashboardLink=resCve[0],#"http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
+                vulnerabilityReportLink=resCve[1],#"http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
+                exploitViewLink=resCve[2],#"http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
+                csvLink=resCve[3]
+            )
     try:
         from main_gui import start
         from json import loads as jld
@@ -74,8 +99,8 @@ def returnLinks():
         return render_template("results.html",
             summaryDashboardLink=resCve[0],#"http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
             vulnerabilityReportLink=resCve[1],#"http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
-            exploitViewLink=resCve[2]#"http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
-            #res=resCve
+            exploitViewLink=resCve[2],#"http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
+            csvLink=resCve[3]
         )
     except Exception as e:
         print("AAAA")

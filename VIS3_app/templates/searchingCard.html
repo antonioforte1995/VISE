@@ -25,10 +25,11 @@
                     <div class="row justify-content-center">
                         <div class="col-md-5 feature-box"><i id = uploadIconTitle class="icon-folder-alt icon"> Import Searching Card</i>
                             <p>Click the button below to upload the searching card.<br>As a result of the uploading of the searching card, some links will be shown to view the analysis results graphically.</p>    
-                            <input type="file" id="myFile" name="filename" onchange="myFunction()">
-                            <a href="{{ url_for('.returnLinks')}}"> 
-                                <button id="returnLinksButton" type="button"  class="button button4">SUBMIT</button>
-                            </a>
+                            <form action = "{{ url_for('.returnLinks') }}" method = "POST" enctype = "multipart/form-data">
+                                <input type="file" id="myFile" name="searchingCard" onchange="myFunction()" />
+                                <input id="returnLinksButton" type="submit"  class="button button4" />
+                            </form>
+                        
                         </div>
 
                         <div style='margin-right:100px;'></div>

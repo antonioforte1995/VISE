@@ -24,8 +24,10 @@ def create_dashboards(index):
     import os
     cwd = os.getcwd()
     print(cwd)
-
-    with open("summary.json") as sumFile:
+    folderName = ""
+    if not os.path.exists(os.path.join(cwd, "summary.json")) and os.path.exists(os.path.join(cwd, "VIS3_app/summary.json")):
+        folderName = "VIS3_app/"
+    with open(folderName + "summary.json") as sumFile:
         summaryData = json.load(sumFile)
     
     if summaryData == None:
@@ -52,7 +54,7 @@ def create_dashboards(index):
 
     technicalData = None
     
-    with open("technical.json") as technicalFile:
+    with open(folderName + "technical.json") as technicalFile:
         technicalData = json.load(technicalFile)
     
     if technicalData == None:
@@ -79,7 +81,7 @@ def create_dashboards(index):
 
     exploitData = None
     
-    with open("exploit.json") as exploitFile:
+    with open(folderName + "exploit.json") as exploitFile:
         exploitData = json.load(exploitFile)
     
     if exploitData == None:
@@ -174,12 +176,15 @@ def create_dashboards(index):
 
     r1 = requests.post("http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=technicalData)
     print(r1)
+    print(r1.text)
 
     r2 = requests.post("http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=summaryData)
     print(r2)
+    print(r2.text)
 
     r3 = requests.post("http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=exploitData)
     print(r3)
+    print(r3.text)
 
     vett_dashboards_links = ['http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(summaryID), 'http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(technicalID), 'http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(exploitID)]
     return vett_dashboards_links
