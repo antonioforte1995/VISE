@@ -31,5 +31,8 @@ WORKDIR /app
 #Installa dipendenze Python
 RUN pip3 install -r requirements.txt
 
+#Setup cartella temporanei upload
+RUN mkdir -p /tmp/upload
+
 #Avvia server Docker
 CMD python3 -m flask run --host=0.0.0.0

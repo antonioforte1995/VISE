@@ -135,7 +135,9 @@ def start(index_name, worksheet = None, usingXLS = True):
     cves = []
     data = list()
     cve_all_edbids = set()
-    es_url = "http://elastic:changeme@3.225.242.97:9200"
+    
+    es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@3.225.242.97:9200"
+
     es = Elasticsearch(hosts=[es_url])
     tempCVE.clear()
     csv_data = list()
@@ -226,8 +228,11 @@ def start(index_name, worksheet = None, usingXLS = True):
 
                 #check on the duplicates
                 #temp2List = list(dict(tempList))
-                a = 1
+                #a = 1
                 tempList = [item for item in tempList if valid(item)]
+                for tmp in tempList:
+                    tmp['searchedCPE'] = vett_cpe23Uri[i]
+                
                 if len(tempList) == 1:
                     cves.append(tempList)
                 elif len(tempList) > 1:
@@ -261,7 +266,7 @@ def start(index_name, worksheet = None, usingXLS = True):
         #add value in table, splitting in new lines the description and cpe
         if (len(cve) > 0):
             description = format_description(cve[0]['_source']['description']['description_data'][0]['value'], 60)
-            cpe = format_CPE(cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'], 40)
+            cpe = format_CPE(cve[0]['searchedCPE'], 40) #cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'], 40)
 
 
             #enrichment, the "Vendor Advisory URL" will be placed in the "URL" field (CLI) and in the "Remediation" one (CSV)
@@ -315,7 +320,7 @@ def start(index_name, worksheet = None, usingXLS = True):
 
             csv_data.append(
                 [   
-                    cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
+                    cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
                     cve[0]["_id"],
                     baseScore,
                     severity,
@@ -331,7 +336,7 @@ def start(index_name, worksheet = None, usingXLS = True):
             print("----")
             if es.exists(index=index_name, id=cve[0]["_id"]) is False:
                 result = es.create(index=index_name, id=cve[0]["_id"],body={
-                    "CPE": cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
+                    "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
                     "CVE": cve[0]["_id"],
                     "SCORE": baseScore,
                     "SEVERITY": severity,
@@ -346,7 +351,7 @@ def start(index_name, worksheet = None, usingXLS = True):
             else:  
                 result = es.update(index=index_name, id=cve[0]["_id"],body={
                     "doc": {
-                        "CPE": cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
+                        "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
                         "CVE": cve[0]["_id"],
                         "SCORE": baseScore,
                         "SEVERITY": severity,
@@ -368,7 +373,8 @@ def start(index_name, worksheet = None, usingXLS = True):
         'Content-Type': 'application/json'
     }
 
-    uri = "http://elastic:changeme@3.225.242.97:9200/.kibana/_doc/index-pattern:{0}".format(index_name)
+    #es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@3.225.242.97:9200"
+    uri = es_url + "/.kibana/_doc/index-pattern:{0}".format(index_name)
 
     query = json.dumps(
         {

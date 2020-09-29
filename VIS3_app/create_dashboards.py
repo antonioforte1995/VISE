@@ -174,19 +174,24 @@ def create_dashboards(index):
     os.system('curl -u elastic:changeme -k -XPOST \'http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import\' -H \'Content-Type: application/json\' -H "kbn-xsrf: true" -d @ev.json')
     """
 
-    r1 = requests.post("http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=technicalData)
+    es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@3.225.242.97:9200"
+    kibanaUrl = es_url[:-4] + "5601"
+
+    r1 = requests.post(kibanaUrl + "/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=technicalData)
     print(r1)
     print(r1.text)
 
-    r2 = requests.post("http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=summaryData)
+    r2 = requests.post(kibanaUrl + "/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=summaryData)
     print(r2)
     print(r2.text)
 
-    r3 = requests.post("http://elastic:changeme@3.225.242.97:5601/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=exploitData)
+    r3 = requests.post(kibanaUrl + "/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=exploitData)
     print(r3)
     print(r3.text)
 
-    vett_dashboards_links = ['http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(summaryID), 'http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(technicalID), 'http://3.225.242.97:5601/app/kibana#/dashboard/{0}'.format(exploitID)]
+    vett_dashboards_links = [kibanaUrl + '/app/kibana#/dashboard/{0}'.format(summaryID), 
+        kibanaUrl + '/app/kibana#/dashboard/{0}'.format(technicalID),
+        kibanaUrl + '/app/kibana#/dashboard/{0}'.format(exploitID)]
     return vett_dashboards_links
 
 

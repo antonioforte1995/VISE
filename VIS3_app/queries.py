@@ -2,8 +2,9 @@
 
 from pprint import pprint
 from elasticsearch import Elasticsearch
+import os
 
-es_url = "http://elastic:changeme@3.225.242.97:9200"
+es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@3.225.242.97:9200"
 
 
 def search_CPE(vendor, product, version, target_software):

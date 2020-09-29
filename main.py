@@ -29,7 +29,7 @@ columns = ["CPE", "CVE", "SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
 tempCVE = set()
 
 
-es_url = "http://elastic:changeme@3.225.242.97:9200"
+es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@3.225.242.97:9200"
 
 es = Elasticsearch(hosts=[es_url])
 
