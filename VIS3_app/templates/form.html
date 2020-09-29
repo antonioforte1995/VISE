@@ -9,10 +9,26 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
-    <link rel="stylesheet" href="static/assets/css/smoothproducts.css">
+    <link rel="stylesheet" href="static/assets/css/bootstrap.min.css">
 </head>
 
 <body>
+    <div style='margin-top:10px;'></div>
+        <nav class="navbar navbar-toggleable-md bg-faded navbar-light bg-light">
+            <a class="navbar-brand" style="margin: auto;">Navbar</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <a class="nav-item nav-link" href="http://127.0.0.1:5000/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link active" href="{{ url_for('.form')}}">Form</a>
+                <a class="nav-item nav-link" href="{{ url_for('.searchingCard')}}">Searching Card</a>
+                <!--<a class="nav-item nav-link" href="#">About</a>-->
+              </div>
+            </div>
+          </nav>
 
     <script>
         function deleteRow(r) {
@@ -58,54 +74,55 @@
 
     <main class="page landing-page">
         <section class="clean-block features" style ="border-color: rgb(201,190,201);">
-            <div id="container" class="container">
+            <div class="container">
                 <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
                     <div id="title" class="carousel-item active"><img class="card-img-top w-100 d-block" height="300" width="800" src="static/scenery/VIS3.png"/></div>
-                </div>
+                </div>  
 
-                <div style='margin-top:50px;'></div>
+                <div class="jumbotron card border-info mb-3">
+                    <div class="row justify-content-center">
+                        <div class="col-md-5 feature-box">
+                            <form action="/action_page.php">
+                                <input id="PackageInput" type="text" name="inputBox" placeholder="Package"><br>
+                                <input id="VersionInput" type="text" name="inputBox" placeholder="Version"><br>
+                                <input id="SoftwareInput" type="text" name="inputBox" placeholder="Software Type"><br>
+                                <input id="ProductInput" type="text" name="inputBox" placeholder="Product Name"><br>
+                                <input id="VendorInput" type="text" name="inputBox" placeholder="Vendor Name"><br>
+                                <input id="PlatformInput" type="text" name="inputBox" placeholder="Platform"><br><br>
+                                <button id="formButton" type="button"  class="btn btn-danger" onclick="addRow()">ADD ROW</button>                       
+                            </form> 
+                        </div>
 
-                <div class="row justify-content-center">
-                    <div>
-                        <form action="/action_page.php">
-                            <input id="PackageInput" type="text" name="inputBox" placeholder="Package"><br>
-                            <input id="VersionInput" type="text" name="inputBox" placeholder="Version"><br>
-                            <input id="SoftwareInput" type="text" name="inputBox" placeholder="Software Type"><br>
-                            <input id="ProductInput" type="text" name="inputBox" placeholder="Product Name"><br>
-                            <input id="VendorInput" type="text" name="inputBox" placeholder="Vendor Name"><br>
-                            <input id="PlatformInput" type="text" name="inputBox" placeholder="Platform"><br><br>
-                            <button id="formButton" type="button"  class="button button4" onclick="addRow()">ADD ROW</button>                       
-                        </form> 
-                    </div>
+                        <div style='margin-right:-100px;'></div>
 
-                    <div style='margin-right:100px;'></div>
+                        <div class="col-md-5 feature-box" style='margin-right:150px;'>
+                            <form id="searchingCardForm" action="{{ url_for('.returnLinks') }}" method="POST">
+                                <input type="hidden" name="res" id="searchingCardField" />
+                                <table id="tableID" width="400" border="1"> 
+                                    <tr> 
+                                        <th style="font-family: helvetica; background-color:lightgreen; color: black; padding:0 15px 0 15px;">Package</th>
+                                        <th style="font-family: helvetica; background-color: lightgreen; color: black; padding:0 15px 0 15px;">Version</th>
+                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; padding:0 15px 0 15px;">Software Type</th>
+                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; padding:0 15px 0 15px;">Product Name</th>
+                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; padding:0 15px 0 15px;">Vendor Name</th> 
+                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; padding:0 15px 0 15px;">Platform</th>
+                                    <tr> 
+                                </table>
 
-                    <div>
-                        <form id="searchingCardForm" action="{{ url_for('.returnLinks') }}" method="POST">
-                            <input type="hidden" name="res" id="searchingCardField" />
-                            <table id="tableID" width="400" border="1"> 
-                                <tr> 
-                                    <th style="font-family: helvetica; background-color:lightgreen; color: black;">Package</th>
-                                    <th style="font-family: helvetica; background-color: lightgreen; color: black;">Version</th>
-                                    <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Software Type</th>
-                                    <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Product Name</th>
-                                    <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Vendor Name</th> 
-                                    <th style="font-family: helvetica; background-color: lightskyblue; color: black;">Platform</th>
-                                <tr> 
-                            </table>
+                                <div style='margin-top:100px;'></div>
 
-                            <div style='margin-top:100px;'></div>
-
-                            <div class="row justify-content-center">
-                                <button id="returnLinksButton" type="button"  class="button button4" onclick="sendFormData()">SUBMIT</button>
-                            </div>
-                        </form>
+                                <div class="row justify-content-center">
+                                    <button id="returnLinksButton" type="button"  class="btn btn-success"" onclick="sendFormData()">SUBMIT</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </section>
        
-        <div style='margin-top:30px;'></div>
+        <div style='margin-top:50px;'></div>
 
         <!--
         <section>
@@ -181,6 +198,10 @@
             width: 20%;
             float: left;
         }
+    }
+    .navbar-nav .nav-link,
+    .navbar-brand {
+        text-align: right;
     }
 </style>
 

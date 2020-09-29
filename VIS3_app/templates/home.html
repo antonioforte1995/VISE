@@ -10,38 +10,55 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
-    <link rel="stylesheet" href="static/assets/css/smoothproducts.css">
+    <link rel="stylesheet" href="static/assets/css/bootstrap.min.css">
 </head>
 
 <body>
     <main class="page landing-page">
+        <div style='margin-top:10px;'></div>
+        <nav class="navbar navbar-toggleable-md bg-faded navbar-light bg-light">
+            <a class="navbar-brand" style="margin: auto;">Navbar</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="http://127.0.0.1:5000/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="{{ url_for('.form')}}">Form</a>
+                <a class="nav-item nav-link" href="{{ url_for('.searchingCard')}}">Searching Card</a>
+                <!--<a class="nav-item nav-link" href="#">About</a>-->
+            </div>
+            </div>
+        </nav>
+
         <section class="clean-block features" style ="border-color: rgb(201,190,201);">
             <div class="container">
                 <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
                     <div id="title" class="carousel-item active"><img class="card-img-top w-100 d-block" height="300" width="800" src="static/scenery/VIS3.png"/></div>
                 </div>
 
-                <div style='margin-top:50px;'></div>
-
-                <div class="row justify-content-center">
+                <div class="row justify-content-center jumbotron card border-warning mb-3">
                     <p> VIS3 è un tool che raccoglie informazioni da piattaforme di pubblico accesso (NVD, CVE Details, Exploit DB) con il fine di aggregare vulnerabilità note e fornire enrichment legati ad esse. <br><br>
                         Le informazioni possono essere ricercate attraverso:<br>
                         &emsp;- il completamento manuale di alcuni parametri di una form HTML<br> 
                         &emsp;- l'inserimento di una searching card<br><br>
                         Come risultato della ricerca in entrambi i casi si otterranno i seguenti 3 file: un PDF, un CVS, un Excell.<br>  
                         Per ognuno di questi è prevista la funzionalità di export.<br> 
-                        VIS3 può essere anche utilizzato da linea di comando, mostrando come risultato una cli minimal ed efficace. <br><br></p>
+                        VIS3 può essere anche utilizzato da linea di comando, mostrando come risultato una cli minimal ed efficace.</p>
                 </div>
+
+                <div style='margin-top:20px;'></div>
                 
                 <div class="row justify-content-center">    
                     <a href="{{ url_for('.form')}}"> 
-                        <button id="formButton" type="button"  class="button button4">FORM</button>
+                        <button id="formButton" type="button"  class="btn btn-danger">FORM</button>
                     </a>
 
                     <div style='margin-right:100px;'></div>
 
                     <a href="{{ url_for('.searchingCard')}}"> 
-                        <button id="searchingCardButton" type="button"  class="button button4">SEARCHING CARD</button>
+                        <button id="searchingCardButton" type="button"  class="btn btn-success">SEARCHING CARD</button>
                     </a>
                 </div>
 
@@ -49,7 +66,7 @@
         </section>
         
 
-        <div style='margin-top:100px;'></div>
+        <div style='margin-top:50px;'></div>
         
     </main>
     <footer class="page-footer dark">
@@ -57,7 +74,7 @@
             <p></p>
             <p></p>
             <p></p>
-            <p align="middle">© 2020 Copyright Text</p>
+            <p footer-text align="middle">© 2020 Copyright Text</p>
         </div>
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -108,6 +125,11 @@
             float: left;
         }
     }
+    .navbar-nav .nav-link,
+    .navbar-brand {
+        text-align: right;
+    }
+
 </style>
 
 </html>
