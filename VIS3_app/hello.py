@@ -55,6 +55,17 @@ def exportPDF():
     path = "out.pdf"
     return send_file(path, as_attachment=True)
 
+@app.route('/leme')
+def leme():
+    filename = request.args.get("a",default="home", type=str)
+    filename = "leme"+filename
+    if ".html" not in filename:
+        filename = filename + ".html"
+    return render_template(filename)
+
+@app.route('/about')
+def aboutUs():
+    return render_template('about-us.html')
 
 @app.route('/returnLinks', methods=['POST'])
 def returnLinks():

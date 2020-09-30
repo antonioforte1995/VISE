@@ -162,7 +162,7 @@ def start(index_name, worksheet = None, usingXLS = True):
         if usingXLS:
             cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
         else:
-            cpes = search_CPE(worksheet[row]['VendorInput'], worksheet[row]['ProductInput'], worksheet[row]['VersionInput'], worksheet[row]['SoftwareInput'])
+            cpes = search_CPE(worksheet[row]['VendorInput'], worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], worksheet[row]['SoftwareInput'], worksheet[row]['ProductInput'])
         
 
         #four arrays are declared, they will contain information about the type and the number of version

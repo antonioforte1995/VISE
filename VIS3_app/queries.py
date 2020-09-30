@@ -7,12 +7,23 @@ import os
 es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@3.225.242.97:9200"
 
 
-def search_CPE(vendor, product, version, target_software):
+def search_CPE(vendor, product, version, target_software, cpetype = "a"):
 
     if (target_software == ""):
         target_software = ".*"
 
     es = Elasticsearch(hosts=[es_url])
+
+    if cpetype not in ["a", "h", "o"]:
+        cpetype = "a"
+    elif cpetype == "application":
+        cpetype = "a"
+    elif cpetype == "os":
+        cpetype = "o"
+    elif cpetype == "operating system":
+        cpetype = "o"
+    elif cpetype == "hardware":
+        cpetype = "h"
 
     res = es.search(index="cpe-index", body={
         "query": {
@@ -21,7 +32,7 @@ def search_CPE(vendor, product, version, target_software):
                     {
                         "regexp": {
                             "cpe23Uri.keyword": {
-                                "value": "cpe:2.3:a:"+ vendor +":"+ product +":"+ version +":.*:.*:.*:.*:(*|"+ target_software +"):.*:.*",
+                                "value": "cpe:2.3:"+cpetype+":"+ vendor +":"+ product +":"+ version +":.*:.*:.*:.*:(*|"+ target_software +"):.*:.*",
                                 "boost": 1.0
                             }
                         }
@@ -29,7 +40,7 @@ def search_CPE(vendor, product, version, target_software):
                     {
                         "regexp": {
                             "cpe_name.cpe23Uri.keyword": {
-                                "value": "cpe:2.3:a:"+ vendor +":"+ product +":"+ version +":.*:.*:.*:.*:(*|"+ target_software +"):.*:.*",
+                                "value": "cpe:2.3:"+cpetype+":"+ vendor +":"+ product +":"+ version +":.*:.*:.*:.*:(*|"+ target_software +"):.*:.*",
                                 "boost": 1.0
                             }
                         }

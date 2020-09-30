@@ -1,0 +1,134 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>VIS3</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
+    <link rel="stylesheet" href="static/assets/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+    <script src="static/assets/js/smoothproducts.min.js"></script>
+    <script src="static/assets/js/theme.js"></script>
+
+    <style>
+        .button4{
+            border-radius: 8px;
+        }
+        #uploadIconTitle{
+                font-weight:    bold;
+            }
+        #downloadIconTitle{
+                font-weight:    bold;
+            }
+        .col-xs-24,
+        .col-sm-24,
+        .col-md-24,
+        .col-lg-24 {
+            position: relative;
+            min-height: 1px;
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+        .col-xs-24 {
+            width: 20%;
+            float: left;
+        }
+        @media (min-width: 768px) {
+        .col-sm-24 {
+                width: 20%;
+                float: left;
+            }
+        }
+        @media (min-width: 992px) {
+            .col-md-24 {
+                width: 20%;
+                float: left;
+            }
+        }
+        @media (min-width: 1200px) {
+            .col-lg-24 {
+                width: 20%;
+                float: left;
+            }
+        }
+        .navbar-nav .nav-link,
+        .navbar-brand {
+            text-align: right;
+        }
+
+    </style>
+</head>
+<body style="display: flex; flex-direction: column; height: 100%;">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="{{ url_for('.main') }}">VIS3</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarColor01">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="{{ url_for('.main') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('.form')}}">Form</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('.searchingCard')}}">Searching card</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('.aboutUs') }}">About us</a>
+                </li>
+              </ul>
+            </div>
+        </nav>
+    </header>
+    
+    <main style="flex: 1 0 auto;">
+        <section class="clean-block features" style ="margin-bottom: 3em;">
+            <div class="container">
+                <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
+                    <div id="title" class="carousel-item active"><img class="card-img-top w-100 d-block" height="300" width="800" src="static/scenery/VIS3.png"/></div>
+                </div>
+
+                <div class="row justify-content-center jumbotron card border-secondary mb-3" style="padding: 2rem; border-radius: 0.5rem;">
+                    <p style="margin: 0px;"> VIS3 è un tool che raccoglie informazioni da piattaforme di pubblico accesso (NVD, CVE Details, Exploit DB) con il fine di aggregare vulnerabilità note e fornire enrichment legati ad esse. <br><br>
+                        Le informazioni possono essere ricercate attraverso:<br>
+                        &emsp;- il completamento manuale di alcuni parametri di una form HTML<br> 
+                        &emsp;- l'inserimento di una searching card<br><br>
+                        Come risultato della ricerca in entrambi i casi si otterranno i seguenti 3 file: un PDF, un CSV, un XLS.<!-- da correggere e togliere XLS ed eventualmente PDF --><br>  
+                        Per ognuno di questi è prevista la funzionalità di export.<br> 
+                        VIS3 può essere anche utilizzato da linea di comando, mostrando come risultato una cli minimal ed efficace.</p>
+                </div>
+
+                <div style='margin-top:20px;'></div>
+                
+                <div class="row justify-content-center">    
+                    <a href="{{ url_for('.form')}}"> 
+                        <button id="formButton" type="button"  class="btn btn-primary">FORM</button>
+                    </a>
+
+                    <div style='margin-right:100px;'></div>
+
+                    <a href="{{ url_for('.searchingCard')}}"> 
+                        <button id="searchingCardButton" type="button"  class="btn btn-info">SEARCHING CARD</button>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="page-footer dark" style="flex-shrink:0;">
+        <div class="footer-copyright">
+            <p footer-text align="middle">Copyright © 2020 CyberHackademy. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
