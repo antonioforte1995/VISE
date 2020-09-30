@@ -124,9 +124,6 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{{ url_for('.searchingCard')}}">Searching card</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('.aboutUs') }}">About us</a>
-                </li>
               </ul>
             </div>
         </nav>
@@ -171,10 +168,10 @@
         <section class="clean-block features" style ="border-color: rgb(201,190,201);">
             <div class="container">
                 <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
-                    <div id="title" class="carousel-item active"><img class="card-img-top w-100 d-block" height="300" width="800" src="static/scenery/VIS3.png"/></div>
+                    <div id="title" class="carousel-item active"><img class="card-img-top w-100 d-block" max-height="300" src="static/scenery/VIS3_alt.png"/></div>
                 </div>  
 
-                <div class="jumbotron card border-light mb-3">
+                <div class="jumbotron card border-secondary mb-3" style="padding: 2rem;"    >
                     <div class="row justify-content-center">
                         <div class="col-3 feature-box">
                             <form action="#">
@@ -195,6 +192,7 @@
                             </form> 
                         </div>
 
+                        <div class="col-1" style="margin-left: -3%;"></div>
 
                         <div class="col-8 feature-box">
                             <form id="searchingCardForm" action="{{ url_for('.returnLinks') }}" method="POST" style="width: 99%;">
@@ -202,13 +200,13 @@
                                 <table id="tableID" width="100%" class="table table-hover"> 
                                     <thead>
                                     <tr> 
-                                        <th style="font-family: helvetica; background-color:lightgreen; color: black; padding: 5px 15px 5px 15px;">Package</th>
-                                        <th style="font-family: helvetica; background-color: lightgreen; color: black; padding: 5px 15px 5px 15px;">Version</th>
-                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; padding: 5px 15px 5px 15px;">Vendor</th>
-                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; padding: 5px 15px 5px 15px;">Target Software</th>
-                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; padding: 5px 15px 5px 15px;">Product Type</th> 
-                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; padding: 5px 15px 5px 15px;">Platform</th>
-                                        <th style="font-family: helvetica; background-color: rgb(235, 166, 163); color: black; padding: 5px 15px 5px 15px;">Remove</th>
+                                        <th style="font-family: helvetica; background-color:lightgreen; color: black;/* padding: 5px 15px 5px 15px;*/">Package</th>
+                                        <th style="font-family: helvetica; background-color: lightgreen; color: black; /*padding: 5px 15px 5px 15px;*/">Version</th>
+                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; /*padding: 5px 15px 5px 15px;*/">Vendor</th>
+                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; /*padding: 5px 15px 5px 15px;*/">Target Software</th>
+                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; /*padding: 5px 15px 5px 15px;*/">Product Type</th> 
+                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; /*padding: 5px 15px 5px 15px;*/">Platform</th>
+                                        <th style="font-family: helvetica; background-color: rgb(235, 166, 163); color: black; /*padding: 5px 15px 5px 15px;*/">Remove</th>
                                     <tr>
                                     </thead>
                                     <tbody id="tableBody">
@@ -237,7 +235,7 @@
                                 <div style='margin-top:100px;'></div>
 
                                 <div class="row justify-content-center">
-                                    <button id="returnLinksButton" type="button"  class="btn btn-success btn-lg btn-block" onclick="sendFormData()" style="width: 75%;">SUBMIT</button>
+                                    <button id="returnLinksButton" type="button"  class="btn btn-primary btn-lg btn-block" onclick="sendFormData()" style="width: 66%;">SUBMIT</button>
                                 </div>
                             </form>
                         </div>

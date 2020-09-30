@@ -14,9 +14,8 @@ def search_CPE(vendor, product, version, target_software, cpetype = "a"):
 
     es = Elasticsearch(hosts=[es_url])
 
-    if cpetype not in ["a", "h", "o"]:
-        cpetype = "a"
-    elif cpetype == "application":
+    
+    if cpetype == "application":
         cpetype = "a"
     elif cpetype == "os":
         cpetype = "o"
@@ -24,6 +23,8 @@ def search_CPE(vendor, product, version, target_software, cpetype = "a"):
         cpetype = "o"
     elif cpetype == "hardware":
         cpetype = "h"
+    elif cpetype not in ["a", "h", "o"]:
+        cpetype = "a"
 
     res = es.search(index="cpe-index", body={
         "query": {

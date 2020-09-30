@@ -15,16 +15,16 @@ app.config['UPLOAD_FOLDER'] = uploadFolder
 
 @app.route('/')
 def main():
-    return render_template("home.html")
+    return render_template("nhome.html")
 
 
 @app.route("/searchingCard.html")
 def searchingCard():
-    return render_template("searchingCard.html")
+    return render_template("nsearchingCard.html")
 
 @app.route("/form.html")
 def form():
-    return render_template("form.html")
+    return render_template("nform.html")
 
 """
 @app.route('/createIndex')
@@ -58,7 +58,7 @@ def exportPDF():
 @app.route('/leme')
 def leme():
     filename = request.args.get("a",default="home", type=str)
-    filename = "leme"+filename
+    filename = "n"+filename
     if ".html" not in filename:
         filename = filename + ".html"
     return render_template(filename)
@@ -90,7 +90,7 @@ def returnLinks():
             from main_gui import start
             resCve = start(kibana_index, temp, True)
             print(resCve)
-            return render_template("results.html",
+            return render_template("nresults.html",
                 summaryDashboardLink=resCve[0],#"http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
                 vulnerabilityReportLink=resCve[1],#"http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
                 exploitViewLink=resCve[2],#"http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
@@ -107,7 +107,7 @@ def returnLinks():
         resCve = start(kibana_index, parsedData, False)
         #Effettuo il render della pagina con i valori generati
         print(resCve)
-        return render_template("results.html",
+        return render_template("nresults.html",
             summaryDashboardLink=resCve[0],#"http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
             vulnerabilityReportLink=resCve[1],#"http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
             exploitViewLink=resCve[2],#"http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
