@@ -26,7 +26,12 @@ import uuid
 from pprint import pprint
 # -------------------- DECLARATIONS ----------------------
 tempCVE = set()
+IS_DEBUG = True
 
+def dprint(a):
+    global IS_DEBUG
+    if IS_DEBUG:
+        print(a)
 
 def escape_ansi(line):
     ansi_escape = re.compile(r'(?:\x1B[@-_]|[\x80-\x9F])[0-?]*[ -/]*[@-~]')
@@ -43,7 +48,29 @@ def valid(cve):
 
 # --------------------- FUNCTIONS ------------------------
 
-   
+# to create and print a formatted and colorized cli table
+def cli_table(columns, data, hrules=True):
+    columns = map(lambda x: colorize(x, attrs="bold"), columns)
+    
+    #to create the structure (raw and column lines) of the cli table
+    table = prettytable.PrettyTable(
+        hrules=prettytable.ALL if hrules else prettytable.FRAME, field_names=columns
+    )
+    for row in data:
+        table.add_row(row)
+    table.align = "l"
+    print(table)
+
+
+#to color the score, ref: https://pypi.org/project/colored/
+def colorize(string, color=None, highlight=None, attrs=None):
+    """Apply style on a string"""
+    return colored.stylize(
+        string,
+        (colored.fg(color) if color else "")
+        + (colored.bg(highlight) if highlight else "")
+        + (colored.attr(attrs) if attrs else ""),
+    )
 
 # to split the description based on "max_line_lenght"
 def format_description(description, max_line_length):
@@ -131,11 +158,15 @@ def create_csv(name, row_data):
 #[SHOULD]control on children should be added!
 #TODO: Modificare in modo da rendere compatibile con i differenti tipi di input
 #TODO - Sal: Copiare quindi le modifiche presenti in stash con id 7344cf4
-def start(index_name, worksheet = None, usingXLS = True):
+def start(index_name, worksheet = None, usingXLS = True, gui=True):
     #Variabili iniziali, spostate dall'esterno così da non dare problemi nell'import
     cves = []
     data = list()
     cve_all_edbids = set()
+    columns = ["CPE", "CVE", "SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
+    global IS_DEBUG
+    IS_DEBUG = gui
+    #print(IS_DEBUG)
     
     es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@3.225.242.97:9200"
 
@@ -151,7 +182,7 @@ def start(index_name, worksheet = None, usingXLS = True):
     elif usingXLS:
         pass
     else:
-        print(len(worksheet))
+        dprint(len(worksheet))
     
     rowRange = range(2, worksheet.nrows) if usingXLS else range(len(worksheet))
 
@@ -242,7 +273,7 @@ def start(index_name, worksheet = None, usingXLS = True):
                     for t in tempList:
                         cves.append([t])
                 else:
-                    print("Ops, scartate tutte")
+                    dprint("Ops, scartate tutte")
 
     #fields used in CSV
     csv_data.append(
@@ -299,6 +330,17 @@ def start(index_name, worksheet = None, usingXLS = True):
             #the function color_score returns 2 values, color and severity
             [color, severity] = color_score(baseScore)
 
+            #add data in the CLI
+            data.append(
+                [
+                    colorize(cpe),
+                    colorize(cve[0]["_id"]),
+                    colorize(baseScore, color, attrs="bold"),
+                    colorize(severity),
+                    colorize(description),
+                    colorize(URLs)
+                ]
+            )
 
             exploit_URLs = []
 
@@ -315,7 +357,7 @@ def start(index_name, worksheet = None, usingXLS = True):
                     for i in range(3, len(splitted_string)-4):
                         exploit_URLs.append(escape_ansi(splitted_string[i].split('|')[-1]))
                 except Exception as e:
-                    print(e)
+                    dprint(e)
                 #cve_all_edbids.add(i)
 
             exploit_URLs_witouth_commas = delete_commas(str(exploit_URLs))
@@ -336,7 +378,7 @@ def start(index_name, worksheet = None, usingXLS = True):
             )
 
 
-            print("----")
+            dprint("----")
             if es.exists(index=index_name, id=cve[0]["_id"]) is False:
                 result = es.create(index=index_name, id=cve[0]["_id"],body={
                     "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
@@ -349,8 +391,8 @@ def start(index_name, worksheet = None, usingXLS = True):
                     "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
                     "EXPLOIT": exploit_URLs
                 })
-                print("Insert result", cve[0]["_id"])
-                print(result)
+                dprint("Insert result" + cve[0]["_id"])
+                dprint(result)
             else:  
                 result = es.update(index=index_name, id=cve[0]["_id"],body={
                     "doc": {
@@ -365,8 +407,8 @@ def start(index_name, worksheet = None, usingXLS = True):
                         "EXPLOIT": exploit_URLs
                     }, "doc_as_upsert": True   
                 })
-                print("Update result", cve[0]["_id"])
-                print(result)
+                dprint("Update result"+ cve[0]["_id"])
+                dprint(result)
 
             
 
@@ -395,6 +437,8 @@ def start(index_name, worksheet = None, usingXLS = True):
     csvName = create_csv(index_name, csv_data)
     vett_dashboards_links = create_dashboards(index_name)
     vett_dashboards_links.append(csvName)
+    if not gui:
+        cli_table(columns, data, hrules=True)
     return vett_dashboards_links
 
 
@@ -404,5 +448,5 @@ if __name__ == "__main__":
     workbook = xlrd.open_workbook('../SearchingCard.xlsx', on_demand = True)
     worksheet = workbook.sheet_by_index(0)
     idx = sys.argv[1] if (len(sys.argv) > 1) else str(int(time.time()))
-    res = start(idx, worksheet, True)
+    res = start(idx, worksheet, True, gui=False)
     print(res)

@@ -23,7 +23,7 @@ def create_dashboards(index):
 
     import os
     cwd = os.getcwd()
-    print(cwd)
+    #print(cwd)
     folderName = ""
     if not os.path.exists(os.path.join(cwd, "summary.json")) and os.path.exists(os.path.join(cwd, "VIS3_app/summary.json")):
         folderName = "VIS3_app/"
@@ -31,7 +31,8 @@ def create_dashboards(index):
         summaryData = json.load(sumFile)
     
     if summaryData == None:
-        print("Failed to load JSON Summary file!!!")
+        #print("Failed to load JSON Summary file!!!")
+        pass
     
     summaryData['objects'][0]['id'] = summaryID
     summaryData['objects'][0]['attributes']['title'] += "_" + index_number
@@ -58,7 +59,8 @@ def create_dashboards(index):
         technicalData = json.load(technicalFile)
     
     if technicalData == None:
-        print("Failed to load JSON technical file!!!")
+        #print("Failed to load JSON technical file!!!")
+        pass
     
     technicalData['objects'][0]['id'] = technicalID
     technicalData['objects'][0]['attributes']['title'] += "_" + index_number
@@ -85,7 +87,8 @@ def create_dashboards(index):
         exploitData = json.load(exploitFile)
     
     if exploitData == None:
-        print("Failed to load JSON exploit file!!!")
+        #print("Failed to load JSON exploit file!!!")
+        pass
     
     exploitData['objects'][0]['id'] = exploitID
     exploitData['objects'][0]['attributes']['title'] += "_" + index_number
@@ -178,16 +181,16 @@ def create_dashboards(index):
     kibanaUrl = es_url[:-4] + "5601"
 
     r1 = requests.post(kibanaUrl + "/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=technicalData)
-    print(r1)
-    print(r1.text)
+    #print(r1)
+    #print(r1.text)
 
     r2 = requests.post(kibanaUrl + "/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=summaryData)
-    print(r2)
-    print(r2.text)
+    #print(r2)
+    #print(r2.text)
 
     r3 = requests.post(kibanaUrl + "/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=exploitData)
-    print(r3)
-    print(r3.text)
+    #print(r3)
+    #print(r3.text)
 
     dashUrl = kibanaUrl.split("@")
     if len(dashUrl) > 1:
@@ -204,4 +207,5 @@ def create_dashboards(index):
 
 
 if __name__ == "__main__":
-    pprint(create_dashboards("index_12345"))
+    resu = create_dashboards("index_12345")
+    #pprint(resu)
