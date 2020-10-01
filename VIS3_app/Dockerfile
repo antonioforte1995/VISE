@@ -19,7 +19,7 @@ RUN git clone https://github.com/offensive-security/exploitdb.git /opt/exploitdb
 RUN ln -sf /opt/exploitdb/searchsploit /usr/local/bin/searchsploit
 
 #Esegue il download del db degli exploit
-RUN cve_searchsploit -u
+RUN searchsploit -u
 
 #Aggiorna pip
 RUN pip3 install --no-cache-dir --upgrade pip
