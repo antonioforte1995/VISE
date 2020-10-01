@@ -64,7 +64,7 @@
         a {
             color: #007bff;
         }
-        li{
+        .elencopuntato{
             margin-top: 0.5em;
         }
 
@@ -135,7 +135,7 @@
             </div>
         </nav>
     </header>
-    <main class="page landing-page">
+    <main class="page landing-page" style="flex: 1 0 auto;">
         <section class="clean-block features" style ="border-color: rgb(201,190,201);">
             <div class="container">
                 <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
@@ -159,7 +159,7 @@
                 </div> -->
                 <div class="jumbotron card border-primary">
                     <div class="row" style="margin-left: 1em; margin-bottom: 1em;">
-                        <p class="lead">Di seguito i risultati della ricerca:</p>
+                        <p class="lead">Results are shown below:</p>
                     </div>
 
                     <div class="row justify-content-center">
@@ -167,16 +167,16 @@
                         <div class="col-5 feature-box">
                             DASHBOARDS
                             <ul>
-                                <li><img src="static/scenery/kibana.png" height="22px"/><a href="{{ summaryDashboardLink }}" > Vulnerability Summary Dashboard</a></li>
-                                <li><img src="static/scenery/kibana.png" height="22px"/><a href="{{ vulnerabilityReportLink }}" > Vulnerability Technical Description Dashboard</a></li>
-                                <li><img src="static/scenery/kibana.png" height="22px"/><a href="{{ exploitViewLink }}"> Exploit View Dashboard</a></li>
+                                <li class="elencopuntato"><img src="static/scenery/kibana.png" height="22px"/><a href="{{ summaryDashboardLink }}" > Vulnerability Summary Dashboard</a></li>
+                                <li class="elencopuntato"><img src="static/scenery/kibana.png" height="22px"/><a href="{{ vulnerabilityReportLink }}" > Vulnerability Technical Description Dashboard</a></li>
+                                <li class="elencopuntato"><img src="static/scenery/kibana.png" height="22px"/><a href="{{ exploitViewLink }}"> Exploit View Dashboard</a></li>
                             </ul>
                         </div>
                         <div class="col-1"></div>
                         <div class="col-5 feature-box">
                             EXPORTS
                             <ul>
-                                <li><i class="fas fa-file-csv"  style="font-size:24px;color:mediumseagreen; margin-right: 0.25em;"></i><a href="{{ url_for('.exportCSV') }}?csv_name={{ csvLink }}" style="color: #007bff;">Export to CSV</a></li>
+                                <li class="elencopuntato"><i class="fas fa-file-csv"  style="font-size:24px;color:mediumseagreen; margin-right: 0.25em;"></i><a href="{{ url_for('.exportCSV') }}?csv_name={{ csvLink }}" style="color: #007bff;">Export to CSV</a></li>
                             </ul>
                         </div>
                     </div>
