@@ -14,6 +14,9 @@ def search_CPE(vendor, product, version, target_software, cpetype = "a"):
 
     es = Elasticsearch(hosts=[es_url])
 
+    if len(vendor) < 1:
+        vendor = ".*"
+
     
     if cpetype == "application":
         cpetype = "a"

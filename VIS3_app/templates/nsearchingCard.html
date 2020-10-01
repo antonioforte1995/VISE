@@ -16,57 +16,8 @@
     <script src="static/assets/js/smoothproducts.min.js"></script>
     <script src="static/assets/js/theme.js"></script>
 
-    <style>
-        body{
-            background-image: linear-gradient(rgba(255,255,255,.85), rgba(255,255,255,.85)), url('static/scenery/bg.jpeg');
-            background-size: cover;
-        }
-        .button4{
-            border-radius: 8px;
-        }
-        #uploadIconTitle{
-                font-weight:    bold;
-            }
-        #downloadIconTitle{
-                font-weight:    bold;
-            }
-        .col-xs-24,
-        .col-sm-24,
-        .col-md-24,
-        .col-lg-24 {
-            position: relative;
-            min-height: 1px;
-            padding-right: 10px;
-            padding-left: 10px;
-        }
-        .col-xs-24 {
-            width: 20%;
-            float: left;
-        }
-        @media (min-width: 768px) {
-        .col-sm-24 {
-                width: 20%;
-                float: left;
-            }
-        }
-        @media (min-width: 992px) {
-            .col-md-24 {
-                width: 20%;
-                float: left;
-            }
-        }
-        @media (min-width: 1200px) {
-            .col-lg-24 {
-                width: 20%;
-                float: left;
-            }
-        }
-        .navbar-nav .nav-link,
-        .navbar-brand {
-            text-align: right;
-        }
-
-    </style>
+    <link rel="stylesheet" href="static/assets/css/mine.css">
+    
     <script>
         function deleteRow(r) {
             var i = r.parentNode.parentNode.rowIndex;
@@ -143,7 +94,7 @@
 
             <div class="row justify-content-center">
                 <div class="col-md-5 feature-box card bg-light border-info mb-3">
-                    <div class="card-header"><i id = uploadIconTitle class="icon-folder-alt icon text-info"> Import Searching Card</i></div>
+                    <div class="card-header"><h4 class="card-title text-info" style="margin-bottom: 0;"><i id = uploadIconTitle class="icon-folder-alt icon text-info" style="margin-right: 0.5em;"></i>Import Searching Card</h4></div>
                     <div class="card-body">
                         <p class="card-text">Click the button below to upload the searching card.<br>As a result of the uploading of the searching card, some links will be shown to view the analysis results graphically.</p>    
                         <form action = "{{ url_for('.returnLinks') }}" method = "POST" enctype = "multipart/form-data">
@@ -165,7 +116,7 @@
                 <div style='margin-right:80px;'></div>
 
                 <div class="col-md-5 feature-box card bg-light border-primary mb-3">
-                    <div class="card-header"><i id = downloadIconTitle class="icon-arrow-down-circle icon text-primary"> Searching Card sample</i></div>
+                    <div class="card-header"><h4 class="card-title text-primary" style="margin-bottom: 0;"><i id = downloadIconTitle class="icon-arrow-down-circle icon text-primary" style="margin-right: 0.5em;"></i>Searching Card sample</h4></div>
                     <div class="card-body">
                         <p class="card-text">Click the button below to download a sample of a searching card.</p>
                         <a href="{{ url_for('.downloadFunction') }}" download> 

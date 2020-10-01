@@ -189,9 +189,17 @@ def create_dashboards(index):
     print(r3)
     print(r3.text)
 
-    vett_dashboards_links = [kibanaUrl + '/app/kibana#/dashboard/{0}'.format(summaryID), 
-        kibanaUrl + '/app/kibana#/dashboard/{0}'.format(technicalID),
-        kibanaUrl + '/app/kibana#/dashboard/{0}'.format(exploitID)]
+    dashUrl = kibanaUrl.split("@")
+    if len(dashUrl) > 1:
+        dashUrl = dashUrl[-1]
+        dashUrl = "http://" + dashUrl
+    else:
+        dashUrl = dashUrl[0]
+    
+
+    vett_dashboards_links = [dashUrl + '/app/kibana#/dashboard/{0}'.format(summaryID), 
+        dashUrl + '/app/kibana#/dashboard/{0}'.format(technicalID),
+        dashUrl + '/app/kibana#/dashboard/{0}'.format(exploitID)]
     return vett_dashboards_links
 
 
