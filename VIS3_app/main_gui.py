@@ -148,6 +148,8 @@ def start(index_name, worksheet = None, usingXLS = True):
     if usingXLS and type(worksheet) is str:
         workbook = xlrd.open_workbook(worksheet, on_demand = True)
         worksheet = workbook.sheet_by_index(0)
+    elif usingXLS:
+        pass
     else:
         print(len(worksheet))
     
@@ -399,8 +401,8 @@ def start(index_name, worksheet = None, usingXLS = True):
 
 if __name__ == "__main__":
     #to read the searching cards
-    workbook = xlrd.open_workbook('SearchingCard.xlsx', on_demand = True)
+    workbook = xlrd.open_workbook('../SearchingCard.xlsx', on_demand = True)
     worksheet = workbook.sheet_by_index(0)
-    idx = sys.argv[1] if (len(sys.argv) > 1) else uuid.uuid1()
+    idx = sys.argv[1] if (len(sys.argv) > 1) else str(int(time.time()))
     res = start(idx, worksheet, True)
     print(res)
