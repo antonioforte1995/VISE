@@ -30,6 +30,7 @@ WORKDIR /app
 
 #Installa dipendenze Python
 RUN pip3 install -r requirements.txt
+RUN cve_searchsploit -u
 
 #Setup cartella temporanei upload
 RUN mkdir -p /tmp/upload
