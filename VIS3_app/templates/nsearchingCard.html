@@ -19,47 +19,11 @@
     <link rel="stylesheet" href="static/assets/css/mine.css">
     
     <script>
-        function deleteRow(r) {
-            var i = r.parentNode.parentNode.rowIndex;
-            document.getElementById("tableID").deleteRow(i);
+        function uploadFunction(){
+            document.getElementById("labelFile").innerHTML = document.getElementById("myFile").value;
         }
     </script>
 
-    <script>
-        //Valore da inviare in post (e serializzato in JSON)
-        var valueToSubmit = [];
-
-        function addRow() {
-            var table = document.getElementById("tableID");
-            var tBody = table.getElementsByTagName('tbody')[0];
-            var row = tBody.insertRow(0);
-            
-            //Strutturata come for in modo da alleggerire il codice
-            var cellNames = ["PackageInput","VersionInput","VendorInput","SoftwareInput","ProductInput","PlatformInput"];
-            var i;
-            var tempDict = {};
-            for(i=0; i<cellNames.length; i++){
-                var key = cellNames[i];
-                var value = document.getElementById(key).value;
-                var tCell = row.insertCell(i);
-                tCell.innerHTML = value;
-                tempDict[key] = value;
-            }
-            valueToSubmit.push(tempDict);
-
-            var cell7 = row.insertCell(6);
-            var deleteElement = '<input type="button" style="font-family: helvetica; color:red;" onclick="deleteRow(this)" value="x">'
-            cell7.innerHTML = deleteElement;
-        }
-
-        //Funzione per inviare i dati del form come POST e strutturati in JSON
-        function sendFormData(){
-            var form = document.getElementById("searchingCardForm");
-            var input = document.getElementById("searchingCardField");
-            input.setAttribute("value", JSON.stringify(valueToSubmit));
-            form.submit();
-        }
-    </script>
 </head>
 <body style="display: flex; flex-direction: column; height: 100%;">
     <header>
@@ -105,7 +69,7 @@
                                     <label id="labelFile" class="custom-file-label">Choose file</label>
                                 </div>
                                 <div class="input-group-append">
-                                    <buttontype="button" id="returnLinksButton" class="btn btn-info">Upload</button>
+                                    <input type="submit" id="returnLinksButton" class="btn btn-info" value="Upload" /> <!--Upload</button>-->
                                 </div>
                                 </div>
                             </div>
