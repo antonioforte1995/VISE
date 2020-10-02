@@ -1,160 +1,160 @@
 {
-    "version": "7.8.0",
-    "objects": [
+  "version": "7.8.0",
+  "objects": [
       {
-        "id": "1601630145_s",
-        "type": "dashboard",
-        "updated_at": "2020-10-02T09:43:53.199Z",
-        "version": "WzE2MjEsMV0=",
-        "attributes": {
-          "title": "VULNERABILITY SUMMARY DASHBOARD",
-          "hits": 0,
-          "description": "",
-          "panelsJSON": "[{\"embeddableConfig\":{},\"gridData\":{\"h\":4,\"i\":\"abf506cd-8422-4216-984c-3d9a7429a634\",\"w\":48,\"x\":0,\"y\":0},\"panelIndex\":\"abf506cd-8422-4216-984c-3d9a7429a634\",\"version\":\"7.8.0\",\"panelRefName\":\"panel_0\"},{\"embeddableConfig\":{},\"gridData\":{\"h\":18,\"i\":\"ea1f6a83-b0cf-4feb-a992-e5216cfa64a2\",\"w\":48,\"x\":0,\"y\":4},\"panelIndex\":\"ea1f6a83-b0cf-4feb-a992-e5216cfa64a2\",\"version\":\"7.8.0\",\"panelRefName\":\"panel_1\"},{\"embeddableConfig\":{},\"gridData\":{\"h\":15,\"i\":\"4b583f41-a6f6-41fd-b62e-c576a1509508\",\"w\":24,\"x\":0,\"y\":22},\"panelIndex\":\"4b583f41-a6f6-41fd-b62e-c576a1509508\",\"version\":\"7.8.0\",\"panelRefName\":\"panel_2\"},{\"embeddableConfig\":{},\"gridData\":{\"h\":15,\"i\":\"0720283a-b2a1-4aba-8e08-bc17fe40cdbd\",\"w\":24,\"x\":24,\"y\":22},\"panelIndex\":\"0720283a-b2a1-4aba-8e08-bc17fe40cdbd\",\"version\":\"7.8.0\",\"panelRefName\":\"panel_3\"}]",
-          "optionsJSON": "{\"hidePanelTitles\":false,\"useMargins\":true}",
-          "version": 1,
-          "timeRestore": false,
-          "kibanaSavedObjectMeta": {
-            "searchSourceJSON": "{\"query\":{\"language\":\"kuery\",\"query\":\"\"},\"filter\":[]}"
-          }
-        },
-        "references": [
-          {
-            "name": "panel_0",
-            "type": "visualization",
-            "id": "1601630145_s0"
+          "id": "1601634397_s",
+          "type": "dashboard",
+          "updated_at": "2020-10-02T10:26:58.293Z",
+          "version": "WzE2NTQsMV0=",
+          "attributes": {
+              "title": "VULNERABILITY SUMMARY DASHBOARD",
+              "hits": 0,
+              "description": "",
+              "panelsJSON": "[{\"embeddableConfig\":{},\"gridData\":{\"h\":4,\"i\":\"abf506cd-8422-4216-984c-3d9a7429a634\",\"w\":48,\"x\":0,\"y\":0},\"panelIndex\":\"abf506cd-8422-4216-984c-3d9a7429a634\",\"version\":\"7.8.0\",\"panelRefName\":\"panel_0\"},{\"embeddableConfig\":{},\"gridData\":{\"h\":18,\"i\":\"ea1f6a83-b0cf-4feb-a992-e5216cfa64a2\",\"w\":48,\"x\":0,\"y\":4},\"panelIndex\":\"ea1f6a83-b0cf-4feb-a992-e5216cfa64a2\",\"version\":\"7.8.0\",\"panelRefName\":\"panel_1\"},{\"embeddableConfig\":{},\"gridData\":{\"h\":15,\"i\":\"4b583f41-a6f6-41fd-b62e-c576a1509508\",\"w\":24,\"x\":0,\"y\":22},\"panelIndex\":\"4b583f41-a6f6-41fd-b62e-c576a1509508\",\"version\":\"7.8.0\",\"panelRefName\":\"panel_2\"},{\"embeddableConfig\":{},\"gridData\":{\"h\":15,\"i\":\"0720283a-b2a1-4aba-8e08-bc17fe40cdbd\",\"w\":24,\"x\":24,\"y\":22},\"panelIndex\":\"0720283a-b2a1-4aba-8e08-bc17fe40cdbd\",\"version\":\"7.8.0\",\"panelRefName\":\"panel_3\"}]",
+              "optionsJSON": "{\"hidePanelTitles\":false,\"useMargins\":true}",
+              "version": 1,
+              "timeRestore": false,
+              "kibanaSavedObjectMeta": {
+                  "searchSourceJSON": "{\"query\":{\"language\":\"kuery\",\"query\":\"\"},\"filter\":[]}"
+              }
           },
-          {
-            "name": "panel_1",
-            "type": "visualization",
-            "id": "1601630145_s1"
+          "references": [
+              {
+                  "name": "panel_0",
+                  "type": "visualization",
+                  "id": "1601634397_s0"
+              },
+              {
+                  "name": "panel_1",
+                  "type": "visualization",
+                  "id": "1601634397_s1"
+              },
+              {
+                  "name": "panel_2",
+                  "type": "visualization",
+                  "id": "1601634397_s2"
+              },
+              {
+                  "name": "panel_3",
+                  "type": "visualization",
+                  "id": "1601634397_s3"
+              }
+          ],
+          "migrationVersion": {
+              "dashboard": "7.3.0"
+          }
+      },
+      {
+          "id": "1601634397_s0",
+          "type": "visualization",
+          "updated_at": "2020-10-02T10:26:58.293Z",
+          "version": "WzE2NTUsMV0=",
+          "attributes": {
+              "title": "VULNERABILITY SUMMARY MARKDOWN",
+              "visState": "{\"type\":\"markdown\",\"aggs\":[],\"params\":{\"fontSize\":20,\"openLinksInNewTab\":false,\"markdown\":\"VULNERABILITY SUMMARY\"},\"title\":\"VULNERABILITY SUMMARY MARKDOWN\"}",
+              "uiStateJSON": "{}",
+              "description": "",
+              "version": 1,
+              "kibanaSavedObjectMeta": {
+                  "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[]}"
+              }
           },
-          {
-            "name": "panel_2",
-            "type": "visualization",
-            "id": "1601630145_s3"
+          "references": [],
+          "migrationVersion": {
+              "visualization": "7.8.0"
+          }
+      },
+      {
+          "id": "1601634397_s1",
+          "type": "visualization",
+          "updated_at": "2020-10-02T11:59:45.501Z",
+          "version": "WzE3NDQsMV0=",
+          "attributes": {
+              "title": "NUMBER & RISK OF CVEs FOR CPE",
+              "visState": "{\"type\":\"histogram\",\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{\"customLabel\":\"Num/Risk CVEs\"}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"CPE.keyword\",\"orderBy\":\"1\",\"order\":\"desc\",\"size\":30,\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\",\"customLabel\":\"CPEs\"}},{\"id\":\"3\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"group\",\"params\":{\"field\":\"SCORE\",\"orderBy\":\"1\",\"order\":\"desc\",\"size\":30,\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\",\"customLabel\":\"\"}}],\"params\":{\"type\":\"histogram\",\"grid\":{\"categoryLines\":true},\"categoryAxes\":[{\"id\":\"CategoryAxis-1\",\"type\":\"category\",\"position\":\"left\",\"show\":true,\"style\":{},\"scale\":{\"type\":\"linear\"},\"labels\":{\"show\":true,\"filter\":true,\"truncate\":70},\"title\":{}}],\"valueAxes\":[{\"id\":\"ValueAxis-1\",\"name\":\"BottomAxis-1\",\"type\":\"value\",\"position\":\"bottom\",\"show\":true,\"style\":{},\"scale\":{\"type\":\"linear\",\"mode\":\"normal\"},\"labels\":{\"show\":true,\"rotate\":0,\"filter\":false,\"truncate\":100},\"title\":{\"text\":\"Num/Risk CVEs\"}}],\"seriesParams\":[{\"show\":true,\"type\":\"histogram\",\"mode\":\"stacked\",\"data\":{\"label\":\"Num/Risk CVEs\",\"id\":\"1\"},\"valueAxis\":\"ValueAxis-1\",\"drawLinesBetweenPoints\":true,\"lineWidth\":2,\"showCircles\":true}],\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"right\",\"times\":[],\"addTimeMarker\":false,\"labels\":{\"show\":true},\"thresholdLine\":{\"show\":false,\"value\":10,\"width\":1,\"style\":\"full\",\"color\":\"#E7664C\"}},\"title\":\"NUMBER & RISK OF CVEs FOR CPE\"}",
+              "uiStateJSON": "{\"vis\":{\"colors\":{\"5\":\"#F9934E\",\"9.8\":\"#58140C\",\"9.1\":\"#890F02\",\"7.5\":\"#EF843C\",\"7.8\":\"#C15C17\",\"6.5\":\"#E5AC0E\",\"5.4\":\"#F4D598\",\"5.8\":\"#CCA300\",\"6.1\":\"#EF843C\",\"8.8\":\"#890F02\",\"8.6\":\"#BF1B00\",\"7.7\":\"#E0752D\",\"7.2\":\"#CCA300\",\"6.4\":\"#EAB839\",\"5.9\":\"#F2C96D\",\"4.8\":\"#FCEACA\"}}}",
+              "description": "",
+              "version": 1,
+              "kibanaSavedObjectMeta": {
+                  "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.index\",\"filter\":[]}"
+              }
           },
-          {
-            "name": "panel_3",
-            "type": "visualization",
-            "id": "1601630145_s2"
+          "references": [
+              {
+                  "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
+                  "type": "index-pattern",
+                  "id": "1601634397_s_ip"
+              }
+          ],
+          "migrationVersion": {
+              "visualization": "7.8.0"
           }
-        ],
-        "migrationVersion": {
-          "dashboard": "7.3.0"
-        }
       },
       {
-        "id": "1601630145_s0",
-        "type": "visualization",
-        "updated_at": "2020-10-02T09:16:16.520Z",
-        "version": "WzE1MzMsMV0=",
-        "attributes": {
-          "title": "VULNERABILITY SUMMARY MARKDOWN",
-          "visState": "{\"type\":\"markdown\",\"aggs\":[],\"params\":{\"fontSize\":20,\"openLinksInNewTab\":false,\"markdown\":\"VULNERABILITY SUMMARY\"},\"title\":\"VULNERABILITY SUMMARY MARKDOWN\"}",
-          "uiStateJSON": "{}",
-          "description": "",
-          "version": 1,
-          "kibanaSavedObjectMeta": {
-            "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[]}"
+          "id": "1601634397_s2",
+          "type": "visualization",
+          "updated_at": "2020-10-02T11:55:05.031Z",
+          "version": "WzE3MzYsMV0=",
+          "attributes": {
+              "title": "RISK (CVSS V3) SUMMARY",
+              "visState": "{\"type\":\"pie\",\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"SCORE\",\"orderBy\":\"_key\",\"order\":\"desc\",\"size\":20,\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\",\"customLabel\":\"Score\"}}],\"params\":{\"type\":\"pie\",\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"right\",\"isDonut\":false,\"labels\":{\"show\":true,\"values\":true,\"last_level\":true,\"truncate\":100}},\"title\":\"RISK (CVSS V3) SUMMARY\"}",
+              "uiStateJSON": "{\"vis\":{\"colors\":{\"5\":\"#E5AC0E\",\"9.8\":\"#58140C\",\"6.5\":\"#E5AC0E\",\"7.5\":\"#F9934E\",\"8.8\":\"#890F02\",\"8.6\":\"#BF1B00\",\"7.8\":\"#E0752D\",\"7.7\":\"#EF843C\",\"7.2\":\"#CCA300\",\"6.4\":\"#EAB839\",\"5.9\":\"#F2C96D\",\"5.4\":\"#F4D598\",\"4.8\":\"#FCEACA\"}}}",
+              "description": "",
+              "version": 1,
+              "kibanaSavedObjectMeta": {
+                  "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.index\",\"filter\":[]}"
+              }
+          },
+          "references": [
+              {
+                  "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
+                  "type": "index-pattern",
+                  "id": "1601634397_s_ip"
+              }
+          ],
+          "migrationVersion": {
+              "visualization": "7.8.0"
           }
-        },
-        "references": [],
-        "migrationVersion": {
-          "visualization": "7.8.0"
-        }
       },
       {
-        "id": "1601630145_s1",
-        "type": "visualization",
-        "updated_at": "2020-10-02T09:38:41.086Z",
-        "version": "WzE2MTIsMV0=",
-        "attributes": {
-          "title": "NUMBER & RISK OF CVEs FOR CPE",
-          "visState": "{\"type\":\"histogram\",\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{\"customLabel\":\"Num/Risk CVEs\"}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"CPE.keyword\",\"orderBy\":\"1\",\"order\":\"desc\",\"size\":30,\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\",\"customLabel\":\"CPEs\"}},{\"id\":\"3\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"group\",\"params\":{\"field\":\"SCORE\",\"orderBy\":\"1\",\"order\":\"desc\",\"size\":30,\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\",\"customLabel\":\"\"}}],\"params\":{\"type\":\"histogram\",\"grid\":{\"categoryLines\":true},\"categoryAxes\":[{\"id\":\"CategoryAxis-1\",\"type\":\"category\",\"position\":\"left\",\"show\":true,\"style\":{},\"scale\":{\"type\":\"linear\"},\"labels\":{\"show\":true,\"filter\":true,\"truncate\":70},\"title\":{}}],\"valueAxes\":[{\"id\":\"ValueAxis-1\",\"name\":\"BottomAxis-1\",\"type\":\"value\",\"position\":\"bottom\",\"show\":true,\"style\":{},\"scale\":{\"type\":\"linear\",\"mode\":\"normal\"},\"labels\":{\"show\":true,\"rotate\":0,\"filter\":false,\"truncate\":100},\"title\":{\"text\":\"Num/Risk CVEs\"}}],\"seriesParams\":[{\"show\":true,\"type\":\"histogram\",\"mode\":\"stacked\",\"data\":{\"label\":\"Num/Risk CVEs\",\"id\":\"1\"},\"valueAxis\":\"ValueAxis-1\",\"drawLinesBetweenPoints\":true,\"lineWidth\":2,\"showCircles\":true}],\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"right\",\"times\":[],\"addTimeMarker\":false,\"labels\":{\"show\":true},\"thresholdLine\":{\"show\":false,\"value\":10,\"width\":1,\"style\":\"full\",\"color\":\"#E7664C\"}},\"title\":\"NUMBER & RISK OF CVEs FOR CPE\"}",
-          "uiStateJSON": "{\"vis\":{\"colors\":{\"5\":\"#F9934E\",\"9.8\":\"#58140C\",\"9.1\":\"#890F02\",\"7.5\":\"#C15C17\",\"7.8\":\"#99440A\",\"6.5\":\"#EF843C\",\"5.4\":\"#CCA300\",\"5.8\":\"#CCA300\",\"6.1\":\"#EF843C\"}}}",
-          "description": "",
-          "version": 1,
-          "kibanaSavedObjectMeta": {
-            "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.index\",\"filter\":[]}"
+          "id": "1601634397_s3",
+          "type": "visualization",
+          "updated_at": "2020-10-02T10:26:58.293Z",
+          "version": "WzE2NTgsMV0=",
+          "attributes": {
+              "title": "SEVERITY SUMMARY",
+              "visState": "{\"type\":\"pie\",\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"SEVERITY.keyword\",\"orderBy\":\"_key\",\"order\":\"asc\",\"size\":5,\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"}}],\"params\":{\"type\":\"pie\",\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"right\",\"isDonut\":false,\"labels\":{\"show\":true,\"values\":true,\"last_level\":true,\"truncate\":100}},\"title\":\"SEVERITY SUMMARY\"}",
+              "uiStateJSON": "{\"vis\":{\"colors\":{\"HIGH\":\"#BF1B00\",\"CRITICAL\":\"#58140C\",\"MEDIUM\":\"#E0752D\"}}}",
+              "description": "",
+              "version": 1,
+              "kibanaSavedObjectMeta": {
+                  "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.index\",\"filter\":[]}"
+              }
+          },
+          "references": [
+              {
+                  "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
+                  "type": "index-pattern",
+                  "id": "1601634397_s_ip"
+              }
+          ],
+          "migrationVersion": {
+              "visualization": "7.8.0"
           }
-        },
-        "references": [
-          {
-            "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
-            "type": "index-pattern",
-            "id": "1601630145_s_ip"
-          }
-        ],
-        "migrationVersion": {
-          "visualization": "7.8.0"
-        }
       },
       {
-        "id": "1601630145_s3",
-        "type": "visualization",
-        "updated_at": "2020-10-02T09:42:02.906Z",
-        "version": "WzE2MTYsMV0=",
-        "attributes": {
-          "title": "RISK (CVSS V3) SUMMARY",
-          "visState": "{\"type\":\"pie\",\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"SCORE\",\"orderBy\":\"1\",\"order\":\"desc\",\"size\":20,\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\",\"customLabel\":\"Score\"}}],\"params\":{\"type\":\"pie\",\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"right\",\"isDonut\":false,\"labels\":{\"show\":true,\"values\":true,\"last_level\":true,\"truncate\":100}},\"title\":\"RISK (CVSS V3) SUMMARY\"}",
-          "uiStateJSON": "{\"vis\":{\"colors\":{\"5\":\"#E5AC0E\",\"9.8\":\"#58140C\",\"6.5\":\"#C15C17\",\"7.5\":\"#99440A\"}}}",
-          "description": "",
-          "version": 1,
-          "kibanaSavedObjectMeta": {
-            "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.index\",\"filter\":[]}"
+          "id": "1601634397_s_ip",
+          "type": "index-pattern",
+          "updated_at": "2020-10-02T10:26:58.293Z",
+          "version": "WzE2NTksMV0=",
+          "attributes": {
+              "title": "index_1601634397",
+              "fields": "[{\"name\":\"CPE\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"CPE.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"CPE\"}}},{\"name\":\"CVE\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"CVE.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"CVE\"}}},{\"name\":\"CWE\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"CWE.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"CWE\"}}},{\"name\":\"DESCRIPTION\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"DESCRIPTION.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"DESCRIPTION\"}}},{\"name\":\"EXPLOIT\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"EXPLOIT.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"EXPLOIT\"}}},{\"name\":\"REMEDIATIONS\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"REMEDIATIONS.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"REMEDIATIONS\"}}},{\"name\":\"SCORE\",\"type\":\"number\",\"esTypes\":[\"float\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true},{\"name\":\"SEVERITY\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"SEVERITY.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"SEVERITY\"}}},{\"name\":\"URLs\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"URLs.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"URLs\"}}},{\"name\":\"_id\",\"type\":\"string\",\"esTypes\":[\"_id\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":false},{\"name\":\"_index\",\"type\":\"string\",\"esTypes\":[\"_index\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":false},{\"name\":\"_score\",\"type\":\"number\",\"count\":0,\"scripted\":false,\"searchable\":false,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"_source\",\"type\":\"_source\",\"esTypes\":[\"_source\"],\"count\":0,\"scripted\":false,\"searchable\":false,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"_type\",\"type\":\"string\",\"esTypes\":[\"_type\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":false}]"
+          },
+          "references": [],
+          "migrationVersion": {
+              "index-pattern": "7.6.0"
           }
-        },
-        "references": [
-          {
-            "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
-            "type": "index-pattern",
-            "id": "1601630145_s_ip"
-          }
-        ],
-        "migrationVersion": {
-          "visualization": "7.8.0"
-        }
-      },
-      {
-        "id": "1601630145_s2",
-        "type": "visualization",
-        "updated_at": "2020-10-02T09:42:59.925Z",
-        "version": "WzE2MjAsMV0=",
-        "attributes": {
-          "title": "SEVERITY SUMMARY",
-          "visState": "{\"type\":\"pie\",\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"SEVERITY.keyword\",\"orderBy\":\"_key\",\"order\":\"asc\",\"size\":5,\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"}}],\"params\":{\"type\":\"pie\",\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"right\",\"isDonut\":false,\"labels\":{\"show\":true,\"values\":true,\"last_level\":true,\"truncate\":100}},\"title\":\"SEVERITY SUMMARY\"}",
-          "uiStateJSON": "{\"vis\":{\"colors\":{\"HIGH\":\"#BF1B00\",\"CRITICAL\":\"#58140C\",\"MEDIUM\":\"#E0752D\"}}}",
-          "description": "",
-          "version": 1,
-          "kibanaSavedObjectMeta": {
-            "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"indexRefName\":\"kibanaSavedObjectMeta.searchSourceJSON.index\",\"filter\":[]}"
-          }
-        },
-        "references": [
-          {
-            "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
-            "type": "index-pattern",
-            "id": "1601630145_s_ip"
-          }
-        ],
-        "migrationVersion": {
-          "visualization": "7.8.0"
-        }
-      },
-      {
-        "id": "1601630145_s_ip",
-        "type": "index-pattern",
-        "updated_at": "2020-10-02T09:16:16.520Z",
-        "version": "WzE1MzcsMV0=",
-        "attributes": {
-          "title": "index_1601630145",
-          "fields": "[{\"name\":\"CPE\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"CPE.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"CPE\"}}},{\"name\":\"CVE\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"CVE.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"CVE\"}}},{\"name\":\"CWE\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"CWE.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"CWE\"}}},{\"name\":\"DESCRIPTION\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"DESCRIPTION.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"DESCRIPTION\"}}},{\"name\":\"EXPLOIT\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"EXPLOIT.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"EXPLOIT\"}}},{\"name\":\"REMEDIATIONS\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"REMEDIATIONS.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"REMEDIATIONS\"}}},{\"name\":\"SCORE\",\"type\":\"number\",\"esTypes\":[\"float\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true},{\"name\":\"SEVERITY\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"SEVERITY.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"SEVERITY\"}}},{\"name\":\"URLs\",\"type\":\"string\",\"esTypes\":[\"text\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"URLs.keyword\",\"type\":\"string\",\"esTypes\":[\"keyword\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":true,\"subType\":{\"multi\":{\"parent\":\"URLs\"}}},{\"name\":\"_id\",\"type\":\"string\",\"esTypes\":[\"_id\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":false},{\"name\":\"_index\",\"type\":\"string\",\"esTypes\":[\"_index\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":false},{\"name\":\"_score\",\"type\":\"number\",\"count\":0,\"scripted\":false,\"searchable\":false,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"_source\",\"type\":\"_source\",\"esTypes\":[\"_source\"],\"count\":0,\"scripted\":false,\"searchable\":false,\"aggregatable\":false,\"readFromDocValues\":false},{\"name\":\"_type\",\"type\":\"string\",\"esTypes\":[\"_type\"],\"count\":0,\"scripted\":false,\"searchable\":true,\"aggregatable\":true,\"readFromDocValues\":false}]"
-        },
-        "references": [],
-        "migrationVersion": {
-          "index-pattern": "7.6.0"
-        }
       }
-    ]
-  }
+  ]
+}
