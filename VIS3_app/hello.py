@@ -26,15 +26,6 @@ def searchingCard():
 def form():
     return render_template("nform.html")
 
-"""
-@app.route('/createIndex')
-def createIndex():
-    index = 'index' + str(randint(1, 100))
-    os.system("./main_gui.py {0}".format(index))
-    #os.system("./main_gui.py {0}".format(request.args.get('index', None)))
-    return render_template("home.html")
-"""
-
 
 @app.route('/downloadFunction')
 def downloadFunction():
@@ -51,7 +42,7 @@ def exportCSV():
 
 @app.route('/exportPDF')
 def exportPDF():
-    pdfkit.from_url('http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/', 'out.pdf')	
+    pdfkit.from_url('http://localhost:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/', 'out.pdf')	
     path = "out.pdf"
     return send_file(path, as_attachment=True)
 
@@ -67,13 +58,13 @@ def leme():
 def aboutUs():
     return render_template('about-us.html')
 
+
 @app.route('/returnLinks', methods=['POST'])
+#this function is used to execute the start() function that creates the dashboards on kibana with the research results
+#the dashboard links are returned by this function
 def returnLinks():
     global index
     index = index + 1
-    #Indice attuale, necessario trovare un modo per generarlo univocamente
-    #(magari effettuare una get dell'ultimo index creato)
-    #from uuid import uuid1
     import re
     from time import time
     identifier = str(int(time()))
@@ -91,26 +82,26 @@ def returnLinks():
             resCve = start(kibana_index, temp, True)
             print(resCve)
             return render_template("nresults.html",
-                summaryDashboardLink=resCve[0],#"http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
-                vulnerabilityReportLink=resCve[1],#"http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
-                exploitViewLink=resCve[2],#"http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
+                summaryDashboardLink=resCve[0],#"http://localhost:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
+                vulnerabilityReportLink=resCve[1],#"http://localhost:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
+                exploitViewLink=resCve[2],#"http://localhost:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
                 csvLink=resCve[3]
             )
     try:
         from main_gui import start
         from json import loads as jld
-        #Recupero i dati del form
+        #Retrieve form data
         dati = request.form["res"]
-        #Effettuo il parse da JSON
+        #I parse from JSON
         parsedData = jld(dati)
-        #Lancio la funzione di ricerca passando l'array del Form
+        #I launch the search function passing the array of the Form
         resCve = start(kibana_index, parsedData, False)
-        #Effettuo il render della pagina con i valori generati
+        #I render the page with the generated values
         print(resCve)
         return render_template("nresults.html",
-            summaryDashboardLink=resCve[0],#"http://3.225.242.97:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
-            vulnerabilityReportLink=resCve[1],#"http://3.225.242.97:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
-            exploitViewLink=resCve[2],#"http://3.225.242.97:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
+            summaryDashboardLink=resCve[0],#"http://localhost:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
+            vulnerabilityReportLink=resCve[1],#"http://localhost:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
+            exploitViewLink=resCve[2],#"http://localhost:5601/app/kibana#/dashboard/bfafb2f0-f344-11ea-950f-fba5732a37f6/",
             csvLink=resCve[3]
         )
     except Exception as e:

@@ -4,9 +4,10 @@ from pprint import pprint
 from elasticsearch import Elasticsearch
 import os
 
-es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@3.225.242.97:9200"
+es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@localhost:9200"
 
-
+#this function returns an array of CPEs matching our searched products
+#this array contains the CPE json objects
 def search_CPE(vendor, product, version, target_software, cpetype = "a"):
 
     if (target_software == ""):
@@ -57,7 +58,10 @@ def search_CPE(vendor, product, version, target_software, cpetype = "a"):
     return cpes
 
 
-
+#this function is used to search the CVE associated to a cpe23Uri when the corresponding CPE json object
+#specifies a single limit of version (es. versionStartIncluding)
+#version_type is the type of version limit (es. versionStartIncluding)
+#version is the value of this version limit
 def search_CVE_from_single_limit(cpe23Uri, version_type, version):
     es = Elasticsearch(hosts=[es_url])
 
@@ -89,7 +93,11 @@ def search_CVE_from_single_limit(cpe23Uri, version_type, version):
     return cves
 
 
-
+#this function is used to search the CVE associated to a cpe23Uri when the corresponding CPE json object
+#specifies an version interval (es. versionStartIncluding and versionEndExcluding)
+#version_types is the array with the limits of the range (es. versionStartIncluding and versionEndExcluding)
+#version_start is the value of the first limit
+#version_end is the value of the second limit
 def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_end):
     es = Elasticsearch(hosts=[es_url])
 
@@ -129,6 +137,8 @@ def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_en
     return cves
 
 
+#this function is used to search the CVE associated to a cpe23Uri when the corresponding CPE json object
+#specifies a specific version
 def search_CVE(cpe23Uri):
     es = Elasticsearch(hosts=[es_url])
 

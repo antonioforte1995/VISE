@@ -13,8 +13,7 @@ import elasticsearch.helpers
 from elasticsearch import Elasticsearch
 
 if 'ESURL' not in os.environ:
-    #es_url = "http://192.168.1.6:9200"
-    es_url = "http://elastic:changeme@3.225.242.97:9200"
+    es_url = "http://elastic:changeme@localhost:9200"
 else:
     es_url = os.environ['ESURL']
 

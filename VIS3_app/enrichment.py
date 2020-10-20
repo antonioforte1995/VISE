@@ -19,7 +19,7 @@ def iter_cve_from_edbid(edb):
             yield cve.upper()
 
 
-#
+
 def searchExploits(cve_id):
     HIGH_CVSS_BOUND = 7.0
 
@@ -36,3 +36,5 @@ def searchExploits(cve_id):
     
     return edbids
     
+
+searchExploits("2018-9236")

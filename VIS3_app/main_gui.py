@@ -156,10 +156,8 @@ def create_csv(name, row_data):
 # ---------------------------- MAIN ------------------------------
 
 #[SHOULD]control on children should be added!
-#TODO: Modificare in modo da rendere compatibile con i differenti tipi di input
-#TODO - Sal: Copiare quindi le modifiche presenti in stash con id 7344cf4
 def start(index_name, worksheet = None, usingXLS = True, gui=True):
-    #Variabili iniziali, spostate dall'esterno così da non dare problemi nell'import
+    #Initial variables, moved from the outside so as not to give problems in the import
     cves = []
     data = list()
     cve_all_edbids = set()
@@ -168,14 +166,13 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     IS_DEBUG = gui
     #print(IS_DEBUG)
     
-    es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@3.225.242.97:9200"
+    es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@localhost:9200"
 
     es = Elasticsearch(hosts=[es_url])
     tempCVE.clear()
     csv_data = list()
 
-    #Definizione condizionata del range
-    #per usare sia xls che liste
+    #Conditional range definition to use both xls and lists
     if usingXLS and type(worksheet) is str:
         workbook = xlrd.open_workbook(worksheet, on_demand = True)
         worksheet = workbook.sheet_by_index(0)
@@ -184,13 +181,13 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     else:
         dprint(len(worksheet))
     
+    #if we are using the searching card (usingXLS is true) then we start from the beginning, otherwise we exclude the first 2 rows
     rowRange = range(2, worksheet.nrows) if usingXLS else range(len(worksheet))
 
     for row in rowRange:
 
         #result of the query
-        #Anche in questo caso condizioniamo la generazione dell'array
-        #così da renderne dinamico l'utilizzo
+        #Also in this case we condition the generation of the array so as to make its use dynamic
         cpes = []
         if usingXLS:
             cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
@@ -217,8 +214,8 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 vett_cpe23Uri[i] = cpes[i]["_source"]["cpe23Uri"]       
                 
 
-                #for each element of the "CPEs" array, version is checked to insert the value in the right array.
-                #for instance: if versionStartIncluding the value will be insert in the versionaStartIncluding array, and so on.
+                #for each object in the "CPEs" array, version is checked to insert the value in the right array.
+                #for instance: if versionStartIncluding the value will be insert in the versionStartIncluding array, and so on.
                 #Same for all 4 "if"
                 if "versionStartIncluding" in cpes[i]["_source"]:                           
                     vett_versionStartIncluding[i] = cpes[i]["_source"]["versionStartIncluding"]
@@ -418,7 +415,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
         'Content-Type': 'application/json'
     }
 
-    #es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@3.225.242.97:9200"
+    #es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@localhost:9200"
     uri = es_url + "/.kibana/_doc/index-pattern:{0}".format(index_name)
 
     query = json.dumps(
