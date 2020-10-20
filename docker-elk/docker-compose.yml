@@ -1,11 +1,12 @@
 version: '3.2'
 
 services:
-  image: docker.elastic.co/elasticsearch/elasticsearch:7.8.0
   elasticsearch:
     restart: always
     build:
       context: elasticsearch/
+      args:
+        ELK_VERSION: $ELK_VERSION
     volumes:
       - type: bind
         source: ./elasticsearch/config/elasticsearch.yml
@@ -32,10 +33,11 @@ services:
       - elk
 
   kibana:
-    image: docker.elastic.co/elasticsearch/kibana:7.8.0
     restart: always
     build:
       context: kibana/
+      args:
+        ELK_VERSION: $ELK_VERSION
     volumes:
       - type: bind
         source: ./kibana/config/kibana.yml
