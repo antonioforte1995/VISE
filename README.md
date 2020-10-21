@@ -38,6 +38,16 @@ sudo docker-compose up
 (kibana starts at http://localhost:5601)
 (the username is "elastic", the password is "changeme")
 ```
+2) upload indexes in elasticsearch
+```
+cd /VIS3/cve-analysis
+./update-es.sh
+(now mannually create a "cve-index" index-pattern from kibana GUI)
+cd ..
+./download_cpe-match.sh
+./cpe-match_indexing.py nvdcpematch-1.0.json
+(now mannually create a "cpe-index" index-pattern from kibana GUI)
+```
 
 ## Execute
 1) start VIS3
