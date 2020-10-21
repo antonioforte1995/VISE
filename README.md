@@ -42,11 +42,11 @@ sudo docker-compose up
 ```
 cd /VIS3/cve-analysis
 ./update-es.sh
-(now mannually create a "cve-index" index-pattern from kibana GUI)
+(now manually create a "cve-index" index-pattern from kibana GUI)
 cd ..
 ./download_cpe-match.sh
 ./cpe-match_indexing.py nvdcpematch-1.0.json
-(now mannually create a "cpe-index" index-pattern from kibana GUI)
+(now manually create a "cpe-index" index-pattern from kibana GUI)
 ```
 
 ## Execute
