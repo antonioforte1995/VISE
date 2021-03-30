@@ -6,7 +6,7 @@ VIS3 is a tool used to harvest OSINT (NVD, CVE Details, Exploit DB) aimed to agg
 2) docker
 ```
 cd VIS3/
-./installDockerUbuntu.sh
+sudo ./installDockerUbuntu.sh
 ```
 3) exploitdb
 ```
