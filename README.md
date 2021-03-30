@@ -45,6 +45,7 @@ cd /VIS3/cve-analysis
 (now manually create a "cve-index" index-pattern from kibana GUI)
 cd ..
 ./download_cpe-match.sh
+sudo python3 -m pip install elasticsearch
 ./cpe-match_indexing.py nvdcpematch-1.0.json
 (now manually create a "cpe-index" index-pattern from kibana GUI)
 ```
