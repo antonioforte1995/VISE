@@ -33,7 +33,7 @@ pip install Flask
 ## Una tantum configurations
 1) start Kibana and Elasticsearch containers with docker-compose (start una tantum because of restart always associated to containers in docker-compose)
 ```
-cd cd ../docker-elk/
+cd ../docker-elk/
 sudo docker-compose up
 (kibana starts at http://localhost:5601)
 (the username is "elastic", the password is "changeme")
