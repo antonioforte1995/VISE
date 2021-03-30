@@ -41,7 +41,7 @@ sudo docker-compose up
 2) upload indexes in elasticsearch
 ```
 
-in a new terminal
+(in a new terminal)
 cd ../VIS3_app/
 source venv/bin/activate
 cd /VIS3/cve-analysis
