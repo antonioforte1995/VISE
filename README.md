@@ -57,7 +57,7 @@ sudo python3 -m pip install elasticsearch
 ## Execute
 1) start VIS3
 ```
-cd ../cve-analysis/
+cd cve-analysis/
 source venv/bin/activate	
 mkdir -p /tmp/upload
 export FLASK_APP=$HOME/VIS3/VIS3_app/hello.py
