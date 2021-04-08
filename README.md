@@ -45,6 +45,7 @@ sudo docker-compose up
 cd ../VIS3_app/
 source venv/bin/activate
 cd /VIS3/cve-analysis
+./get-cve-json.sh
 ./update-es.sh
 (now manually create a "cve-index" index-pattern from kibana GUI)
 cd ..
