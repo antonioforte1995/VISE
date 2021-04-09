@@ -25,7 +25,7 @@
     </script>
 
     <script>
-        //Valore da inviare in post (e serializzato in JSON)
+        // Value to be sent in post (and serialized in JSON)
         var valueToSubmit = [];
 
         function addRow() {
@@ -33,7 +33,7 @@
             var tBody = table.getElementsByTagName('tbody')[0];
             var row = tBody.insertRow(0);
             
-            //Strutturata come for in modo da alleggerire il codice
+            // Structured like the "for" in order to lighten the code
             var cellNames = ["PackageInput","VersionInput","VendorInput","SoftwareInput","ProductInput","PlatformInput"];
             var i;
             var tempDict = {};
@@ -51,7 +51,7 @@
             cell7.innerHTML = deleteElement;
         }
 
-        //Funzione per inviare i dati del form come POST e strutturati in JSON
+        // Function to send form data as POST and structured in JSON
         function sendFormData(){
             var form = document.getElementById("searchingCardForm");
             var input = document.getElementById("searchingCardField");
@@ -83,42 +83,7 @@
             </div>
         </nav>
     </header>
-    <!--
-    <main style="flex: 1 0 auto;">
-        <section class="clean-block features" style ="margin-bottom: 3em;">
-            <div class="container">
-                <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
-                    <div id="title" class="carousel-item active"><img class="card-img-top w-100 d-block" height="300" width="800" src="static/scenery/VIS3.png"/></div>
-                </div>
 
-                <div class="row justify-content-center jumbotron card border-secondary mb-3" style="padding: 2rem; border-radius: 0.5rem;">
-                    <p style="margin: 0px;"> VIS3 è un tool che raccoglie informazioni da piattaforme di pubblico accesso (NVD, CVE Details, Exploit DB) con il fine di aggregare vulnerabilità note e fornire enrichment legati ad esse. <br><br>
-                        Le informazioni possono essere ricercate attraverso:<br>
-                        &emsp;- il completamento manuale di alcuni parametri di una form HTML<br> 
-                        &emsp;- l'inserimento di una searching card<br><br>
-                        
-                        Per ognuno di questi è prevista la funzionalità di export.<br> 
-                        VIS3 può essere anche utilizzato da linea di comando, mostrando come risultato una cli minimal ed efficace.</p>
-                </div>
-
-                <div style='margin-top:20px;'></div>
-                
-                <div class="row justify-content-center">    
-                    <a href="{{ url_for('.form')}}"> 
-                        <button id="formButton" type="button"  class="btn btn-primary">FORM</button>
-                    </a>
-
-                    <div style='margin-right:100px;'></div>
-
-                    <a href="{{ url_for('.searchingCard')}}"> 
-                        <button id="searchingCardButton" type="button"  class="btn btn-info">SEARCHING CARD</button>
-                    </a>
-                </div>
-
-            </div>
-        </section>
-    </main>
-    -->
     <main class="page landing-page">
         <section class="clean-block features" style ="border-color: rgb(201,190,201);">
             <div class="container">
@@ -164,27 +129,7 @@
                                         <th style="font-family: helvetica; background-color: rgb(235, 166, 163); color: black; /*padding: 5px 15px 5px 15px;*/">Remove</th>
                                     <tr>
                                     </thead>
-                                    <tbody id="tableBody">
-                                        <!--
-                                        <tr>
-                                            <td>A</td>
-                                            <td>A</td>
-                                            <td>A</td>
-                                            <td>A</td>
-                                            <td>A</td>
-                                            <td>A</td>
-                                            <td>A</td>
-                                        </tr>
-                                        <tr>
-                                            <td>A</td>
-                                            <td>A</td>
-                                            <td>A</td>
-                                            <td>A</td>
-                                            <td>A</td>
-                                            <td>A</td>
-                                            <td>A</td>
-                                        </tr>-->
-                                    </tbody>
+                                    <tbody id="tableBody"></tbody>
                                 </table>
 
                                 <div style='margin-top:100px;'></div>
@@ -201,22 +146,6 @@
         </section>
        
         <div style='margin-top:50px;'></div>
-
-        <!--
-        <section>
-            <div class="row justify-content-center">
-                <a href="{{ url_for('.exportPDF')}}"> 
-                    <button id="exportPDFButton" type="button"  class="button button4">Export to PDF</button>
-                </a>
-
-                <div style='margin-right:100px;'></div>
-
-                <a href="{{ url_for('.exportCSV')}}"> 
-                    <button id="exportCSVButton" type="button"  class="button button4">Export to CSV</button>
-                </a>
-            </div>
-        </section>
-        -->
 
         <div style='margin-top:50px;'></div>
 

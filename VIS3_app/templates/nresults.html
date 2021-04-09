@@ -26,7 +26,7 @@
     </script>
 
     <script>
-        //Valore da inviare in post (e serializzato in JSON)
+        // Value to be sent in post (and serialized in JSON)
         var valueToSubmit = [];
 
         function addRow() {
@@ -34,7 +34,7 @@
             var tBody = table.getElementsByTagName('tbody')[0];
             var row = tBody.insertRow(0);
             
-            //Strutturata come for in modo da alleggerire il codice
+            // Structured like the "for" in order to lighten the code
             var cellNames = ["PackageInput","VersionInput","VendorInput","SoftwareInput","ProductInput","PlatformInput"];
             var i;
             var tempDict = {};
@@ -52,7 +52,7 @@
             cell7.innerHTML = deleteElement;
         }
 
-        //Funzione per inviare i dati del form come POST e strutturati in JSON
+        // Function to send form data as POST and structured in JSON
         function sendFormData(){
             var form = document.getElementById("searchingCardForm");
             var input = document.getElementById("searchingCardField");
@@ -90,22 +90,6 @@
                 <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
                     <div id="title" class="carousel-item active"><img class="card-img-top w-100 d-block" max-height="300" max-width="800" src="static/scenery/VIS3_alt.png"/></div>
                 </div>
-                <!--
-                <div class="row justify-content-center ">
-                <div class="jumbotron card border-secondary mb-3" style="padding: 2rem; border-radius: 0.5rem;">
-                    <p> Di seguito sono riportati i risultati della ricerca.&emsp;
-                        <ul>
-                            <li>DASHBOARDS:</li>
-                                &emsp;<a href="{{ summaryDashboardLink }}" style="color: #007bff;"> Vulnerability Summary Dashboard</a><br>
-                                &emsp;<a href="{{ vulnerabilityReportLink }}" style="color: #007bff;"> Vulnerability Technical Description Dashboard</a><br>
-                                &emsp;<a href="{{ exploitViewLink }}" style="color: #007bff;"> Exploit View Dashboard</a><br>
-                            <br>
-                            <li>CSV:</li>
-                                &emsp;<i class="fas fa-file-csv"  style="font-size:24px;color:mediumseagreen"></i><a href="{{ url_for('.exportCSV') }}?csv_name={{ csvLink }}" style="color: #007bff;">Export to CSV</a>
-                        </ul>
-                    </p> 
-                </div>
-                </div> -->
                 <div class="jumbotron card border-primary">
                     <div class="row" style="margin-left: 1em; margin-bottom: 1em;">
                         <p class="lead">Results are shown below:</p>
