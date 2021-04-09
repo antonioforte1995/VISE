@@ -6,7 +6,7 @@ VIS3 is a tool used to harvest OSINT (NVD, CVE Details, Exploit DB) aimed to agg
 2) docker
 ```
 cd VIS3/
-./installDockerUbuntu.sh
+sudo ./installDockerUbuntu.sh
 ```
 3) exploitdb
 ```
@@ -33,26 +33,30 @@ pip install Flask
 ## Una tantum configurations
 1) start Kibana and Elasticsearch containers with docker-compose (start una tantum because of restart always associated to containers in docker-compose)
 ```
-cd docker-elk/
+cd ../docker-elk/
 sudo docker-compose up
 (kibana starts at http://localhost:5601)
 (the username is "elastic", the password is "changeme")
 ```
 2) upload indexes in elasticsearch
 ```
+
+(in a new terminal)
+cd ../VIS3_app/
+source venv/bin/activate
 cd /VIS3/cve-analysis
+./get-cve-json.sh
 ./update-es.sh
-(now manually create a "cve-index" index-pattern from kibana GUI)
 cd ..
 ./download_cpe-match.sh
+sudo python3 -m pip install elasticsearch
 ./cpe-match_indexing.py nvdcpematch-1.0.json
-(now manually create a "cpe-index" index-pattern from kibana GUI)
 ```
 
 ## Execute
 1) start VIS3
 ```
-cd VIS3/VIS3_app/
+cd VIS3_app/
 source venv/bin/activate	
 mkdir -p /tmp/upload
 export FLASK_APP=$HOME/VIS3/VIS3_app/hello.py
