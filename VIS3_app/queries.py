@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-from pprint import pprint
 from elasticsearch import Elasticsearch
 import os
 
@@ -30,6 +28,7 @@ def search_CPE(vendor, product, version, target_software, cpetype = "a"):
     elif cpetype not in ["a", "h", "o"]:
         cpetype = "a"
 
+    
     res = es.search(index="cpe-index", body={
         "query": {
             "bool": {
@@ -53,7 +52,7 @@ def search_CPE(vendor, product, version, target_software, cpetype = "a"):
                 ]
             }
         }
-    }, size=10000)
+    },size=1000)
     cpes = res['hits']['hits']
     return cpes
 
@@ -62,7 +61,7 @@ def search_CPE(vendor, product, version, target_software, cpetype = "a"):
 #specifies a single limit of version (es. versionStartIncluding)
 #version_type is the type of version limit (es. versionStartIncluding)
 #version is the value of this version limit
-def search_CVE_from_single_limit(cpe23Uri, version_type, version):
+def search_CVE_from_single_limit(cpe23Uri, version_type, version, children = ""):
     es = Elasticsearch(hosts=[es_url])
 
     res = es.search(index="cve-index", body={
@@ -71,7 +70,7 @@ def search_CVE_from_single_limit(cpe23Uri, version_type, version):
                 "must": [
                     {
                         "term": {
-                            "vuln.nodes.cpe_match.cpe23Uri.keyword": {
+                            "vuln.nodes{0}.cpe_match.cpe23Uri.keyword".format(children): {
                             "value": cpe23Uri,
                             "boost": 1.0
                             }
@@ -79,7 +78,7 @@ def search_CVE_from_single_limit(cpe23Uri, version_type, version):
                     },
                     {
                         "term": {
-                            "vuln.nodes.cpe_match.{0}.keyword".format(version_type): {
+                            "vuln.nodes{0}.cpe_match.{1}.keyword".format(children, version_type): {
                             "value": version,
                             "boost": 1.0
                             }
@@ -88,7 +87,7 @@ def search_CVE_from_single_limit(cpe23Uri, version_type, version):
                 ]
             }
         }
-    }, size=10000)
+    },size=1000)
     cves = res['hits']['hits']
     return cves
 
@@ -98,7 +97,7 @@ def search_CVE_from_single_limit(cpe23Uri, version_type, version):
 #version_types is the array with the limits of the range (es. versionStartIncluding and versionEndExcluding)
 #version_start is the value of the first limit
 #version_end is the value of the second limit
-def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_end):
+def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_end, children = ""):
     es = Elasticsearch(hosts=[es_url])
 
     res = es.search(index="cve-index", body={
@@ -107,7 +106,7 @@ def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_en
                 "must": [
                     {
                         "term": {
-                            "vuln.nodes.cpe_match.cpe23Uri.keyword": {
+                            "vuln.nodes{0}.cpe_match.cpe23Uri.keyword".format(children): {
                             "value": cpe23Uri,
                             "boost": 1.0
                             }
@@ -115,7 +114,7 @@ def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_en
                     },
                     {
                         "term": {
-                            "vuln.nodes.cpe_match.{0}.keyword".format(versions_types[0]): {
+                            "vuln.nodes{0}.cpe_match.{1}.keyword".format(children, versions_types[0]): {
                             "value": version_start,
                             "boost": 1.0
                             }
@@ -123,7 +122,7 @@ def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_en
                     },
                     {
                         "term": {
-                            "vuln.nodes.cpe_match.{0}.keyword".format(versions_types[1]): {
+                            "vuln.nodes{0}.cpe_match.{1}.keyword".format(children, versions_types[1]): {
                             "value": version_end,
                             "boost": 1.0
                             }
@@ -132,7 +131,7 @@ def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_en
                 ]
             }
         }
-    }, size=10000)
+    },size=1000)
     cves = res['hits']['hits']
     return cves
 
@@ -145,10 +144,18 @@ def search_CVE(cpe23Uri):
     res = es.search(index="cve-index", body={
         "query": {
             "bool": {
-                "must": [
+                "should": [
                     {
                         "term": {
                             "vuln.nodes.cpe_match.cpe23Uri.keyword": {
+                            "value": cpe23Uri,
+                            "boost": 1.0
+                            }
+                        }
+                    },
+                    {
+                        "term": {
+                            "vuln.nodes.children.cpe_match.cpe23Uri.keyword": {
                             "value": cpe23Uri,
                             "boost": 1.0
                             }
@@ -157,38 +164,6 @@ def search_CVE(cpe23Uri):
                 ]
             }
         }
-    }, size=10000)
+    },size=1000)
     cves = res['hits']['hits']
     return cves
-
-
-
-def stampaInfo(cve):
-    print("")
-    print("")
-    print("--------------")
-    print(cve['_id'])
-    #return
-    print("Metrics:")
-    cve = cve['_source']
-    #pprint(cve['baseMetricV2']['cvssV2'])
-    for key, val in cve['baseMetricV2'].items():
-        if "obtain" in key:
-            print(key, " -> ", val)
-    print("Score: ", cve['baseMetricV2']['impactScore'])
-    print("Severity: ", cve['baseMetricV2']['severity'])
-    desc = cve['description']['description_data']
-    print("")
-    print("Description:")
-    for d in desc:
-        if 'en' in d['lang']:
-            print(''.join(d['value']))
-            break
-    print("")
-    print("References:")
-    pprint(cve['references']['reference_data'])
-    print("")
-    print("Vulnerable configurations:")
-    pprint(cve['vuln'])
-    print("--------------")
-    print("")

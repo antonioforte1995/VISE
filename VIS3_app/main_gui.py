@@ -6,9 +6,9 @@
 
 
 # ---------------------- IMPORTS -------------------------
-from create_dashboards import *
-from queries import *
-from enrichment import *
+
+from create_dashboards import create_dashboards, requests
+from queries import search_CPE, search_CVE_from_single_limit, search_CVE_from_interval, search_CVE
 from prettytable import ALL as ALL
 import csv	                #to read the csv file			
 import os                   #to execute the command in a subshell for "os.system(command)"
@@ -19,6 +19,7 @@ import xlrd				    #to read xls
 import re
 import subprocess
 from elasticsearch import Elasticsearch
+import cve_searchsploit
 import json
 import time
 import sys
@@ -116,12 +117,12 @@ def format_CPE(CPE, max_line_length):
     return formatted_CPE
 
 
-#to attribute color and severity to the CVSS score, based on the reference: https://nvd.nist.gov/vuln-metrics/cvss
+#to attribute color and severity to the CVSS score, based on the reference: https://nvd.nist.gov/vuln-metrics/cvss and https://nvd.nist.gov/general/nvd-dashboard
 # 0.0       None 	 -> White
-# 0.1-3.9   Low      -> Green
-# 4.0-6.9   Medium 	 -> Yellow
-# 7.0-8.9   High 	 -> DarkOrange
-# 9.0-10.0  Critical -> Red
+# 0.1-3.9   Low      -> Yellow
+# 4.0-6.9   Medium 	 -> Orange
+# 7.0-8.9   High 	 -> Red
+# 9.0-10.0  Critical -> DarkRed
 
 def color_score(score):
     score = float(score)
@@ -131,16 +132,16 @@ def color_score(score):
         color = "white"
         severity = "NONE"
     elif (score >= 0.1) and (score <= 3.9):
-        color = "green_3b"
+        color = "yellow_1"
         severity = "LOW"
     elif (score >= 4.0) and (score <= 6.9):
-        color = "yellow_1"
+        color = "orange_1"
         severity = "MEDIUM"
     elif (score >= 7.0) and (score <= 8.9):
-        color = "orange_1"
+        color = "red"
         severity = "HIGH"
     elif (score >= 9.0) and (score <= 10.0):
-        color = "red"
+        color = "dark_red_2"
         severity = "CRITICAL"
 
     return color, severity
@@ -153,6 +154,17 @@ def create_csv(name, row_data):
         writer.writerows(row_data)
         return name+'_output.csv'
 
+
+def searchExploits(cve_id):
+    #cve_searchsploit.update_db()
+    cve_exploits = set()
+    edbids = cve_searchsploit.edbid_from_cve(cve_id)
+    for i in edbids:
+        cve_exploits.add(i)
+    
+    return edbids
+
+
 # ---------------------------- MAIN ------------------------------
 
 #[SHOULD]control on children should be added!
@@ -160,17 +172,30 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     #Initial variables, moved from the outside so as not to give problems in the import
     cves = []
     data = list()
-    cve_all_edbids = set()
     columns = ["CPE", "CVE", "SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
     global IS_DEBUG
     IS_DEBUG = gui
-    #print(IS_DEBUG)
     
     es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@localhost:9200"
 
     es = Elasticsearch(hosts=[es_url])
     tempCVE.clear()
     csv_data = list()
+
+    #fields used in CSV
+    csv_data.append(
+        [   
+            "CPE",
+            "CVE",
+            "SCORE",
+            "SEVERITY",
+            "DESCRIPTION",
+            "URLs",
+            "REMEDIATIONS",
+            "CWE",
+            "EXPLOIT" 
+        ]
+    )
 
     #Conditional range definition to use both xls and lists
     if usingXLS and type(worksheet) is str:
@@ -181,14 +206,14 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     else:
         dprint(len(worksheet))
     
-    #if we are using the searching card (usingXLS is true) then we start from the beginning, otherwise we exclude the first 2 rows
-    rowRange = range(2, worksheet.nrows) if usingXLS else range(len(worksheet))
-
+    #if we are not using the searching card (usingXLS is false) then we start from the beginning, otherwise we exclude the first 2 rows
+    rowRange = range(1, worksheet.nrows) if usingXLS else range(len(worksheet))
     for row in rowRange:
 
         #result of the query
         #Also in this case we condition the generation of the array so as to make its use dynamic
         cpes = []
+        cves = []
         if usingXLS:
             cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
         else:
@@ -202,7 +227,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
         vett_versionEndIncluding = [0]*len(cpes)
         vett_versionEndExcluding = [0]*len(cpes)
 
-
+ 
         #for all the CPEs that have a range or a wildcard, it should be found the start and the end of this range
         if (len(cpes) > 0):
             for i in range(0, len(cpes)):
@@ -211,8 +236,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 versions_types_values = []          #array that has the effective values of the range (value of StartIncluding, ...)
 
                 #result of the query
-                vett_cpe23Uri[i] = cpes[i]["_source"]["cpe23Uri"]       
-                
+                vett_cpe23Uri[i] = cpes[i]["_source"]["cpe23Uri"] 
 
                 #for each object in the "CPEs" array, version is checked to insert the value in the right array.
                 #for instance: if versionStartIncluding the value will be insert in the versionStartIncluding array, and so on.
@@ -241,25 +265,26 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                     versions_types.append("versionEndExcluding")
                     versions_types_values.append(cpes[i]["_source"]["versionEndExcluding"])
 
-
-                #tempList will be used to filter the duplicates 
-                tempList = None
+                
+                #tempList and tempList1 will be used to filter the duplicates 
+                tempList = []
+                tempList1 = []
                 
                 #if there is only one boundary
                 if (len(versions_types) == 1):
                     tempList = search_CVE_from_single_limit(vett_cpe23Uri[i], versions_types[0], versions_types_values[0])
+                    tempList1 = search_CVE_from_single_limit(vett_cpe23Uri[i], versions_types[0], versions_types_values[0], ".children")
 
                 #if there are two boundaries
                 elif (len(versions_types) == 2):
                     tempList = search_CVE_from_interval(vett_cpe23Uri[i], versions_types, versions_types_values[0], versions_types_values[1])
+                    tempList1 = search_CVE_from_interval(vett_cpe23Uri[i], versions_types, versions_types_values[0], versions_types_values[1], ".children")
 
                 #if there is the accurate version
                 else:
                     tempList = search_CVE(vett_cpe23Uri[i])
 
-                #check on the duplicates
-                #temp2List = list(dict(tempList))
-                #a = 1
+                #check on duplicates
                 tempList = [item for item in tempList if valid(item)]
                 for tmp in tempList:
                     tmp['searchedCPE'] = vett_cpe23Uri[i]
@@ -272,144 +297,136 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 else:
                     dprint("Ops, scartate tutte")
 
-    #fields used in CSV
-    csv_data.append(
-        [   
-            "CPE",
-            "CVE",
-            "SCORE",
-            "SEVERITY",
-            "DESCRIPTION",
-            "URLs",
-            "REMEDIATIONS",
-            "CWE",
-            "EXPLOIT" 
-        ]
-    )
-    #building each rows and columns of CLI and CSV
-    for cve in cves:
 
-        vett_URLs = []
-        vett_remediations = []
-        severity = ""
-        baseScore = 0
+                if(len(tempList1)>0):
+                    tempList1 = [item for item in tempList1 if valid(item)]
 
-        #add value in table, splitting in new lines the description and cpe
-        if (len(cve) > 0):
-            description = format_description(cve[0]['_source']['description']['description_data'][0]['value'], 60)
-            cpe = format_CPE(cve[0]['searchedCPE'], 40) #cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'], 40)
+                    for tmp in tempList1:
+                        tmp['searchedCPE'] = vett_cpe23Uri[i]
 
+                    if len(tempList1) == 1:
+                        cves.append(tempList1)
+                    elif len(tempList1) > 1:
+                        for t in tempList1:
+                            cves.append([t])
+                    else:
+                        dprint("Ops, scartate tutte")
 
-            #enrichment, the "Vendor Advisory URL" will be placed in the "URL" field (CLI) and in the "Remediation" one (CSV)
-            #[SHOULD] actually we should control more than the "VendorAdvisory" tag and return a better result
-            for obj in cve[0]['_source']['references']['reference_data']:
-                if("Vendor Advisory" in obj["tags"]):
-                    vett_remediations.append(obj["url"])
-                vett_URLs.append(obj["url"])
+                
+            #building each rows and columns of CLI and CSV
+            for cve in cves:
+
+                vett_URLs = []
+                vett_remediations = []
+                severity = ""
+                baseScore = 0
+
+                #add value in table, splitting in new lines the description and cpe
+                if (len(cve) > 0):
+                    description = format_description(cve[0]['_source']['description']['description_data'][0]['value'], 60)
+                    cpe = format_CPE(cve[0]['searchedCPE'], 40) #cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'], 40)
 
 
-            #delete commas to deal with URLs in CLI and (first of all) in CSV 
-            URLs_witouth_commas = delete_commas(str(vett_URLs))
-            remediations_witouth_commas = delete_commas(str(vett_remediations))
-            URLs = format_URLs(URLs_witouth_commas)
-            remediations = format_URLs(remediations_witouth_commas)
+                    #enrichment, the "Vendor Advisory URL" will be placed in the "URL" field (CLI) and in the "Remediation" one (CSV)
+                    #[SHOULD] actually we should control more than the "VendorAdvisory" tag and return a better result
+                    for obj in cve[0]['_source']['references']['reference_data']:
+                        if("Vendor Advisory" in obj["tags"]):
+                            vett_remediations.append(obj["url"])
+                        vett_URLs.append(obj["url"])
 
 
-            #"impactScore" is a subpart of "baseScore", this last one is reported by NIST. 
-            if ("baseMetricV3" in cve[0]['_source']):
-                #severity = cve[0]['_source']['baseMetricV3']['cvssV3']['baseSeverity']
-                baseScore = cve[0]['_source']['baseMetricV3']['cvssV3']['baseScore']
-            else:
-                #severity = cve[0]['_source']['baseMetricV2']['severity']
-                baseScore = cve[0]['_source']['baseMetricV2']['cvssV2']['baseScore']
+                    #delete commas to deal with URLs in CLI and (first of all) in CSV 
+                    URLs_witouth_commas = delete_commas(str(vett_URLs))
+                    remediations_witouth_commas = delete_commas(str(vett_remediations))
+                    URLs = format_URLs(URLs_witouth_commas)
+                    remediations = format_URLs(remediations_witouth_commas)
 
 
-            #the function color_score returns 2 values, color and severity
-            [color, severity] = color_score(baseScore)
-
-            #add data in the CLI
-            data.append(
-                [
-                    colorize(cpe),
-                    colorize(cve[0]["_id"]),
-                    colorize(baseScore, color, attrs="bold"),
-                    colorize(severity),
-                    colorize(description),
-                    colorize(URLs)
-                ]
-            )
-
-            exploit_URLs = []
-
-            #reasearching on the ExploitDB for the enrichment, each cve found is added to the "cve_all_edbids" set (in this way there are no duplicates)
-            cve_edbids = searchExploits(cve[0]["_id"])
-            for i in cve_edbids:
-                try:
-                    output = subprocess.check_output('searchsploit '+ str(i) + ' -w', shell=True)
-
-                    string_output = output.decode('utf-8')
-                    splitted_string = string_output.split("\n")
-            
-
-                    for i in range(3, len(splitted_string)-4):
-                        exploit_URLs.append(escape_ansi(splitted_string[i].split('|')[-1]))
-                except Exception as e:
-                    dprint(e)
-                #cve_all_edbids.add(i)
-
-            exploit_URLs_witouth_commas = delete_commas(str(exploit_URLs))
-            exploit_URLs = format_URLs(exploit_URLs_witouth_commas)
-
-            csv_data.append(
-                [   
-                    cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
-                    cve[0]["_id"],
-                    baseScore,
-                    severity,
-                    description,
-                    URLs,
-                    remediations,
-                    cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
-                    exploit_URLs
-                ]
-            )
+                    #"impactScore" is a subpart of "baseScore", this last one is reported by NIST. 
+                    if ("baseMetricV3" in cve[0]['_source']):
+                        baseScore = cve[0]['_source']['baseMetricV3']['cvssV3']['baseScore']
+                    else:
+                        baseScore = cve[0]['_source']['baseMetricV2']['cvssV2']['baseScore']
 
 
-            dprint("----")
-            if es.exists(index=index_name, id=cve[0]["_id"]) is False:
-                result = es.create(index=index_name, id=cve[0]["_id"],body={
-                    "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
-                    "CVE": cve[0]["_id"],
-                    "SCORE": baseScore,
-                    "SEVERITY": severity,
-                    "DESCRIPTION": description,
-                    "URLs": URLs,
-                    "REMEDIATIONS": remediations,
-                    "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
-                    "EXPLOIT": exploit_URLs
-                })
-                dprint("Insert result" + cve[0]["_id"])
-                dprint(result)
-            else:  
-                result = es.update(index=index_name, id=cve[0]["_id"],body={
-                    "doc": {
-                        "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
-                        "CVE": cve[0]["_id"],
-                        "SCORE": baseScore,
-                        "SEVERITY": severity,
-                        "DESCRIPTION": description,
-                        "URLs": URLs,
-                        "REMEDIATIONS": remediations,
-                        "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
-                        "EXPLOIT": exploit_URLs
-                    }, "doc_as_upsert": True   
-                })
-                dprint("Update result"+ cve[0]["_id"])
-                dprint(result)
+                    #the function color_score returns 2 values, color and severity
+                    [color, severity] = color_score(baseScore)
 
-            
+                    #add data in the CLI
+                    data.append(
+                        [
+                            colorize(cpe),
+                            colorize(cve[0]["_id"]),
+                            colorize(baseScore, color, attrs="bold"),
+                            colorize(severity),
+                            colorize(description),
+                            colorize(URLs)
+                        ]
+                    )
 
-        pass
+                    exploit_URLs = []
+
+                    #reasearching on the ExploitDB for the enrichment
+                    cve_edbids = searchExploits(cve[0]["_id"])
+                    for i in cve_edbids:
+                        try:
+                            output = subprocess.check_output('searchsploit '+ str(i) + ' -w', shell=True)
+
+                            string_output = output.decode('utf-8')
+                            splitted_string = string_output.split("\n")
+                    
+
+                            for i in range(3, len(splitted_string)-4):
+                                exploit_URLs.append(escape_ansi(splitted_string[i].split('|')[-1]))
+                        except Exception as e:
+                            dprint(e)
+
+                    exploit_URLs_witouth_commas = delete_commas(str(exploit_URLs))
+                    exploit_URLs = format_URLs(exploit_URLs_witouth_commas)
+
+                    csv_data.append(
+                        [   
+                            cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
+                            cve[0]["_id"],
+                            baseScore,
+                            severity,
+                            description,
+                            URLs,
+                            remediations,
+                            cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
+                            exploit_URLs
+                        ]
+                    )
+
+
+                    dprint("----")
+                    if es.exists(index=index_name, id=cve[0]["_id"]) is False:
+                        es.create(index=index_name, id=cve[0]["_id"],body={
+                            "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
+                            "CVE": cve[0]["_id"],
+                            "SCORE": baseScore,
+                            "SEVERITY": severity,
+                            "DESCRIPTION": description,
+                            "URLs": URLs,
+                            "REMEDIATIONS": remediations,
+                            "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
+                            "EXPLOIT": exploit_URLs
+                        })
+                    else:  
+                        es.update(index=index_name, id=cve[0]["_id"],body={
+                            "doc": {
+                                "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
+                                "CVE": cve[0]["_id"],
+                                "SCORE": baseScore,
+                                "SEVERITY": severity,
+                                "DESCRIPTION": description,
+                                "URLs": URLs,
+                                "REMEDIATIONS": remediations,
+                                "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
+                                "EXPLOIT": exploit_URLs
+                            }, "doc_as_upsert": True   
+                        })
+                        
 
     HEADERS = {
         'Content-Type': 'application/json'
@@ -423,7 +440,6 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
             "type": "index-pattern",
             "index-pattern": {
                 "title": index_name
-                #"timeFieldName": time.strftime("%Y%m%d-%H%M%S")
             }
         }
     )
@@ -436,14 +452,15 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     vett_dashboards_links.append(csvName)
     if not gui:
         cli_table(columns, data, hrules=True)
+
     return vett_dashboards_links
 
 
 
 if __name__ == "__main__":
     #to read the searching cards
-    workbook = xlrd.open_workbook('../SearchingCard.xlsx', on_demand = True)
+    workbook = xlrd.open_workbook(sys.argv[1], on_demand = True)
     worksheet = workbook.sheet_by_index(0)
-    idx = sys.argv[1] if (len(sys.argv) > 1) else str(int(time.time()))
+    idx = sys.argv[2] if (len(sys.argv) > 2) else str(int(time.time()))
     res = start(idx, worksheet, True, gui=False)
     print(res)
