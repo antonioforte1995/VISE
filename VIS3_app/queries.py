@@ -17,18 +17,6 @@ def search_CPE(vendor, product, version, target_software, cpetype = "a"):
         vendor = ".*"
 
     
-    if cpetype == "application":
-        cpetype = "a"
-    elif cpetype == "os":
-        cpetype = "o"
-    elif cpetype == "operating system":
-        cpetype = "o"
-    elif cpetype == "hardware":
-        cpetype = "h"
-    elif cpetype not in ["a", "h", "o"]:
-        cpetype = "a"
-
-    
     res = es.search(index="cpe-index", body={
         "query": {
             "bool": {

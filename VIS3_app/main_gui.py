@@ -7,24 +7,28 @@
 
 # ---------------------- IMPORTS -------------------------
 
-from create_dashboards import create_dashboards, requests
-from queries import search_CPE, search_CVE_from_single_limit, search_CVE_from_interval, search_CVE
-from prettytable import ALL as ALL
-import csv	                #to read the csv file			
-import os                   #to execute the command in a subshell for "os.system(command)"
-import textwrap             #to split long strings in more lines
-import prettytable			#to make the cli
-import colored				#to colorize the "score" field
-import xlrd				    #to read xls
+import csv  # to read the csv file
+import json
+import os  # to execute the command in a subshell for "os.system(command)"
 import re
 import subprocess
-from elasticsearch import Elasticsearch
-import cve_searchsploit
-import json
-import time
 import sys
-import uuid 
+import textwrap  # to split long strings in more lines
+import time
+import uuid
 from pprint import pprint
+
+import colored  # to colorize the "score" field
+import cve_searchsploit
+import prettytable  # to make the cli
+import xlrd  # to read xls
+from elasticsearch import Elasticsearch
+from prettytable import ALL as ALL
+
+from create_dashboards import create_dashboards, requests
+from queries import (search_CPE, search_CVE, search_CVE_from_interval,
+                     search_CVE_from_single_limit)
+
 # -------------------- DECLARATIONS ----------------------
 tempCVE = set()
 IS_DEBUG = True
@@ -214,11 +218,37 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
         #Also in this case we condition the generation of the array so as to make its use dynamic
         cpes = []
         cves = []
+        searched_CPE = ""
+
         if usingXLS:
-            cpes = search_CPE(worksheet.cell_value(row,4), worksheet.cell_value(row,0), worksheet.cell_value(row,1), worksheet.cell_value(row,5))
+            vendor = worksheet.cell_value(row,4)
+            target_software = worksheet.cell_value(row,5)
+            cpes = search_CPE(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software)
+            if len(vendor) < 1:
+                vendor = "*"
+            if (target_software == ""):
+                target_software = "*"
+            searched_CPE = "cpe:2.3:a:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software)
         else:
-            cpes = search_CPE(worksheet[row]['VendorInput'], worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], worksheet[row]['SoftwareInput'], worksheet[row]['ProductInput'])
-        
+            vendor = worksheet[row]['VendorInput']
+            target_software = worksheet[row]['SoftwareInput']
+            cpetype = worksheet[row]['ProductInput']
+            cpes = search_CPE(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
+            if cpetype == "Application":
+                cpetype = "a"
+            elif cpetype == "OS":
+                cpetype = "o"
+            elif cpetype == "Hardware":
+                cpetype = "h"
+            elif cpetype not in ["a", "h", "o"]:
+                cpetype = "a"
+
+            if len(vendor) < 1:
+                vendor = "*"
+            if (target_software == ""):
+                target_software = "*"
+            searched_CPE = "cpe:2.3:a:{4}:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
+            
 
         #four arrays are declared, they will contain information about the type and the number of version
         vett_cpe23Uri = [0]*len(cpes)
@@ -287,7 +317,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 #check on duplicates
                 tempList = [item for item in tempList if valid(item)]
                 for tmp in tempList:
-                    tmp['searchedCPE'] = vett_cpe23Uri[i]
+                    tmp['searchedCPE'] = searched_CPE
                 
                 if len(tempList) == 1:
                     cves.append(tempList)
@@ -302,7 +332,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                     tempList1 = [item for item in tempList1 if valid(item)]
 
                     for tmp in tempList1:
-                        tmp['searchedCPE'] = vett_cpe23Uri[i]
+                        tmp['searchedCPE'] = searched_CPE
 
                     if len(tempList1) == 1:
                         cves.append(tempList1)
