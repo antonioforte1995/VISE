@@ -44,7 +44,7 @@ sudo docker-compose up
 (in a new terminal)
 cd ../VIS3_app/
 source venv/bin/activate
-cd /VIS3/cve-analysis
+cd ../cve-analysis
 ./get-cve-json.sh
 ./update-es.sh
 cd ..
