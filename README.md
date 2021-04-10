@@ -44,12 +44,11 @@ sudo docker-compose up
 (in a new terminal)
 cd ../VIS3_app/
 source venv/bin/activate
-cd /VIS3/cve-analysis
+cd ../cve-analysis
 ./get-cve-json.sh
 ./update-es.sh
 cd ..
 ./download_cpe-match.sh
-sudo python3 -m pip install elasticsearch
 ./cpe-match_indexing.py nvdcpematch-1.0.json
 ```
 
