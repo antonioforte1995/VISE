@@ -1,4 +1,4 @@
-# ISEV
+# ISEV (Information Search Engine on Vulnerabilities)
 ISEV is a tool used to harvest OSINT (NVD, CVE Details, Exploit DB) aimed to aggregate informations about known vulnerabilities.
 
 ## Prerequisites
