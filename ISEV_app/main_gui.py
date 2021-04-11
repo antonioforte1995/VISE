@@ -223,40 +223,42 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
         if usingXLS:
             vendor = worksheet.cell_value(row,4)
             target_software = worksheet.cell_value(row,5)
-            cpetype = worksheet.cell_value(row,1)
-            cpes = search_CPE(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software)
+            cpetype = target_software = worksheet.cell_value(row,2)
             if cpetype == "Application":
                 cpetype = "a"
             elif cpetype == "OS":
                 cpetype = "o"
             elif cpetype == "Hardware":
                 cpetype = "h"
-            elif cpetype not in ["a", "h", "o"]:
-                cpetype = "a"
-            
-            if len(vendor) < 1:
-                vendor = "*"
-            if (target_software == ""):
-                target_software = "*"
-            searched_CPE = "cpe:2.3:a:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet.cell_value(row,0), cpetype, target_software)
-        else:
-            vendor = worksheet[row]['VendorInput']
-            target_software = worksheet[row]['SoftwareInput']
-            cpetype = worksheet[row]['ProductInput']
-            cpes = search_CPE(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
-            if cpetype == "Application":
-                cpetype = "a"
-            elif cpetype == "OS":
-                cpetype = "o"
-            elif cpetype == "Hardware":
-                cpetype = "h"
-            elif cpetype not in ["a", "h", "o"]:
+            else:
                 cpetype = "a"
 
             if len(vendor) < 1:
                 vendor = "*"
             if (target_software == ""):
                 target_software = "*"
+
+            cpes = search_CPE(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software, cpetype)
+            searched_CPE = "cpe:2.3:a:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software, cpetype)
+        else:
+            vendor = worksheet[row]['VendorInput']
+            target_software = worksheet[row]['SoftwareInput']
+            cpetype = worksheet[row]['ProductInput']
+            if cpetype == "a":
+                cpetype = "a"
+            elif cpetype == "o":
+                cpetype = "o"
+            elif cpetype == "h":
+                cpetype = "h"
+            else:
+                cpetype = "a"
+
+            if len(vendor) < 1:
+                vendor = "*"
+            if (target_software == ""):
+                target_software = "*"
+            
+            cpes = search_CPE(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
             searched_CPE = "cpe:2.3:a:{4}:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
             
 
