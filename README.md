@@ -42,5 +42,5 @@ sudo ./uploadIndeces.sh
 ```
 cd ISEV/ISEV_app/
 source venv/bin/activate
-sudo ./scripts/startISEV.sh
+sudo ../scripts/startISEV.sh
 ```
