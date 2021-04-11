@@ -223,6 +223,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
         if usingXLS:
             vendor = worksheet.cell_value(row,4)
             target_software = worksheet.cell_value(row,5)
+            cpetype = worksheet.cell_value(row,1)
             cpes = search_CPE(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software)
             if cpetype == "Application":
                 cpetype = "a"
@@ -237,7 +238,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 vendor = "*"
             if (target_software == ""):
                 target_software = "*"
-            searched_CPE = "cpe:2.3:a:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software)
+            searched_CPE = "cpe:2.3:a:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet.cell_value(row,0), cpetype, target_software)
         else:
             vendor = worksheet[row]['VendorInput']
             target_software = worksheet[row]['SoftwareInput']
