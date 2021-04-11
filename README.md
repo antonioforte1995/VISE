@@ -12,18 +12,17 @@ sudo ./installOthers.sh
 ```
 cd ../ISEV_app/
 source venv/bin/activate
-cd ../scripts/
-sudo ./installFlask.sh
+sudo ../scripts/installFlask.sh
 ```
 4) exploitdb
 ```
-sudo ./installExploitDB.sh
+sudo ../scripts/installExploitDB.sh
 sudo searchsploit -u
 sudo cve_searchsploit -u
 ```
 5) docker
 ```
-sudo ./installDockerUbuntu.sh
+sudo ../scripts/installDockerUbuntu.sh
 
 (the script also start Kibana and Elasticsearch containers with docker-compose)
 (kibana starts at http://localhost:5601)
@@ -34,7 +33,7 @@ sudo ./installDockerUbuntu.sh
 ## Una tantum configurations
 1) upload indexes in elasticsearch
 ```
-sudo ./uploadIndexes.sh
+sudo ../scripts/uploadIndexes.sh
 ```
 
 ## Execute
