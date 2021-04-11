@@ -17,7 +17,7 @@ sudo ../scripts/installFlask.sh
 4) exploitdb
 ```
 sudo ../scripts/installExploitDB.sh
-sudo searchsploit -u
+searchsploit -u
 sudo cve_searchsploit -u
 ```
 5) docker
