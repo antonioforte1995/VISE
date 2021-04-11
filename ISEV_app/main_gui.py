@@ -244,11 +244,11 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
             vendor = worksheet[row]['VendorInput']
             target_software = worksheet[row]['SoftwareInput']
             cpetype = worksheet[row]['ProductInput']
-            if cpetype == "a":
+            if cpetype == "Application":
                 cpetype = "a"
-            elif cpetype == "o":
+            elif cpetype == "OS":
                 cpetype = "o"
-            elif cpetype == "h":
+            elif cpetype == "Hardware":
                 cpetype = "h"
             else:
                 cpetype = "a"
