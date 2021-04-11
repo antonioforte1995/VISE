@@ -34,7 +34,7 @@ sudo cve_searchsploit -u
 ## Una tantum configurations
 1) upload indexes in elasticsearch
 ```
-sudo ./uploadIndeces.sh
+sudo ./uploadIndexes.sh
 ```
 
 ## Execute
