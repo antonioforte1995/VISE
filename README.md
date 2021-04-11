@@ -40,5 +40,7 @@ sudo ./uploadIndeces.sh
 ## Execute
 1) start ISEV
 ```
-sudo ./startISEV.sh
+cd ISEV//ISEV_app/
+source venv/bin/activate
+sudo ./scripts/startISEV.sh
 ```
