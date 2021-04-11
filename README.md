@@ -27,13 +27,14 @@ sudo ./installOthers.sh
 cd ../ISEV_app/
 source venv/bin/activate
 sudo ../scripts/installFlask.sh
+cd ../scripts/
 ```
 
 
 ## Una tantum configurations
 1) upload indexes in elasticsearch
 ```
-sudo ./ uploadIndeces.sh
+sudo ./uploadIndeces.sh
 ```
 
 ## Execute
