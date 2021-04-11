@@ -16,6 +16,7 @@ sudo ./installDockerUbuntu.sh
 ```
 sudo ./installExploitDB.sh
 searchsploit -u
+cve_searchsploit -u
 ```
 4) python3, idle3
 ```
@@ -23,7 +24,9 @@ sudo ./installOthers.sh
 ```
 5) flask
 ```
-sudo ./installFlask.sh
+cd ../ISEV_app/
+source venv/bin/activate
+sudo ../scripts/installFlask.sh
 ```
 
 
