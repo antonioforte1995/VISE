@@ -224,6 +224,15 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
             vendor = worksheet.cell_value(row,4)
             target_software = worksheet.cell_value(row,5)
             cpes = search_CPE(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software)
+            if cpetype == "Application":
+                cpetype = "a"
+            elif cpetype == "OS":
+                cpetype = "o"
+            elif cpetype == "Hardware":
+                cpetype = "h"
+            elif cpetype not in ["a", "h", "o"]:
+                cpetype = "a"
+            
             if len(vendor) < 1:
                 vendor = "*"
             if (target_software == ""):
