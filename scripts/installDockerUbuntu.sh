@@ -13,5 +13,5 @@ usermod -aG docker $USER
 systemctl enable docker
 systemctl daemon-reload
 systemctl restart docker.service
-cd docker-elk/
+cd ../docker-elk/
 sudo docker-compose up
