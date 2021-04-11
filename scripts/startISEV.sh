@@ -1,5 +1,3 @@
-cd ../ISEV_app/
-source venv/bin/activate
 mkdir -p /tmp/upload
 export FLASK_APP=./hello.py
 export FLASK_ENV=production
