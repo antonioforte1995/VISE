@@ -21,7 +21,6 @@ sudo ./installOthers.sh
 ```
 5) flask
 ```
-cd VIS3_app/
 sudo ./installFlask.sh
 ```
 
