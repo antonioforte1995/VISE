@@ -33,7 +33,7 @@ sudo ./ uploadIndeces.sh
 ```
 
 ## Execute
-1) start VIS3
+1) start ISEV
 ```
 sudo ./startISEV.sh
 ```
