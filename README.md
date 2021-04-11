@@ -15,19 +15,19 @@ source venv/bin/activate
 cd ../scripts/
 sudo ./installFlask.sh
 ```
-4) docker
+4) exploitdb
+```
+sudo ./installExploitDB.sh
+sudo searchsploit -u
+sudo cve_searchsploit -u
+```
+5) docker
 ```
 sudo ./installDockerUbuntu.sh
 
 (the script also start Kibana and Elasticsearch containers with docker-compose)
 (kibana starts at http://localhost:5601)
 (the username is "elastic", the password is "changeme")
-```
-5) exploitdb
-```
-sudo ./installExploitDB.sh
-sudo searchsploit -u
-sudo cve_searchsploit -u
 ```
 
 
