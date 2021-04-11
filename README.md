@@ -15,7 +15,7 @@ sudo ./installDockerUbuntu.sh
 ```
 sudo ./installExploitDB.sh
 ```
-4) python3, idle3, git
+4) python3, idle3
 ```
 sudo ./installOthers.sh
 ```
