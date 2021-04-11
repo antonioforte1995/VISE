@@ -15,6 +15,7 @@ sudo ./installDockerUbuntu.sh
 3) exploitdb
 ```
 sudo ./installExploitDB.sh
+searchsploit -u
 ```
 4) python3, idle3
 ```
