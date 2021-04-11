@@ -7,7 +7,7 @@ ISEV is a tool used to harvest OSINT (NVD, CVE Details, Exploit DB) aimed to agg
 ```
 cd ISEV/scripts/
 sudo ./installDockerUbuntu.sh
-(the script also start Kibana and Elasticsearch containers with docker-compose, start una tantum because of restart always associated to containers in docker-compose)
+(the script also start Kibana and Elasticsearch containers with docker-compose)
 (kibana starts at http://localhost:5601)
 (the username is "elastic", the password is "changeme")
 ```
