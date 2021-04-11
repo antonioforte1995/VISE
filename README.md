@@ -16,7 +16,7 @@ sudo ./installDockerUbuntu.sh
 ```
 sudo ./installExploitDB.sh
 searchsploit -u
-cve_searchsploit -u
+sudo cve_searchsploit -u
 ```
 4) python3, idle3
 ```
