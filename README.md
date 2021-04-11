@@ -13,7 +13,7 @@ sudo ./installOthers.sh
 cd ../ISEV_app/
 source venv/bin/activate
 cd ../scripts/
-sudo .installFlask.sh
+sudo ./installFlask.sh
 ```
 4) docker
 ```
