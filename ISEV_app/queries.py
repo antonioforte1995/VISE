@@ -8,15 +8,8 @@ es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:cha
 #this array contains the CPE json objects
 def search_CPE(vendor, product, version, target_software, cpetype):
 
-    if (target_software == ""):
-        target_software = ".*"
-
     es = Elasticsearch(hosts=[es_url])
 
-    if len(vendor) < 1:
-        vendor = ".*"
-
-    
     res = es.search(index="cpe-index", body={
         "query": {
             "bool": {
