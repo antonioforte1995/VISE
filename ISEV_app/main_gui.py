@@ -239,7 +239,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 target_software = "*"
 
             cpes = search_CPE(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software, cpetype)
-            searched_CPE = "cpe:2.3:a:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software, cpetype)
+            searched_CPE = "cpe:2.3:{4}:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software, cpetype)
         else:
             vendor = worksheet[row]['VendorInput']
             target_software = worksheet[row]['SoftwareInput']
@@ -259,7 +259,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 target_software = "*"
             
             cpes = search_CPE(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
-            searched_CPE = "cpe:2.3:a:{4}:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
+            searched_CPE = "cpe:2.3:{4}:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
             
 
         #four arrays are declared, they will contain information about the type and the number of version

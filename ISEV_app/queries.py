@@ -6,7 +6,7 @@ es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:cha
 
 #this function returns an array of CPEs matching our searched products
 #this array contains the CPE json objects
-def search_CPE(vendor, product, version, target_software, cpetype = "a"):
+def search_CPE(vendor, product, version, target_software, cpetype):
 
     if (target_software == ""):
         target_software = ".*"
