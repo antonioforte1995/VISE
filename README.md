@@ -4,6 +4,37 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ISEV is a tool used to harvest OSINT (NVD, CVE Details, Exploit DB) aimed to aggregate information about known vulnerabilities.
+<!-- ![alt text] -->
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Home.JPG?token=AO6ZS5QZ7D4M6P6BU6LRGH3APUYPY)
+
+The information can be exctracted by:
+
+ 1) manually filling a form:
+<!-- ![alt text] -->
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Form.JPG?token=AO6ZS5U4FSZFII4MWICLKHTAPUY5Y)
+
+ 2) uploading a searching card:
+<!-- ![alt text] -->
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Searching_Card.JPG?token=AO6ZS5VBI2C4FH2JJEO6GSDAPUZFC)
+
+As a result, in both cases can be obtained three dashboards hosted on Kibana, describing respectivelly:
+
+  - a summary on found vulnerabilities:
+<!-- ![alt text] -->
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Summary_Dashboard.JPG?token=AO6ZS5SAGLL267URGKTKVMTAPUZYY)
+
+  - a more deep description about ones:
+<!-- ![alt text] -->
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Description_Dashboard.JPG?token=AO6ZS5QK643T55I3MW7Y3PTAPUZQI)
+
+  - the available exploits for them:
+<!-- ![alt text] -->
+![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/Exploit_Dashboard.JPG)
+
+Moreover, it is possible to export those kinds of data as a unified CSV so that they can be easily managed and reviewed.
+ISEV can be also used from the CLI, showing the results in a minimal and effective TUI.
+<!-- ![alt text] -->
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/TUI.JPG?token=AO6ZS5SSVIRALULD273JTDLAPU3XA)
 
 ## Prerequisites
 1) Linux distribution (Ubuntu 18:04 LTS preferred)
