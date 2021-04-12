@@ -29,9 +29,10 @@ As a result, in both cases can be obtained three dashboards hosted on Kibana, de
 
   - the available exploits for them:
 <!-- ![alt text] -->
-![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/Exploit_Dashboard.JPG)
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/TUI.JPG?token=AO6ZS5RIGLZ36OTYWSFMSYDAPU4FA)
 
 Moreover, it is possible to export those kinds of data as a unified CSV so that they can be easily managed and reviewed.
+
 ISEV can be also used from the CLI, showing the results in a minimal and effective TUI.
 <!-- ![alt text] -->
 ![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/TUI.JPG?token=AO6ZS5SSVIRALULD273JTDLAPU3XA)
