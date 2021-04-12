@@ -239,6 +239,10 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 target_software = ".*"
 
             cpes = search_CPE(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software, cpetype)
+            if vendor == ".*":
+                vendor = "*"
+            if (target_software == ".*"):
+                target_software = "*"
             searched_CPE = "cpe:2.3:{4}:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software, cpetype)
         else:
             vendor = worksheet[row]['VendorInput']
@@ -259,6 +263,10 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 target_software = ".*"
             
             cpes = search_CPE(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
+            if vendor == ".*":
+                vendor = "*"
+            if (target_software == ".*"):
+                target_software = "*"
             searched_CPE = "cpe:2.3:{4}:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
             
 
