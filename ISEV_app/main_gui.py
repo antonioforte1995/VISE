@@ -223,7 +223,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
         if usingXLS:
             vendor = worksheet.cell_value(row,4)
             target_software = worksheet.cell_value(row,5)
-            cpetype = target_software = worksheet.cell_value(row,2)
+            cpetype = worksheet.cell_value(row,2)
             if cpetype == "Application":
                 cpetype = "a"
             elif cpetype == "OS":
