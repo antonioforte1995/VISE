@@ -160,8 +160,10 @@ def create_csv(name, row_data):
 
 
 def searchExploits(cve_id):
+    
     #cve_searchsploit.update_db()
     cve_exploits = set()
+    edbids=[]
     edbids = cve_searchsploit.edbid_from_cve(cve_id)
     for i in edbids:
         cve_exploits.add(i)
@@ -173,6 +175,12 @@ def searchExploits(cve_id):
 
 #[SHOULD]control on children should be added!
 def start(index_name, worksheet = None, usingXLS = True, gui=True):
+    try:
+        from subprocess import DEVNULL  # Python 3.
+    except ImportError:
+        DEVNULL = open(os.devnull, 'wb')
+
+
     #Initial variables, moved from the outside so as not to give problems in the import
     cves = []
     data = list()
@@ -345,7 +353,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                     for t in tempList:
                         cves.append([t])
                 else:
-                    dprint("Ops, scartate tutte")
+                    pass
 
 
                 if(len(tempList1)>0):
@@ -360,7 +368,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                         for t in tempList1:
                             cves.append([t])
                     else:
-                        dprint("Ops, scartate tutte")
+                        pass
 
                 
             #building each rows and columns of CLI and CSV
@@ -415,16 +423,14 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                     )
 
                     exploit_URLs = []
-
                     #reasearching on the ExploitDB for the enrichment
                     cve_edbids = searchExploits(cve[0]["_id"])
                     for i in cve_edbids:
                         try:
-                            output = subprocess.check_output('searchsploit '+ str(i) + ' -w', shell=True)
+                            output = subprocess.check_output('searchsploit '+ str(i) + ' -w ', shell=True, stderr=DEVNULL)
 
                             string_output = output.decode('utf-8')
                             splitted_string = string_output.split("\n")
-                    
 
                             for i in range(3, len(splitted_string)-4):
                                 exploit_URLs.append(escape_ansi(splitted_string[i].split('|')[-1]))
@@ -449,7 +455,6 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                     )
 
 
-                    dprint("----")
                     if es.exists(index=index_name, id=cve[0]["_id"]) is False:
                         es.create(index=index_name, id=cve[0]["_id"],body={
                             "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
@@ -495,7 +500,6 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     )
 
     r = requests.put(uri, headers=HEADERS, data=query).json()
-    pprint(r)
 
     csvName = create_csv(index_name, csv_data)
     vett_dashboards_links = create_dashboards(index_name)
@@ -513,4 +517,5 @@ if __name__ == "__main__":
     worksheet = workbook.sheet_by_index(0)
     idx = sys.argv[2] if (len(sys.argv) > 2) else str(int(time.time()))
     res = start(idx, worksheet, True, gui=False)
-    print(res)
+    print("\nCHECK RESULTS AT FOLLOWING URLs:")
+    print("         {0}\n".format(res))

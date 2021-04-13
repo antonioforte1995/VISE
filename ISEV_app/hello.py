@@ -79,7 +79,8 @@ def returnLinks():
             f.save(temp)
             from main_gui import start
             resCve = start(kibana_index, temp, True)
-            print(resCve)
+            print("\nCHECK RESULTS AT FOLLOWING URLs:")
+            print("         {0}\n".format(resCve))
             return render_template("nresults.html",
                 summaryDashboardLink=resCve[0],#"http://localhost:5601/app/kibana#/dashboard/4500b700-f341-11ea-950f-fba5732a37f6/",
                 vulnerabilityReportLink=resCve[1],#"http://localhost:5601/app/kibana#/dashboard/c4cf3880-f341-11ea-950f-fba5732a37f6/",
