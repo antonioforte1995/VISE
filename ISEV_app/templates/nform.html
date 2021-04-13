@@ -34,7 +34,7 @@
             var row = tBody.insertRow(0);
             
             // Structured like the "for" in order to lighten the code
-            var cellNames = ["PackageInput","VersionInput","VendorInput","SoftwareInput","ProductInput","PlatformInput"];
+            var cellNames = ["PackageInput","VersionInput","VendorInput","SoftwareInput","ProductInput"];
             var i;
             var tempDict = {};
             for(i=0; i<cellNames.length; i++){
@@ -46,9 +46,9 @@
             }
             valueToSubmit.push(tempDict);
 
-            var cell7 = row.insertCell(6);
+            var cell6 = row.insertCell(5);
             var deleteElement = '<input type="button" style="font-family: helvetica; color:red;" onclick="deleteRow(this)" value="x">'
-            cell7.innerHTML = deleteElement;
+            cell6.innerHTML = deleteElement;
         }
 
         // Function to send form data as POST and structured in JSON
@@ -105,8 +105,6 @@
                                 <input id="SoftwareInput" type="text" name="inputBox" placeholder="Target Software" class="form-control">
                                 <label class="col-form-label" for="ProductInput">Product Type</label>
                                 <input id="ProductInput" type="text" name="inputBox" placeholder='"Application", "OS" or "Hardware"' class="form-control">
-                                <label class="col-form-label" for="PlatformInput">Platform</label>
-                                <input id="PlatformInput" type="text" name="inputBox" placeholder="Platform" class="form-control">
                                 <small id="fileHelp" class="form-text text-muted" style="margin-bottom: 10px;">* = Required fields.</small>
                                 <button id="formButton" type="button"  class="btn btn-primary" onclick="addRow()">ADD ROW</button>                       
                             </form> 
@@ -115,6 +113,7 @@
                         <div class="col-1" style="margin-left: -3%;"></div>
 
                         <div class="col-8 feature-box">
+                            <div class="row justify-content-md-center">
                             <form id="searchingCardForm" action="{{ url_for('.returnLinks') }}" method="POST" style="width: 99%;">
                                 <input type="hidden" name="res" id="searchingCardField" />
                                 <table id="tableID" width="100%" class="table table-hover"> 
@@ -125,7 +124,6 @@
                                         <th style="font-family: helvetica; background-color: lightskyblue; color: black; /*padding: 5px 15px 5px 15px;*/">Vendor</th>
                                         <th style="font-family: helvetica; background-color: lightskyblue; color: black; /*padding: 5px 15px 5px 15px;*/">Target Software</th>
                                         <th style="font-family: helvetica; background-color: lightskyblue; color: black; /*padding: 5px 15px 5px 15px;*/">Product Type</th> 
-                                        <th style="font-family: helvetica; background-color: lightskyblue; color: black; /*padding: 5px 15px 5px 15px;*/">Platform</th>
                                         <th style="font-family: helvetica; background-color: rgb(235, 166, 163); color: black; /*padding: 5px 15px 5px 15px;*/">Remove</th>
                                     <tr>
                                     </thead>
