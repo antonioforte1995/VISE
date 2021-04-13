@@ -245,7 +245,6 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 vendor = ".*"
             if (target_software == ""):
                 target_software = ".*"
-
             cpes = search_CPE(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software, cpetype)
             if vendor == ".*":
                 vendor = "*"
@@ -294,7 +293,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 versions_types_values = []          #array that has the effective values of the range (value of StartIncluding, ...)
 
                 #result of the query
-                vett_cpe23Uri[i] = cpes[i]["_source"]["cpe23Uri"] 
+                vett_cpe23Uri[i] = cpes[i]["_source"]["cpe23Uri"]
 
                 #for each object in the "CPEs" array, version is checked to insert the value in the right array.
                 #for instance: if versionStartIncluding the value will be insert in the versionStartIncluding array, and so on.
@@ -340,6 +339,10 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
 
                 #if there is the accurate version
                 else:
+                    temp_cpe = vett_cpe23Uri[i].split(':')
+                    temp_searched_CPE = searched_CPE.split(':')
+                    temp_cpe[5] = temp_searched_CPE[5]
+                    vett_cpe23Uri[i] = ':'.join(temp_cpe)
                     tempList = search_CVE(vett_cpe23Uri[i])
 
                 #check on duplicates

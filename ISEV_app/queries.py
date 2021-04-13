@@ -17,7 +17,7 @@ def search_CPE(vendor, product, version, target_software, cpetype):
                     {
                         "regexp": {
                             "cpe23Uri.keyword": {
-                                "value": "cpe:2.3:"+cpetype+":"+ vendor +":"+ product +":"+ version +":.*:.*:.*:.*:(*|"+ target_software +"):.*:.*",
+                                "value": "cpe:2.3:"+cpetype+":"+ vendor +":"+ product +":"+ version +":.*:.*:.*:.*:"+ target_software +":.*:.*",
                                 "boost": 1.0
                             }
                         }
@@ -25,7 +25,7 @@ def search_CPE(vendor, product, version, target_software, cpetype):
                     {
                         "regexp": {
                             "cpe_name.cpe23Uri.keyword": {
-                                "value": "cpe:2.3:"+cpetype+":"+ vendor +":"+ product +":"+ version +":.*:.*:.*:.*:(*|"+ target_software +"):.*:.*",
+                                "value": "cpe:2.3:"+cpetype+":"+ vendor +":"+ product +":"+ version +":.*:.*:.*:.*:"+ target_software +":.*:.*",
                                 "boost": 1.0
                             }
                         }
@@ -79,6 +79,7 @@ def search_CVE_from_single_limit(cpe23Uri, version_type, version, children = "")
 #version_start is the value of the first limit
 #version_end is the value of the second limit
 def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_end, children = ""):
+
     es = Elasticsearch(hosts=[es_url])
 
     res = es.search(index="cve-index", body={
@@ -119,7 +120,7 @@ def search_CVE_from_interval(cpe23Uri, versions_types, version_start, version_en
 
 #this function is used to search the CVE associated to a cpe23Uri when the corresponding CPE json object
 #specifies a specific version
-def search_CVE(cpe23Uri):
+def search_CVE(cpe23Uri): 
     es = Elasticsearch(hosts=[es_url])
 
     res = es.search(index="cve-index", body={
