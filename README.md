@@ -3,7 +3,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-ISEV is a tool used to harvest OSINT (NVD, CVE Details, Exploit DB) aimed to aggregate information about known vulnerabilities.
+ISEV is a tool to harvest OSINT information (NVD, CVE Details, Exploit DB) about known vulnerabilities.
 <!-- ![alt text] -->
 ![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Home.JPG?token=AO6ZS5VH5JHQA5DLN677PD3APU5D2)
 
