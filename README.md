@@ -108,3 +108,16 @@ sudo ../scripts/startISEV.sh
 
 ## License
 This project is under the **MIT license**
+
+## Cite
+If you use this tool in your academic work you can cite it using
+```bibtex
+@Misc{isev,
+  author       = {Antonio Forte},
+  howpublished = {GitHub},
+  month        = apr,
+  title        = {{ISEV (Information Search Engine on Vulnerabilities)}},
+  year         = {2020},
+  url          = {https://github.com/antonioforte1995/ISEV},
+}
+```
