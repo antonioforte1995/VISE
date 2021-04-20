@@ -112,7 +112,7 @@ This project is under the **MIT license**
 ## Cite
 If you use this tool in your academic work you can cite it using:
 ```bibtex
-@Misc{isev,
+@misc{isev,
   author       = {Antonio Forte},
   howpublished = {GitHub},
   month        = apr,
