@@ -21,7 +21,7 @@ As a result, in both cases can be obtained three dashboards hosted on Kibana, de
 
   - a summary on found vulnerabilities:
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Summary_Dashboard.JPG?token=AO6ZS5SAGLL267URGKTKVMTAPUZYY)
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Summary_Dashboard.PNG)
 
   - a more deep description about ones:
 <!-- ![alt text] -->
