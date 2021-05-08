@@ -25,7 +25,7 @@ As a result, in both cases can be obtained three dashboards hosted on Kibana, de
 
   - a more deep description about ones:
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Description_Dashboard.JPG?token=AO6ZS5QK643T55I3MW7Y3PTAPUZQI)
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Description_Dashboard.PNG)
 
   - the available exploits for them:
 <!-- ![alt text] -->
