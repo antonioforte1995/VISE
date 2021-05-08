@@ -485,7 +485,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                             }, "doc_as_upsert": True   
                         })
                         
-
+    """
     HEADERS = {
         'Content-Type': 'application/json'
     }
@@ -503,7 +503,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     )
 
     r = requests.put(uri, headers=HEADERS, data=query).json()
-
+    """
     csvName = create_csv(index_name, csv_data)
     vett_dashboards_links = create_dashboards(index_name)
     vett_dashboards_links.append(csvName)
