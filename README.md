@@ -29,7 +29,7 @@ As a result, in both cases can be obtained three dashboards hosted on Kibana, de
 
   - the available exploits for them:
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Exploit_Dashboard.JPG?token=AO6ZS5TFHXVZOFUL6X6TQP3APU4LC)
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Exploit_Dashboard.PNG)
 
 Moreover, it is possible to export those kinds of data as a unified CSV so that they can be easily managed and reviewed.
 
