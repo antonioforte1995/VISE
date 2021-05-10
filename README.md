@@ -5,31 +5,31 @@
 
 ISEV is a search engine on information delivered by OSINT sources (e.g. NVD, Exploit DB) to support Vulnerability Assessment.
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Home.PNG)
+![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/home.PNG)
 
 The information can be exctracted by:
 
  1) manually filling a form:
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Form.JPG?token=AO6ZS5U4FSZFII4MWICLKHTAPUY5Y)
+![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/form.PNG)
 
  2) uploading a searching card:
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Searching_Card.JPG?token=AO6ZS5VBI2C4FH2JJEO6GSDAPUZFC)
+![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/searching_card.JPG)
 
 As a result, in both cases can be obtained three dashboards hosted on Kibana, describing respectivelly:
 
   - a summary on found vulnerabilities:
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Summary_Dashboard.PNG)
+![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/summary_dashboard.PNG)
 
   - a more deep description about ones:
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Description_Dashboard.PNG)
+![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/description_dashboard.JPG)
 
   - the available exploits for them:
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Exploit_Dashboard.PNG)
+![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/exploit_dashboard1.JPG)
 
 Moreover, it is possible to export those kinds of data as a unified CSV so that they can be easily managed and reviewed.
 
