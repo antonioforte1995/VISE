@@ -3,7 +3,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-ISEV is a search engine on information delivered by OSINT sources (NVD, CVE Details, Exploit DB) to support Vulnerability Assessment.
+ISEV is a search engine on information delivered by OSINT sources (e.g. NVD, Exploit DB) to support Vulnerability Assessment.
 <!-- ![alt text] -->
 ![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/Home.JPG?token=AO6ZS5VH5JHQA5DLN677PD3APU5D2)
 
