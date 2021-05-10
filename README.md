@@ -76,7 +76,6 @@ sudo ../scripts/uploadIndices.sh
 1) start ISEV
 ```
 cd ISEV/ISEV_app/
-source venv/bin/activate
 sudo ../scripts/startISEV.sh
 ```
 ## Contributors
