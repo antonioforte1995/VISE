@@ -67,9 +67,9 @@ sudo ../scripts/installDockerUbuntu.sh
 
 
 ## Una tantum configurations
-1) upload indexes in elasticsearch
+1) upload indices in elasticsearch
 ```
-sudo ../scripts/uploadIndexes.sh
+sudo ../scripts/uploadIndices.sh
 ```
 
 ## Execute
