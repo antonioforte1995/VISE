@@ -184,7 +184,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     #Initial variables, moved from the outside so as not to give problems in the import
     cves = []
     data = list()
-    columns = ["CPE", "CVE", "SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
+    columns = ["CPE", "CVE-ID", "CVSSv3 BASE SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
     global IS_DEBUG
     IS_DEBUG = gui
     
@@ -198,14 +198,14 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     csv_data.append(
         [   
             "CPE",
-            "CVE",
-            "SCORE",
+            "CVE-ID",
+            "CVSSv3 BASE SCORE",
             "SEVERITY",
             "DESCRIPTION",
             "URLs",
             "REMEDIATIONS",
-            "CWE",
-            "EXPLOIT" 
+            "CWE-ID",
+            "EXPLOITS" 
         ]
     )
 
@@ -419,7 +419,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                             colorize(cpe),
                             colorize(cve[0]["_id"]),
                             colorize(baseScore, color, attrs="bold"),
-                            colorize(severity),
+                            colorize(severity, color, attrs="bold"),
                             colorize(description),
                             colorize(URLs)
                         ]
