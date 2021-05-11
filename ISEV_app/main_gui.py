@@ -184,7 +184,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     #Initial variables, moved from the outside so as not to give problems in the import
     cves = []
     data = list()
-    columns = ["CPE", "CVE-ID", "CVSSv3 BASE SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
+    columns = ["CPE", "CVE", "SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
     global IS_DEBUG
     IS_DEBUG = gui
     
@@ -198,14 +198,14 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     csv_data.append(
         [   
             "CPE",
-            "CVE-ID",
-            "CVSSv3 BASE SCORE",
+            "CVE",
+            "SCORE",
             "SEVERITY",
             "DESCRIPTION",
             "URLs",
             "REMEDIATIONS",
-            "CWE-ID",
-            "EXPLOITS" 
+            "CWE",
+            "EXPLOIT" 
         ]
     )
 
@@ -419,7 +419,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                             colorize(cpe),
                             colorize(cve[0]["_id"]),
                             colorize(baseScore, color, attrs="bold"),
-                            colorize(severity, color, attrs="bold"),
+                            colorize(severity),
                             colorize(description),
                             colorize(URLs)
                         ]
@@ -461,27 +461,27 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                     if es.exists(index=index_name, id=cve[0]["_id"]) is False:
                         es.create(index=index_name, id=cve[0]["_id"],body={
                             "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
-                            "CVE-ID": cve[0]["_id"],
-                            "CVSSv3 BASE SCORE": baseScore,
+                            "CVE": cve[0]["_id"],
+                            "SCORE": baseScore,
                             "SEVERITY": severity,
                             "DESCRIPTION": description,
                             "URLs": URLs,
                             "REMEDIATIONS": remediations,
-                            "CWE-ID": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
-                            "EXPLOITS": exploit_URLs
+                            "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
+                            "EXPLOIT": exploit_URLs
                         })
                     else:  
                         es.update(index=index_name, id=cve[0]["_id"],body={
                             "doc": {
                                 "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
-                                "CVE-ID": cve[0]["_id"],
-                                "CVSSv3 BASE SCORE": baseScore,
+                                "CVE": cve[0]["_id"],
+                                "SCORE": baseScore,
                                 "SEVERITY": severity,
                                 "DESCRIPTION": description,
                                 "URLs": URLs,
                                 "REMEDIATIONS": remediations,
-                                "CWE-ID": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
-                                "EXPLOITS": exploit_URLs
+                                "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
+                                "EXPLOIT": exploit_URLs
                             }, "doc_as_upsert": True   
                         })
                         
