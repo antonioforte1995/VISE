@@ -77,7 +77,7 @@ def returnLinks():
             fName = secure_filename(identifier + "_" + f.filename)
             temp = os.path.join(app.config['UPLOAD_FOLDER'], fName)
             f.save(temp)
-            from main_gui import start
+            from main import start
             resCve = start(kibana_index, temp, True)
             print("\nCHECK RESULTS AT FOLLOWING URLs:")
             print("         {0}\n".format(resCve))
@@ -88,7 +88,7 @@ def returnLinks():
                 csvLink=resCve[3]
             )
     try:
-        from main_gui import start
+        from main import start
         from json import loads as jld
         #Retrieve form data
         dati = request.form["res"]

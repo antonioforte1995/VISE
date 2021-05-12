@@ -151,7 +151,7 @@ def color_score(score):
     return color, severity
 
 def create_csv(name, row_data):
-    fld = "ISEV_app/" if os.path.isdir('ISEV_app') else ""
+    fld = "VISE_app/" if os.path.isdir('VISE_app') else ""
     fname = fld+name+'_output.csv'
     with open(fname, 'w', newline='') as file:
         writer = csv.writer(file)
