@@ -60,8 +60,8 @@ sudo cve_searchsploit -u
 ```
 sudo ../scripts/installDockerUbuntu.sh
 ```
-(the script also start Kibana and Elasticsearch containers with docker-compose)
-(kibana starts at http://localhost:5601)
+(the script also start Kibana and Elasticsearch containers with docker-compose)<br />
+(kibana starts at http://localhost:5601)<br />
 (the username is "elastic", the password is "changeme")
 
 ## Una tantum configurations
