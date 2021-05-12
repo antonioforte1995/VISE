@@ -115,7 +115,7 @@ If you use this tool in your academic work you can cite it using:
   author       = {Antonio Forte},
   howpublished = {GitHub},
   month        = apr,
-  title        = {{VISE (VulnerabilitY Information Search Engine)}},
+  title        = {{VISE (Vulnerability Information Search Engine)}},
   year         = {2020},
   url          = {https://github.com/antonioforte1995/VISE},
 }
