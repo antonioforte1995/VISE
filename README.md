@@ -5,37 +5,37 @@
 
 ISEV is a search engine on information delivered by OSINT sources (e.g. NVD, Exploit DB) to support Vulnerability Assessment.
 <!-- ![alt text] -->
-![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/home.PNG)
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/home.PNG)
 
 The information can be exctracted by:
 
  1) manually filling a form:
 <!-- ![alt text] -->
-![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/form.PNG)
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/form.PNG)
 
  2) uploading a searching card:
 <!-- ![alt text] -->
-![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/searching_card.JPG)
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/searching_card.JPG)
 
 As a result, in both cases can be obtained three dashboards hosted on Kibana, describing respectivelly:
 
   - a summary on found vulnerabilities:
 <!-- ![alt text] -->
-![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/summary_dashboard.PNG)
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/vulnerability_summary_dashboard.PNG)
 
   - a more deep description about ones:
 <!-- ![alt text] -->
-![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/description_dashboard.JPG)
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/vulnerability_technical_description_dashboard.JPG)
 
   - the available exploits for them:
 <!-- ![alt text] -->
-![](https://github.com/antonioforte1995/ISEV/blob/master/ISEV_app/static/assets/img/scenery/exploit_dashboard1.JPG)
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/exploit_view_dashboard.JPG)
 
 Moreover, it is possible to export those kinds of data as a unified CSV so that they can be easily managed and reviewed.
 
 ISEV can be also used from the CLI, showing the results in a minimal and effective TUI.
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/TUI.JPG?token=AO6ZS5SSVIRALULD273JTDLAPU3XA)
+![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/ISEV_app/static/assets/img/scenery/TUI.jpg)
 
 ## Prerequisites
 1) Linux distribution (Ubuntu 18:04 LTS preferred)
