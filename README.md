@@ -5,17 +5,17 @@
 
 VISE is a search engine on information delivered by OSINT sources (e.g. NVD, Exploit DB) to support Vulnerability Assessment.
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/VISE_app/static/assets/img/scenery/home.PNG)
+![](https://raw.githubusercontent.com/antonioforte1995/VISE/master/VISE_app/static/assets/img/scenery/Home.PNG)
 
 The information can be exctracted by:
 
  1) manually filling a form:
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/VISE_app/static/assets/img/scenery/form.PNG)
+![](https://raw.githubusercontent.com/antonioforte1995/VISE/master/VISE_app/static/assets/img/scenery/Form.PNG)
 
  2) uploading a searching card:
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/VISE_app/static/assets/img/scenery/searching_card.JPG)
+![](https://raw.githubusercontent.com/antonioforte1995/VISE/master/VISE_app/static/assets/img/scenery/searching_card.PNG)
 
 As a result, in both cases can be obtained three dashboards hosted on Kibana, describing respectivelly:
 
