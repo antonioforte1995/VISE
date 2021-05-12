@@ -17,6 +17,16 @@
 
     <link rel="stylesheet" href="static/assets/css/mine.css">
     
+
+    <style>
+    .center {
+        display: block;
+        height: 45%;
+        width: 40%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    </style>    
 </head>
 <body style="display: flex; flex-direction: column; height: 100%;">
     <header>
@@ -42,12 +52,16 @@
         </nav>
     </header>
     
-    <main style="flex: 1 0 auto;">
-        <section class="clean-block features" style ="margin-bottom: 3em;">
+    <div style='margin-top:20px;'></div>
+
+    <main class="page landing-page">
+        <section class="clean-block features" style ="border-color: rgb(201,190,201);">
             <div class="container">
                 <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
-                    <div id="title" class="carousel-item active"><img class="card-img-top w-100 d-block" max-height="300" max-width="800" src="static/scenery/ISEV_alt.png"/></div>
+                    <div id="title" class="carousel-item active"><img class="center" src="static/scenery/VISE_alt.png"/></div>
                 </div>
+
+                <div style='margin-top:20px;'></div>
 
                 <div class="row justify-content-center jumbotron card border-secondary mb-3" style="padding: 2rem; border-radius: 0.5rem;">
                     <p style="margin: 0px;"> VISE is a search engine on information delivered by OSINT sources (e.g. NVD, Exploit DB) to support Vulnerability Assessment.<br>
@@ -79,6 +93,8 @@
             </div>
         </section>
     </main>
+
+    <div style='margin-top:30px;'></div>
 
     <footer class="page-footer dark" style="flex-shrink:0;">
         <div class="footer-copyright">
