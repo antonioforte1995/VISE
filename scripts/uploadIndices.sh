@@ -1,4 +1,4 @@
-cd ../ISEV_app/
+cd ../VISE_app/
 source venv/bin/activate
 cd ../cve-analysis
 ./get-cve-json.sh
