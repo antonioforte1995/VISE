@@ -33,7 +33,7 @@ As a result, in both cases can be obtained three dashboards hosted on Kibana, de
 
 Moreover, it is possible to export those kinds of data as a unified CSV so that they can be easily managed and reviewed.
 
-VISE can be also used from the CLI, showing the results in a minimal and effective TUI.
+VISE can be also used from the CLI.
 <!-- ![alt text] -->
 ![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/VISE_app/static/assets/img/scenery/TUI.jpg)
 
