@@ -31,7 +31,6 @@
         function deleteRow(r) {
             var i = r.parentNode.parentNode.rowIndex;
             document.getElementById("tableID").deleteRow(i);
-            valueToSubmit.splice(i-2, 1)
         }
     </script>
 
@@ -55,7 +54,7 @@
                 tCell.innerHTML = value;
                 tempDict[key] = value;
             }
-            valueToSubmit.unshift(tempDict);
+            valueToSubmit.push(tempDict);
 
             var cell6 = row.insertCell(5);
             var deleteElement = '<input type="button" style="font-family: helvetica; color:red;" onclick="deleteRow(this)" value="x">'
