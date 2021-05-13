@@ -38,7 +38,7 @@ VISE can be also used from the CLI.
 ![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/VISE_app/static/assets/img/scenery/TUI.jpg)
 
 ## Prerequisites
-1) Linux distribution (Ubuntu 18:04 LTS preferred)
+1) Linux distribution (Ubuntu preferred)
 2) python3, idle3
 ```
 cd VISE/scripts/
