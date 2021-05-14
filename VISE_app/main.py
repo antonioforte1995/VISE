@@ -151,13 +151,15 @@ def color_score(score):
     return color, severity
 
 def create_csv(name, row_data):
-    fld = "VISE_app/" if os.path.isdir('VISE_app') else ""
+    fld = "CSVs/"
     fname = fld+name+'_output.csv'
+    os.system("touch {0}".format(fname))
+    print(fname)
     with open(fname, 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(row_data)
-        return name+'_output.csv'
-
+        return fname
+    
 
 def searchExploits(cve_id):
     
@@ -173,7 +175,6 @@ def searchExploits(cve_id):
 
 # ---------------------------- MAIN ------------------------------
 
-#[SHOULD]control on children should be added!
 def start(index_name, worksheet = None, usingXLS = True, gui=True):
     try:
         from subprocess import DEVNULL  # Python 3.
@@ -500,7 +501,7 @@ if __name__ == "__main__":
     #to read the searching cards
     workbook = xlrd.open_workbook(sys.argv[1], on_demand = True)
     worksheet = workbook.sheet_by_index(0)
-    idx = sys.argv[2] if (len(sys.argv) > 2) else str(int(time.time()))
+    idx = str(int(time.time()))
     res = start(idx, worksheet, True, gui=False)
     print("\nCHECK RESULTS AT FOLLOWING URLs:")
     print("         {0}\n".format(res))

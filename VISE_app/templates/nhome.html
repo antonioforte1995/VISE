@@ -1,105 +1,104 @@
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>VISE</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
-    <link rel="stylesheet" href="static/assets/css/bootstrap.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
-    <script src="static/assets/js/smoothproducts.min.js"></script>
-    <script src="static/assets/js/theme.js"></script>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>VISE</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
+        <link rel="stylesheet" href="static/assets/css/bootstrap.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+        <script src="static/assets/js/smoothproducts.min.js"></script>
+        <script src="static/assets/js/theme.js"></script>
 
-    <link rel="stylesheet" href="static/assets/css/mine.css">
-    
+        <link rel="stylesheet" href="static/assets/css/mine.css">
+        
+        <style>
+        .center {
+            display: block;
+            height: 45%;
+            width: 40%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        </style>    
+    </head>
+    <body style="display: flex; flex-direction: column; height: 100%;">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <a class="navbar-brand" href="{{ url_for('.main') }}">VISE</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+            
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('.main') }}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('.form')}}">Form</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('.searchingCard')}}">Searching card</a>
+                    </li>
+                </ul>
+                </div>
+            </nav>
+        </header>
+        
+        <div style='margin-top:20px;'></div>
 
-    <style>
-    .center {
-        display: block;
-        height: 45%;
-        width: 40%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    </style>    
-</head>
-<body style="display: flex; flex-direction: column; height: 100%;">
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <a class="navbar-brand" href="{{ url_for('.main') }}">VISE</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          
-            <div class="collapse navbar-collapse" id="navbarColor01">
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                  <a class="nav-link" href="{{ url_for('.main') }}">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('.form')}}">Form</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('.searchingCard')}}">Searching card</a>
-                </li>
-              </ul>
+        <main class="page landing-page">
+            <section class="clean-block features" style ="border-color: rgb(201,190,201);">
+                <div class="container">
+                    <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
+                        <div id="title" class="carousel-item active"><img class="center" src="static/scenery/VISE_alt.png"/></div>
+                    </div>
+
+                    <div style='margin-top:20px;'></div>
+
+                    <div class="row justify-content-center jumbotron card border-secondary mb-3" style="padding: 2rem; border-radius: 0.5rem;">
+                        <p style="margin: 0px;"> VISE is a search engine on information delivered by OSINT sources (e.g. NVD, Exploit DB) to support Vulnerability Assessment.<br>
+                            The information can be exctracted by:<br>
+                            &emsp;- manually filling a form<br> 
+                            &emsp;- uploading a searching card<br><br>
+                            As a result, in both cases can be obtained three dashboards hosted on Kibana, describing respectivelly:<br>
+                            &emsp;1) a summary on found vulnerabilities<br> 
+                            &emsp;2) a more deep description about ones<br>
+                            &emsp;3) the available exploits for them<br><br>
+                            Moreover, it is possible to export those kinds of data as a unified CSV so that they can be easily managed and reviewed.<br> 
+                            VISE can also be used from the CLI.</p>
+                    </div>
+
+                    <div style='margin-top:20px;'></div>
+                    
+                    <div class="row justify-content-center">    
+                        <a href="{{ url_for('.form')}}"> 
+                            <button id="formButton" type="button"  class="btn btn-primary">FORM</button>
+                        </a>
+
+                        <div style='margin-right:100px;'></div>
+
+                        <a href="{{ url_for('.searchingCard')}}"> 
+                            <button id="searchingCardButton" type="button"  class="btn btn-info">SEARCHING CARD</button>
+                        </a>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <div style='margin-top:30px;'></div>
+
+        <footer class="page-footer dark" style="flex-shrink:0;">
+            <div class="footer-copyright">
+                <p footer-text align="middle">Copyright © 2020 CyberHackademy. All rights reserved.</p>
             </div>
-        </nav>
-    </header>
-    
-    <div style='margin-top:20px;'></div>
-
-    <main class="page landing-page">
-        <section class="clean-block features" style ="border-color: rgb(201,190,201);">
-            <div class="container">
-                <div class="carousel-inner" role="listbox" margin-right="auto" margin-left="auto">
-                    <div id="title" class="carousel-item active"><img class="center" src="static/scenery/VISE_alt.png"/></div>
-                </div>
-
-                <div style='margin-top:20px;'></div>
-
-                <div class="row justify-content-center jumbotron card border-secondary mb-3" style="padding: 2rem; border-radius: 0.5rem;">
-                    <p style="margin: 0px;"> VISE is a search engine on information delivered by OSINT sources (e.g. NVD, Exploit DB) to support Vulnerability Assessment.<br>
-                        The information can be exctracted by:<br>
-                        &emsp;- manually filling a form<br> 
-                        &emsp;- uploading a searching card<br><br>
-                        As a result, in both cases can be obtained three dashboards hosted on Kibana, describing respectivelly:<br>
-                        &emsp;1) a summary on found vulnerabilities<br> 
-                        &emsp;2) a more deep description about ones<br>
-                        &emsp;3) the available exploits for them<br><br>
-                        Moreover, it is possible to export those kinds of data as a unified CSV so that they can be easily managed and reviewed.<br> 
-                        VISE can also be used from the CLI.</p>
-                </div>
-
-                <div style='margin-top:20px;'></div>
-                
-                <div class="row justify-content-center">    
-                    <a href="{{ url_for('.form')}}"> 
-                        <button id="formButton" type="button"  class="btn btn-primary">FORM</button>
-                    </a>
-
-                    <div style='margin-right:100px;'></div>
-
-                    <a href="{{ url_for('.searchingCard')}}"> 
-                        <button id="searchingCardButton" type="button"  class="btn btn-info">SEARCHING CARD</button>
-                    </a>
-                </div>
-
-            </div>
-        </section>
-    </main>
-
-    <div style='margin-top:30px;'></div>
-
-    <footer class="page-footer dark" style="flex-shrink:0;">
-        <div class="footer-copyright">
-            <p footer-text align="middle">Copyright © 2020 CyberHackademy. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
+        </footer>
+    </body>
 </html>
