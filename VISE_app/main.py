@@ -151,7 +151,7 @@ def color_score(score):
     return color, severity
 
 def create_csv(name, row_data):
-    fld = "CSVs/"
+    fld = "static/assets/CSVs/"
     fname = fld+name+'_output.csv'
     os.system("touch {0}".format(fname))
     with open(fname, 'w', newline='') as file:

@@ -16,11 +16,7 @@ def create_dashboards(index):
 
     summaryData = None
 
-    import os
-    cwd = os.getcwd()
-    folderName = ""
-    if not os.path.exists(os.path.join(cwd, "summary.json")) and os.path.exists(os.path.join(cwd, "VISE_app/summary.json")):
-        folderName = "VISE_app/"
+    folderName = "static/assets/json_files/"
     with open(folderName + "summary.json") as sumFile:
         summaryData = json.load(sumFile)
     

@@ -80,7 +80,7 @@ def returnLinks():
 
 @app.route('/downloadSearchingCardSample')
 def downloadSearchingCardSample():
-	path = "SearchingCard.xlsx"
+	path = "static/assets/SearchingCards/SearchingCardSample.xlsx"
 	return send_file(path, as_attachment=True)
 
 
