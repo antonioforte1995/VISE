@@ -6,7 +6,7 @@ from random import randint
 import pdfkit
 from werkzeug.utils import secure_filename
 
-index = 11
+index = 0
 uploadFolder = "/tmp/upload"
 
 app = Flask(__name__)
@@ -15,33 +15,20 @@ app.config['UPLOAD_FOLDER'] = uploadFolder
 
 @app.route('/')
 def main():
-    return render_template("nhome.html")
+    return render_template("home.html")
 
 
 @app.route("/searchingCard.html")
 def searchingCard():
-    return render_template("nsearchingCard.html")
+    return render_template("searchingCard.html")
 
 
 @app.route("/form.html")
 def form():
-    return render_template("nform.html")
+    return render_template("form.html")
 
 
-@app.route('/downloadSearchingCardSample')
-def downloadSearchingCardSample():
-	path = "SearchingCard.xlsx"
-	return send_file(path, as_attachment=True)
-
-
-@app.route('/exportCSV')
-def exportCSV():
-    filename = request.args.get("csv_name", default="output.csv", type=str)
-    path = filename
-    return send_file(path, as_attachment=True)
-
-
-@app.route('/returnLinks', methods=['POST'])
+@app.route('/returnLinks.html', methods=['POST'])
 #this function is used to execute the start() function that creates the dashboards on kibana with the research results
 #the dashboard links are returned by this function
 def returnLinks():
@@ -63,7 +50,7 @@ def returnLinks():
             from main import start
             #I launch the search function by uploading Searching Card
             resCve = start(elasticsearch_index, temp, True)
-            return render_template("nresults.html",
+            return render_template("returnLinks.html",
                 summaryDashboardLink=resCve[0],
                 vulnerabilityReportLink=resCve[1],
                 exploitViewLink=resCve[2],
@@ -74,12 +61,12 @@ def returnLinks():
         from json import loads as jld
         #Retrieve form data
         data = request.form["res"]
-        #I parse from JSON
+        #parse from JSON to python dictionary
         parsedData = jld(data)
-        #I launch the search function passing the array of the Form
+        #launch the search function passing the array of the Form
         resCve = start(elasticsearch_index, parsedData, False)
-        #I render the page with the generated values
-        return render_template("nresults.html",
+        #render the page with the generated values
+        return render_template("returnLinks.html",
             summaryDashboardLink=resCve[0],
             vulnerabilityReportLink=resCve[1],
             exploitViewLink=resCve[2],
@@ -89,3 +76,16 @@ def returnLinks():
         print("AAAA")
         print(e)
         return e
+
+
+@app.route('/downloadSearchingCardSample')
+def downloadSearchingCardSample():
+	path = "SearchingCard.xlsx"
+	return send_file(path, as_attachment=True)
+
+
+@app.route('/exportCSV')
+def exportCSV():
+    filename = request.args.get("csv_name", default="output.csv", type=str)
+    path = filename
+    return send_file(path, as_attachment=True)

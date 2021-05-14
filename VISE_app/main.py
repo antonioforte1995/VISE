@@ -154,7 +154,6 @@ def create_csv(name, row_data):
     fld = "CSVs/"
     fname = fld+name+'_output.csv'
     os.system("touch {0}".format(fname))
-    print(fname)
     with open(fname, 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(row_data)

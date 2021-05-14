@@ -36,7 +36,7 @@
         </script>
 
         <script>
-            // Value to be sent in post (and serialized in JSON)
+            // Value to be sent in POST (and serialized in JSON)
             var valueToSubmit = [];
 
             function addRow() {
@@ -66,6 +66,7 @@
             function sendFormData(){
                 var form = document.getElementById("searchingCardForm");
                 var input = document.getElementById("searchingCardField");
+                //Convert a JavaScript array into a JSON string
                 input.setAttribute("value", JSON.stringify(valueToSubmit));
                 form.submit();
             }

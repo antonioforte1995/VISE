@@ -30,7 +30,7 @@
 
         <script>
             function uploadFunction(){
-                document.getElementById("labelFile").innerHTML = document.getElementById("myFile").value;
+                document.getElementById("labelFile").innerHTML = document.getElementById("myFile").files[0].name; 
             }
         </script>
 
@@ -84,7 +84,7 @@
                                         <label id="labelFile" class="custom-file-label">Choose file</label>
                                     </div>
                                     <div class="input-group-append">
-                                        <input type="submit" id="returnLinksButton" class="btn btn-info" value="Upload" /> <!--Upload</button>-->
+                                        <input type="submit" id="returnLinksButton" class="btn btn-info" value="Upload" />
                                     </div>
                                     </div>
                                 </div>
