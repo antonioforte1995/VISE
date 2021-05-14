@@ -33,13 +33,13 @@ As a result, in both cases can be obtained three dashboards hosted on Kibana, de
 
 Moreover, it is possible to export those kinds of data as a unified CSV so that they can be easily managed and reviewed.
 
-VISE can be also used from the CLI.
+VISE can be also used from the CLI running the following commands:
 ```
 cd VISE/VISE_app/
 ./main.py static/assets/SearchingCards/SearchingCard.xlsx 
 ```
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/ISEV/master/VISE_app/static/assets/img/scenery/TUI.jpg)
+![](https://raw.githubusercontent.com/antonioforte1995/VISE/master/VISE_app/static/assets/img/scenery/CLI.jpg)
 
 ## Prerequisites
 1) Linux distribution (Ubuntu preferred)
