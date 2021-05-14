@@ -39,7 +39,7 @@ cd VISE/VISE_app/
 ./main.py static/assets/SearchingCards/SearchingCard.xlsx 
 ```
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/VISE/master/VISE_app/static/assets/img/scenery/CLI.jpg)
+![](https://raw.githubusercontent.com/antonioforte1995/VISE/master/VISE_app/static/assets/img/scenery/CLI.png)
 
 ## Prerequisites
 1) Linux distribution (Ubuntu preferred)
