@@ -1,4 +1,4 @@
 mkdir -p /tmp/upload
-export FLASK_APP=./hello.py
+export FLASK_APP=./main_gui.py
 export FLASK_ENV=production
 flask run --host=localhost
