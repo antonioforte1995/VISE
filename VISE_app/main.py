@@ -497,10 +497,14 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
 
 
 if __name__ == "__main__":
-    #to read the searching cards
-    workbook = xlrd.open_workbook(sys.argv[1], on_demand = True)
-    worksheet = workbook.sheet_by_index(0)
-    idx = str(int(time.time()))
-    res = start(idx, worksheet, True, gui=False)
-    print("\nCHECK RESULTS AT FOLLOWING URLs:")
-    print("         {0}\n".format(res))
+    #to read the searching card
+    if(len(sys.argv)<2):
+        print("PLEASE GIVE THE SEARCHING CARD !! \n")
+        print("A correct example of use is:\n   ./main static/assets/SearchingCards/SearchingCard.xlsx\n")
+    else:
+        workbook = xlrd.open_workbook(sys.argv[1], on_demand = True)
+        worksheet = workbook.sheet_by_index(0)
+        idx = str(int(time.time()))
+        res = start(idx, worksheet, True, gui=False)
+        print("\nCHECK RESULTS AT FOLLOWING URLs:")
+        print("         {0}\n".format(res))
