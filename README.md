@@ -43,7 +43,7 @@ cd VISE/VISE_app/
 
 ## Prerequisites
 1) Linux distribution (Ubuntu preferred)
-2) python3, idle3
+2) python3, python3-venv
 ```
 cd VISE/scripts/
 sudo ./installOthers.sh
