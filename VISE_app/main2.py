@@ -17,11 +17,13 @@ import textwrap  # to split long strings in more lines
 import time
 import uuid
 from pprint import pprint
+
 import colored  # to colorize the "score" field
 import cve_searchsploit
 import prettytable  # to make the cli
 import xlrd  # to read xls
 from elasticsearch import Elasticsearch
+from prettytable import ALL as ALL
 
 from create_dashboards import create_dashboards, requests
 from queries import (search_CPE, search_CVE, search_CVE_from_interval,
@@ -29,6 +31,12 @@ from queries import (search_CPE, search_CVE, search_CVE_from_interval,
 
 # -------------------- DECLARATIONS ----------------------
 tempCVE = set()
+IS_DEBUG = True
+
+def dprint(a):
+    global IS_DEBUG
+    if IS_DEBUG:
+        print(a)
 
 def escape_ansi(line):
     ansi_escape = re.compile(r'(?:\x1B[@-_]|[\x80-\x9F])[0-?]*[ -/]*[@-~]')
@@ -46,15 +54,15 @@ def valid(cve):
 # --------------------- FUNCTIONS ------------------------
 
 # to create and print a formatted and colorized cli table
-def cli_table(CLI_columns_headers, CLI_data, hrules=True):
-    CLI_columns_headers = map(lambda x: colorize(x, attrs="bold"), CLI_columns_headers)
+def cli_table(columns, data, hrules=True):
+    columns = map(lambda x: colorize(x, attrs="bold"), columns)
     
     #to create the structure (raw and column lines) of the cli table
     table = prettytable.PrettyTable(
-        hrules=prettytable.ALL if hrules else prettytable.FRAME, field_names=CLI_columns_headers
+        hrules=prettytable.ALL if hrules else prettytable.FRAME, field_names=columns
     )
-    for package in CLI_data:
-        table.add_row(package)
+    for row in data:
+        table.add_row(row)
     table.align = "l"
     print(table)
 
@@ -166,96 +174,109 @@ def searchExploits(cve_id):
     return edbids
 
 
-def convert_worksheet_row_to_dictionary(worksheet, package):
-    package_dict = {}
-    package_dict['Product Name'] = worksheet.cell_value(package,0)
-    package_dict['Version Number'] = worksheet.cell_value(package,1)
-    package_dict['Vendor Name'] = worksheet.cell_value(package,2)
-    package_dict['Target Software'] = worksheet.cell_value(package,3)
-    package_dict['Product Type'] = worksheet.cell_value(package,4)
-
-    return package_dict
-
-
-def searchCPEs(package):
-    vendor_name = package['Vendor Name']
-    target_software = package['Target Software']
-    product_type = package['Product Type']
-
-    if product_type in ["Application", "application", "a", "A"]:
-        product_type = "a"
-    elif product_type in ["OS", "os", "O", "o"]:
-        product_type = "o"
-    elif product_type in ["Hardware", "hardware", "h", "H"]:
-        product_type = "h"
-    else:
-        product_type = "a"
-
-    if len(vendor_name) < 1:
-        vendor_name = ".*"
-
-    if (target_software == ""):
-        target_software = ".*"
-
-    cpes = search_CPE(package['Product Name'], package['Version Number'], vendor_name, target_software, product_type)
-
-    if vendor_name == ".*":
-        vendor_name = "*"
-
-    if (target_software == ".*"):
-        target_software = "*"
-        
-    searched_CPE = "cpe:2.3:{0}:{1}:{2}:{3}:*:*:*:*:{4}:*:*".format(product_type, vendor_name, package['Product Name'], package['Version Number'], target_software)
-    
-    return searched_CPE, cpes
-
 # ---------------------------- MAIN ------------------------------
 
 def start(index_name, worksheet = None, usingXLS = True, gui=True):
-    
     try:
         from subprocess import DEVNULL  # Python 3.
     except ImportError:
         DEVNULL = open(os.devnull, 'wb')
-    
+
 
     #Initial variables, moved from the outside so as not to give problems in the import
-    CLI_data = list()
-    CSV_data = list()
-    tempCVE.clear()
-
-    # columns headers in CLI
-    CLI_columns_headers = ["CPE", "CVE-ID", "CVSSv3 BASE SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
-
-    # columns headers in CSV
-    CSV_data.append(["CPE", "CVE-ID", "CVSSv3 BASE SCORE", "SEVERITY", "DESCRIPTION", "URLs", "REMEDIATIONS", "CWE-ID", "EXPLOITS" ])
-
-
-    # define Elasticsearch host
+    cves = []
+    data = list()
+    columns = ["CPE", "CVE-ID", "CVSSv3 BASE SCORE", "SEVERITY", "DESCRIPTION", "URLs"]
+    global IS_DEBUG
+    IS_DEBUG = gui
+    
     es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@localhost:9200"
+
     es = Elasticsearch(hosts=[es_url])
+    tempCVE.clear()
+    csv_data = list()
 
+    #fields used in CSV
+    csv_data.append(
+        [   
+            "CPE",
+            "CVE-ID",
+            "CVSSv3 BASE SCORE",
+            "SEVERITY",
+            "DESCRIPTION",
+            "URLs",
+            "REMEDIATIONS",
+            "CWE-ID",
+            "EXPLOITS" 
+        ]
+    )
 
-    #Conditional definition to use both xlsx and lists
+    #Conditional range definition to use both xls and lists
     if usingXLS and type(worksheet) is str:
         workbook = xlrd.open_workbook(worksheet, on_demand = True)
         worksheet = workbook.sheet_by_index(0)
-    else:
+    elif usingXLS:
         pass
+    else:
+        dprint(len(worksheet))
     
     #if we are not using the searching card (usingXLS is false) then we start from the beginning, otherwise we exclude the first 2 rows
-    packages = range(1, worksheet.nrows) if usingXLS else range(len(worksheet))
+    rowRange = range(1, worksheet.nrows) if usingXLS else range(len(worksheet))
+    for row in rowRange:
 
-    for package in packages:
+        #result of the query
+        #Also in this case we condition the generation of the array so as to make its use dynamic
         cpes = []
         cves = []
         searched_CPE = ""
 
         if usingXLS:
-            package = convert_worksheet_row_to_dictionary(worksheet, package)
-            searched_CPE, cpes = searchCPEs(package)
+            vendor = worksheet.cell_value(row,4)
+            target_software = worksheet.cell_value(row,5)
+            cpetype = worksheet.cell_value(row,2)
+            if cpetype == "Application":
+                cpetype = "a"
+            elif cpetype == "OS":
+                cpetype = "o"
+            elif cpetype == "Hardware":
+                cpetype = "h"
+            else:
+                cpetype = "a"
+
+            if len(vendor) < 1:
+                vendor = ".*"
+            if (target_software == ""):
+                target_software = ".*"
+            cpes = search_CPE(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software, cpetype)
+            if vendor == ".*":
+                vendor = "*"
+            if (target_software == ".*"):
+                target_software = "*"
+            searched_CPE = "cpe:2.3:{4}:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet.cell_value(row,0), worksheet.cell_value(row,1), target_software, cpetype)
         else:
-            searched_CPE, cpes = searchCPEs(worksheet[package])
+            vendor = worksheet[row]['VendorInput']
+            target_software = worksheet[row]['SoftwareInput']
+            cpetype = worksheet[row]['ProductInput']
+            if cpetype == "Application":
+                cpetype = "a"
+            elif cpetype == "OS":
+                cpetype = "o"
+            elif cpetype == "Hardware":
+                cpetype = "h"
+            else:
+                cpetype = "a"
+
+            if len(vendor) < 1:
+                vendor = ".*"
+            if (target_software == ""):
+                target_software = ".*"
+            
+            cpes = search_CPE(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
+            if vendor == ".*":
+                vendor = "*"
+            if (target_software == ".*"):
+                target_software = "*"
+            searched_CPE = "cpe:2.3:{4}:{0}:{1}:{2}:*:*:*:*:{3}:*:*".format(vendor, worksheet[row]['PackageInput'], worksheet[row]['VersionInput'], target_software, cpetype)
             
 
         #four arrays are declared, they will contain information about the type and the number of version
@@ -394,8 +415,8 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                     #the function color_score returns 2 values, color and severity
                     [color, severity] = color_score(baseScore)
 
-                    #add CLI_data in the CLI
-                    CLI_data.append(
+                    #add data in the CLI
+                    data.append(
                         [
                             colorize(cpe),
                             colorize(cve[0]["_id"]),
@@ -419,12 +440,12 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                             for i in range(3, len(splitted_string)-4):
                                 exploit_URLs.append(escape_ansi(splitted_string[i].split('|')[-1]))
                         except Exception as e:
-                            print(e)
+                            dprint(e)
 
                     exploit_URLs_witouth_commas = delete_commas(str(exploit_URLs))
                     exploit_URLs = format_URLs(exploit_URLs_witouth_commas)
 
-                    CSV_data.append(
+                    csv_data.append(
                         [   
                             cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
                             cve[0]["_id"],
@@ -467,11 +488,11 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                         })
                         
 
-    csvName = create_csv(index_name, CSV_data)
+    csvName = create_csv(index_name, csv_data)
     vett_dashboards_links = create_dashboards(index_name)
     vett_dashboards_links.append(csvName)
     if not gui:
-        cli_table(CLI_columns_headers, CLI_data, hrules=True)
+        cli_table(columns, data, hrules=True)
 
     return vett_dashboards_links
 
@@ -485,7 +506,7 @@ if __name__ == "__main__":
     else:
         workbook = xlrd.open_workbook(sys.argv[1], on_demand = True)
         worksheet = workbook.sheet_by_index(0)
-        index = str(int(time.time()))
-        res = start(index, worksheet, True, gui=False)
+        idx = str(int(time.time()))
+        res = start(idx, worksheet, True, gui=False)
         print("\nCHECK RESULTS AT FOLLOWING URLs:")
         print("         {0}\n".format(res))

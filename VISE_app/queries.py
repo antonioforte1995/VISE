@@ -6,7 +6,7 @@ es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:cha
 
 #this function returns an array of CPEs matching our searched products
 #this array contains the CPE json objects
-def search_CPE(vendor, product, version, target_software, cpetype):
+def search_CPE(product_name, version_number, vendor_name, target_software, product_type):
 
     es = Elasticsearch(hosts=[es_url])
 
@@ -17,7 +17,7 @@ def search_CPE(vendor, product, version, target_software, cpetype):
                     {
                         "regexp": {
                             "cpe23Uri.keyword": {
-                                "value": "cpe:2.3:"+cpetype+":"+ vendor +":"+ product +":"+ version +":.*:.*:.*:.*:"+ target_software +":.*:.*",
+                                "value": "cpe:2.3:"+product_type+":"+ vendor_name +":"+ product_name +":"+ version_number +":.*:.*:.*:.*:"+ target_software +":.*:.*",
                                 "boost": 1.0
                             }
                         }
@@ -25,7 +25,7 @@ def search_CPE(vendor, product, version, target_software, cpetype):
                     {
                         "regexp": {
                             "cpe_name.cpe23Uri.keyword": {
-                                "value": "cpe:2.3:"+cpetype+":"+ vendor +":"+ product +":"+ version +":.*:.*:.*:.*:"+ target_software +":.*:.*",
+                                "value": "cpe:2.3:"+product_type+":"+ vendor_name +":"+ product_name +":"+ version_number +":.*:.*:.*:.*:"+ target_software +":.*:.*",
                                 "boost": 1.0
                             }
                         }
@@ -42,7 +42,7 @@ def search_CPE(vendor, product, version, target_software, cpetype):
 #specifies a single limit of version (es. versionStartIncluding)
 #version_type is the type of version limit (es. versionStartIncluding)
 #version is the value of this version limit
-def search_CVE_from_single_limit(cpe23Uri, version_type, version, children = ""):
+def search_CVE_from_single_limit(cpe23Uri, version_type, version_number, children = ""):
     es = Elasticsearch(hosts=[es_url])
 
     res = es.search(index="cve-index", body={
@@ -60,7 +60,7 @@ def search_CVE_from_single_limit(cpe23Uri, version_type, version, children = "")
                     {
                         "term": {
                             "vuln.nodes{0}.cpe_match.{1}.keyword".format(children, version_type): {
-                            "value": version,
+                            "value": version_number,
                             "boost": 1.0
                             }
                         }

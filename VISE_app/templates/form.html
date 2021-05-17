@@ -45,7 +45,7 @@
                 var row = tBody.insertRow(0);
                 
                 // Structured like the "for" in order to lighten the code
-                var cellNames = ["PackageInput","VersionInput","VendorInput","SoftwareInput","ProductInput"];
+                var cellNames = ["Product Name","Version Number","Vendor Name","Target Software","Product Type"];
                 var i;
                 var tempDict = {};
                 for(i=0; i<cellNames.length; i++){
@@ -111,17 +111,17 @@
                         <div class="row justify-content-center">
                             <div class="col-3 feature-box">
                                 <form action="#">
-                                    <label class="col-form-label" for="PackageInput">Package Name *</label>
-                                    <input id="PackageInput" type="text" name="inputBox" placeholder="Package" class="form-control">
-                                    <label class="col-form-label" for="VersionInput">Version Number *</label>
-                                    <input id="VersionInput" type="text" name="inputBox" placeholder="Version" class="form-control">
-                                    <label class="col-form-label" for="VendorInput">Vendor Name</label>
-                                    <input id="VendorInput" type="text" name="inputBox" placeholder="Vendor Name" class="form-control">
-                                    <label class="col-form-label" for="SoftwareInput">Target Software</label>
-                                    <input id="SoftwareInput" type="text" name="inputBox" placeholder="Target Software" class="form-control">
-                                    <label class="col-form-label" for="ProductInput">Product Type</label>
-                                    <input id="ProductInput" type="text" name="inputBox" placeholder='"Application", "OS" or "Hardware"' class="form-control">
-                                    <small id="fileHelp" class="form-text text-muted" style="margin-bottom: 10px;">* = Required fields.</small>
+                                    <label class="col-form-label" for="Product Name">Product Name *</label>
+                                    <input id="Product Name" type="text" name="inputBox" placeholder="Product Name" class="form-control">
+                                    <label class="col-form-label" for="Version Number">Version Number *</label>
+                                    <input id="Version Number" type="text" name="inputBox" placeholder="Version Number" class="form-control">
+                                    <label class="col-form-label" for="Vendor Name">Vendor Name</label>
+                                    <input id="Vendor Name" type="text" name="inputBox" placeholder="Vendor Name" class="form-control">
+                                    <label class="col-form-label" for="Target Software">Target Software</label>
+                                    <input id="Target Software" type="text" name="inputBox" placeholder="Target Software" class="form-control">
+                                    <label class="col-form-label" for="Product Type">Product Type</label>
+                                    <input id="Product Type" type="text" name="inputBox" placeholder='"Application", "OS" or "Hardware"' class="form-control">
+                                    <small id="fileHelp" class="form-text text-muted" style="margin-bottom: 10px;">* = Required fields</small>
                                     <button id="formButton" type="button"  class="btn btn-primary" onclick="addRow()">ADD ROW</button>                       
                                 </form> 
                             </div>
@@ -135,7 +135,7 @@
                                     <table id="tableID" width="100%" class="table table-hover"> 
                                         <thead>
                                         <tr> 
-                                            <th style="font-family: helvetica; background-color:lightgreen; color: black;/* padding: 5px 15px 5px 15px;*/">Package</th>
+                                            <th style="font-family: helvetica; background-color:lightgreen; color: black;/* padding: 5px 15px 5px 15px;*/">Product</th>
                                             <th style="font-family: helvetica; background-color: lightgreen; color: black; /*padding: 5px 15px 5px 15px;*/">Version</th>
                                             <th style="font-family: helvetica; background-color: lightskyblue; color: black; /*padding: 5px 15px 5px 15px;*/">Vendor</th>
                                             <th style="font-family: helvetica; background-color: lightskyblue; color: black; /*padding: 5px 15px 5px 15px;*/">Target Software</th>
