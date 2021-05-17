@@ -1,58 +1,78 @@
+# The Compose file is a YAML file defining services, networks and volumes
+# Compose specification
 version: '3.2'
 
 services:
   elasticsearch:
+    # the container restart automatically when they exit, or when Docker restarts
     restart: always
+    # Configuration options that are applied at build time
     build:
+      # This is the build context that is sent to the Docker daemon (path relative relative to the location of the Compose file)
       context: elasticsearch/
+      # build arguments are environment variables accessible only during the build process
       args:
+        #ELK_VERSION is 7.8.0
         ELK_VERSION: $ELK_VERSION
     volumes:
+      # bind mount permits a file or directory on the host machine (source) to be mounted into a container (target)
       - type: bind
         source: ./elasticsearch/config/elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
+        # causes the bind mount to be mounted into the container as read-only
         read_only: true
+      # create a volume for persistency
       - type: volume
+        # name of volume is elasticsearch
         source: elasticsearch
+        # it is the path where the file or directory are mounted in the container
         target: /usr/share/elasticsearch/data
     ports:
+      # we map host ports 9200 and 9300 on container ports 9200 and 9300
       - "9200:9200"
       - "9300:9300"
     environment:
+      # set the maximum heap size to 3GB
       ES_JAVA_OPTS: "-Xmx3g -Xms3g"
       ELASTIC_PASSWORD: changeme
-      # Use single node discovery in order to disable production mode and avoid bootstrap checks
-      # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      # single-node permits a node to elect itself master and not join a cluster with any other node
       discovery.type: single-node
-      #Flag per DejaVu
-      #http.cors.enabled: 'true'
-      #http.cors.allow-origin: "http://localhost:1358,http://127.0.0.1:1358"
-      #http.cors.allow-headers: "X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization"
-      #http.cors.allow-credentials: 'true'
+    # attach container to elk network
     networks:
       - elk
 
   kibana:
+    # the container restart automatically when they exit, or when Docker restarts
     restart: always
     build:
+      # This is the build context that is sent to the Docker daemon (path relative relative to the location of the Compose file)
       context: kibana/
       args:
+        #ELK_VERSION is 7.8.0
         ELK_VERSION: $ELK_VERSION
     volumes:
+      # bind mount permits a file or directory on the host machine (source) to be mounted into a container (target)
       - type: bind
         source: ./kibana/config/kibana.yml
         target: /usr/share/kibana/config/kibana.yml
+        # causes the bind mount to be mounted into the container as read-only
         read_only: true
     ports:
+      # we map host port 5601 on container port 5601
       - "5601:5601"
+    # attach container to elk network
     networks:
       - elk
+    # Express dependency between services
     depends_on:
       - elasticsearch
 
+# create custom network elk with driver bridge
 networks:
   elk:
+    # User-defined bridge networks are best when you need multiple containers to communicate on the same Docker host
     driver: bridge
 
+# create elasticsearch volume
 volumes:
   elasticsearch:

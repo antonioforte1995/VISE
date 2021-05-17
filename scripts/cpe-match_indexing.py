@@ -17,6 +17,8 @@ if 'ESURL' not in os.environ:
 else:
     es_url = os.environ['ESURL']
 
+# connect to Elasticsearch host
+# timeout is time in seconds to keep Elasticsearch client connection open
 es = Elasticsearch([es_url], timeout = 30000)
 
 class CPE:
@@ -24,18 +26,20 @@ class CPE:
     def __init__(self):
         self.ids = []
         self.current = -1
-        self.rh_data = None
 
     def add(self, i, id):
-        cve_bulk = {
+        # Bulk inserting is a way to add multiple documents to Elasticsearch in a single request
+        cpe_bulk = {
+                    # the action is update
                     "_op_type": "update",
                     "_index":   "cpe-index",
                     "_id":      id,
+                    # doc_as_upsert is used to update a document
                     "doc_as_upsert": True,
                     "doc":  i
                    }
-
-        self.ids.append(cve_bulk)
+        # append new bulk to ids
+        self.ids.append(cpe_bulk)
 
     def __next__(self):
         "Handle a call to next()"
@@ -51,42 +55,6 @@ class CPE:
 
     def __len__(self):
         return len(self.ids)
-
-    def __get_redhat_data(self, the_cve):
-
-        if self.rh_data is None:
-
-            self.rh_data = {}
-
-            fh = open('data/cve_dates.txt')
-            for line in fh.readlines():
-                line = line.rstrip()
-
-                # The data format looks like
-                # CVE key=value,key=value,...
-                split_line = line.split(' ')
-                cve = split_line[0]
-                self.rh_data[cve] = {}
-
-                if len(split_line) > 1:
-                    # There are a few CVE IDs that don't have any data
-                    data = split_line[1]
-                else:
-                    next
-
-                for keyval in data.split(','):
-                    (key, value) = keyval.split('=')
-                    if key == 'cvss3' or key == 'cvss2':
-                        # The cvss scores are special, we only want the
-                        # number
-                        value = float(value.split('/')[0])
-                    self.rh_data[cve][key] = value
-
-        if the_cve in self.rh_data:
-            return self.rh_data[the_cve]
-        else:
-            return {}
-
 
 
 def main():
@@ -104,22 +72,19 @@ def main():
             index="cpe-index",
             body={
                 "settings":{
+                    # Elasticsearch divides the data into different shards (unit) around the cluster
                     "number_of_shards" :3,
                     "index":{
                         "analysis":{
+                        # we define the analyzer_shingle analyzer for both search and index
                         "analyzer":{
                             "analyzer_shingle":{
+                                # analyzer first applies the standard tokenizer, then walks through the standard, lowercase and filter_stop filters 
                                 "tokenizer":"standard",
-                                "filter":["lowercase", "filter_stop", "filter_shingle"]
+                                "filter":["lowercase", "filter_stop"]
                             }
                         },
                         "filter":{
-                            "filter_shingle":{
-                                "type":"shingle",
-                                "max_shingle_size":3,
-                                "min_shingle_size":2,
-                                "output_unigrams":"true"
-                            },
                             "filter_stop":{
                                 "type":"stop"
                             }
@@ -127,9 +92,12 @@ def main():
                     }
                 }
             },
+            # Mapping is the process of defining how a document, and the fields it contains, are stored and indexed
             "mappings": {
+                # properties object holds the list of fields and their type
                 "properties": {
                     "matches": {
+                        # the nested type is a data type that allows to index arrays of objects and to maintain the independence of each object in the array
                         "type" : "nested"
                     }
                 }
@@ -138,16 +106,24 @@ def main():
         )
 
     fh = open(input_file)
+    #  takes a file object and returns the json object
     json_data = json.load(fh)
 
+    # the_cpes is the iterable object
     the_cpes = CPE()
 
     id = 0
+    # for each dictionary in matches list call the add(i, id) function to the_cpes iterable object
+    # i is the current dictionary
+    # id is the id of the dictionary in the the_cpes object
     for i in json_data['matches']:
         id = id + 1
         the_cpes.add(i, id)
 
-
+    #streaming_bulk(c) won't actually do anything. It's not until you iterate over it 
+    #as is done in this for loop that the indexing actually starts to happen.
+    # the_cpes is the iterable containing the actions to be executed
+    # max_retries is the maximum number of times a document will be retried
     for ok, item in elasticsearch.helpers.streaming_bulk(es, the_cpes, max_retries=2):
             if not ok:
                 print("ERROR:")

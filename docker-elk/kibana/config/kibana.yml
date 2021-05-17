@@ -1,15 +1,16 @@
----
 ## Default Kibana configuration from Kibana base image.
 ## https://github.com/elastic/kibana/blob/master/src/dev/build/tasks/os_packages/docker_generator/templates/kibana_yml.template.js
 #
 server.name: kibana
 server.host: 0.0.0.0
-elasticsearch.hosts: [ "http://elasticsearch:9200" ]
-monitoring.ui.container.elasticsearch.enabled: true
+# Kibana is configured to connect to the Elasticsearch node
+elasticsearch.hosts: ["http://elasticsearch:9200"]
 
+# Time in milliseconds to wait for responses from Elasticsearch
 elasticsearch.requestTimeout: 60000
 
 ## X-Pack security credentials
 #
+# The Kibana server submits requests as this user to access the cluster monitoring APIs and the .kibana index
 elasticsearch.username: elastic
 elasticsearch.password: changeme
