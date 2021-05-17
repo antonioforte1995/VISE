@@ -152,6 +152,8 @@ def color_score(score):
 
 def create_csv(name, row_data):
     fld = "static/assets/CSVs/"
+    if not os.path.exists('static/assets/CSVs/'):
+                os.makedirs('static/assets/CSVs/')
     fname = fld+name+'_output.csv'
     os.system("touch {0}".format(fname))
     with open(fname, 'w', newline='') as file:
