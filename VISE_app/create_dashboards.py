@@ -1,112 +1,66 @@
 #!/usr/bin/env python3
-import os
 import json
-from pprint import pprint
 import requests
-import uuid
 
-def create_dashboards(index):
-    x = index.split("_")
-    index_number = x[1] if len(x)>1 else index
+# this script creates 3 kibana dashboards for the current search
+# to make so, we start from 3 json files describing:
+# 1) the summary dashboard
+# 2) the technical dashboard
+# 3) the exploit dashboard
 
-    #Dashboard Vulnerability Summary
-    summaryID = index_number + "_s"
-    summaryPanels = [ (summaryID + str(i)) for i in range(4)]
-    summaryIndexPattern = summaryID + "_ip"
 
-    summaryData = None
+def create_dashboards(elastic_index):
+    dashboards_links = []    
+    dashboards = ['summary_dashboard', 'technical_dashboard', 'exploit_dashboard']
+    sum_dash_num_panels = 4
+    sum_dash_num_objects = 6
 
-    folderName = "static/assets/json_files/"
-    with open(folderName + "summary.json") as sumFile:
-        summaryData = json.load(sumFile)
-    
-    if summaryData == None:
-        pass
-    
-    summaryData['objects'][0]['id'] = summaryID
-    summaryData['objects'][0]['attributes']['title'] += "_" + index_number
+    # each iteration creates a new dashboard
+    for dashboard in dashboards:
+        if (dashboard == 'summary_dashboard'):
+            id = elastic_index + "_s"
+            panels_ids = [ (id + str(i)) for i in range(sum_dash_num_panels)]
+            indexPattern = id + "_ip"
+        elif (dashboard == 'technical_dashboard'):
+            id = elastic_index + "_t"
+            panels_ids = [ (id + str(i)) for i in range(sum_dash_num_panels-1)]
+            indexPattern = id + "_ip"
+        else:
+            id = elastic_index + "_e"
+            panels_ids = [ (id + str(i)) for i in range(sum_dash_num_panels-1)]
+            indexPattern = id + "_ip"
 
-    for i in range(len(summaryPanels)):
-        summaryData['objects'][0]['references'][i]['id'] = summaryPanels[i]
-        summaryData['objects'][i+1]['id'] = summaryPanels[i]
-    
-    for i in range(1,len(summaryPanels)):
-        summaryData['objects'][i+1]['references'][0]['id'] = summaryIndexPattern
-    
-    summaryData['objects'][5]['id'] = summaryIndexPattern
-    summaryData['objects'][5]['attributes']['title'] = index
-    # summaryID coincides with the id to be concatenated to the link for the Kibana dashboard
+        data = None
 
-    #Dashboard Vulnerability Technical Description
-    technicalID = index_number + "_t"
-    technicalPanels = [ (technicalID + str(i)) for i in range(3)]
-    technicalIndexPattern = technicalID + "_ip"
+        # read json file of current basic dashboard
+        folderName = "static/assets/json_files/"
+        with open(folderName + "{0}.json".format(dashboard)) as File:
+            data = json.load(File)
+        
+        if data == None:
+            pass
+        
+        # customize something for the creation of the new dashboard
+        data['objects'][0]['id'] = id
+        data['objects'][0]['attributes']['title'] += "_" + elastic_index
 
-    technicalData = None
-    
-    with open(folderName + "technical.json") as technicalFile:
-        technicalData = json.load(technicalFile)
-    
-    if technicalData == None:
-        pass
-    
-    technicalData['objects'][0]['id'] = technicalID
-    technicalData['objects'][0]['attributes']['title'] += "_" + index_number
+        for i in range(len(panels_ids)):
+            data['objects'][0]['references'][i]['id'] = panels_ids[i]
+            data['objects'][i+1]['id'] = panels_ids[i]
+        
+        for i in range(1,len(panels_ids)):
+            data['objects'][i+1]['references'][0]['id'] = indexPattern
+        
+        if (dashboard == 'summary_dashboard'):
+            data['objects'][sum_dash_num_objects-1]['id'] = indexPattern
+            data['objects'][sum_dash_num_objects-1]['attributes']['title'] = elastic_index
+        else:
+            data['objects'][sum_dash_num_objects-2]['id'] = indexPattern
+            data['objects'][sum_dash_num_objects-2]['attributes']['title'] = elastic_index
 
-    for i in range(len(technicalPanels)):
-        technicalData['objects'][0]['references'][i]['id'] = technicalPanels[i]
-        technicalData['objects'][i+1]['id'] = technicalPanels[i]
-    
-    for i in range(1,len(technicalPanels)):
-        technicalData['objects'][i+1]['references'][0]['id'] = technicalIndexPattern
-    
-    technicalData['objects'][4]['id'] = technicalIndexPattern
-    technicalData['objects'][4]['attributes']['title'] = index
-    # technicalID coincides with the id to be concatenated to the link for the Kibana dashboard
+        # make an HTTP POST request to create a new dashboard
+        requests.post("http://elastic:changeme@localhost:5601/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=data)
+        # add the URL of the just created dashboard to the dashboards_links array
+        dashboards_links.append('http://localhost:5601/app/kibana#/dashboard/{0}'.format(id))
 
-    #Dashboard Vulnerability exploit Description
-    exploitID = index_number + "_e"
-    exploitPanels = [ (exploitID + str(i)) for i in range(3)]
-    exploitIndexPattern = exploitID + "_ip"
-
-    exploitData = None
-    
-    with open(folderName + "exploit.json") as exploitFile:
-        exploitData = json.load(exploitFile)
-    
-    if exploitData == None:
-        pass
-    
-    exploitData['objects'][0]['id'] = exploitID
-    exploitData['objects'][0]['attributes']['title'] += "_" + index_number
-
-    for i in range(len(exploitPanels)):
-        exploitData['objects'][0]['references'][i]['id'] = exploitPanels[i]
-        exploitData['objects'][i+1]['id'] = exploitPanels[i]
-    
-    for i in range(1,len(exploitPanels)):
-        exploitData['objects'][i+1]['references'][0]['id'] = exploitIndexPattern
-    
-    exploitData['objects'][4]['id'] = exploitIndexPattern
-    exploitData['objects'][4]['attributes']['title'] = index
-    # exploitID coincides with the id to be concatenated to the link for the Kibana dashboard
-
-    es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@localhost:9200"
-    kibanaUrl = es_url[:-4] + "5601"
-    
-    requests.post(kibanaUrl + "/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=technicalData)
-    requests.post(kibanaUrl + "/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=summaryData)
-    requests.post(kibanaUrl + "/api/kibana/dashboards/import", headers = {'kbn-xsrf': 'true'}, json=exploitData)
-    
-    dashUrl = kibanaUrl.split("@")
-    if len(dashUrl) > 1:
-        dashUrl = dashUrl[-1]
-        dashUrl = "http://" + dashUrl
-    else:
-        dashUrl = dashUrl[0]
-    
-
-    vett_dashboards_links = [dashUrl + '/app/kibana#/dashboard/{0}'.format(summaryID), 
-        dashUrl + '/app/kibana#/dashboard/{0}'.format(technicalID),
-        dashUrl + '/app/kibana#/dashboard/{0}'.format(exploitID)]
-    return vett_dashboards_links
+    return dashboards_links

@@ -6,7 +6,6 @@ from random import randint
 import pdfkit
 from werkzeug.utils import secure_filename
 
-index = 0
 uploadFolder = "/tmp/upload"
 
 app = Flask(__name__)
@@ -32,12 +31,10 @@ def form():
 #this function is used to execute the start() function that creates the dashboards on kibana with the research results
 #the dashboard links are returned by this function
 def returnLinks():
-    global index
-    index = index + 1
     import re
     from time import time
     identifier = str(int(time()))
-    elasticsearch_index = 'index_' + identifier
+    elasticsearch_index = identifier
     if 'searchingCard' in request.files:
         f = request.files['searchingCard']
         if f.filename == '':
