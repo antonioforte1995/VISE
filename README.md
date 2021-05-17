@@ -36,7 +36,7 @@ Moreover, it is possible to export those kinds of data as a unified CSV so that 
 VISE can be also used from the CLI running the following commands:
 ```
 cd VISE/VISE_app/
-./main.py static/assets/SearchingCards/SearchingCard.xlsx 
+sudo ./main.py static/assets/SearchingCards/SearchingCard.xlsx 
 ```
 <!-- ![alt text] -->
 ![](https://raw.githubusercontent.com/antonioforte1995/VISE/master/VISE_app/static/assets/img/scenery/CLI.png)
