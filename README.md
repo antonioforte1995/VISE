@@ -43,7 +43,7 @@ sudo ./main.py static/assets/SearchingCards/SearchingCard.xlsx
 
 ## Prerequisites
 1) Linux distribution (Ubuntu preferred)
-2) python3, python3-venv
+2) python3-pip, python3-venv
 ```
 cd VISE/scripts/
 sudo ./installOthers.sh
