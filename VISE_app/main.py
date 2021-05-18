@@ -24,7 +24,7 @@ import xlrd  # to read xls
 from elasticsearch import Elasticsearch
 
 from create_dashboards import create_dashboards, requests
-from queries import (search_CPE, search_CVE, search_CVE_from_interval,
+from queries import (search_CPEs, search_CVE, search_CVE_from_interval,
                      search_CVE_from_single_limit)
 
 # -------------------- DECLARATIONS ----------------------
@@ -197,7 +197,7 @@ def searchCPEs(package):
     if (target_software == ""):
         target_software = ".*"
 
-    cpes = search_CPE(package['Product Name'], package['Version Number'], vendor_name, target_software, product_type)
+    cpes = search_CPEs(package['Product Name'], package['Version Number'], vendor_name, target_software, product_type)
 
     if vendor_name == ".*":
         vendor_name = "*"
@@ -208,6 +208,14 @@ def searchCPEs(package):
     searched_CPE = "cpe:2.3:{0}:{1}:{2}:{3}:*:*:*:*:{4}:*:*".format(product_type, vendor_name, package['Product Name'], package['Version Number'], target_software)
     
     return searched_CPE, cpes
+
+
+def build_specific_version(cpe23Uri, searched_CPE):
+    temp_cpe = cpe23Uri.split(':')
+    temp_searched_CPE = searched_CPE.split(':')
+    temp_cpe[5] = temp_searched_CPE[5]
+    cpe23Uri = ':'.join(temp_cpe)
+    return cpe23Uri
 
 # ---------------------------- MAIN ------------------------------
 
@@ -248,6 +256,9 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
 
     for package in packages:
         cpes = []
+        #CVEs_tempList1 and CVEs_tempList2 will be used to filter the duplicates
+        CVEs_tempList1 = []
+        CVEs_tempList2 = []
         cves = []
         searched_CPE = ""
 
@@ -257,223 +268,171 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
         else:
             searched_CPE, cpes = searchCPEs(worksheet[package])
             
-
-        #four arrays are declared, they will contain information about the type and the number of version
-        vett_cpe23Uri = [0]*len(cpes)
-        vett_versionStartIncluding = [0]*len(cpes)
-        vett_versionStartExcluding = [0]*len(cpes)
-        vett_versionEndIncluding = [0]*len(cpes)
-        vett_versionEndExcluding = [0]*len(cpes)
-
  
         #for all the CPEs that have a range or a wildcard, it should be found the start and the end of this range
-        if (len(cpes) > 0):
-            for i in range(0, len(cpes)):
-                not_null_version_types = 0          #if the CPE exists there will be the version too, so the counter is initialized to 0
-                versions_types = []                 #array that has the type of the range (if StartIncluding, StartExcluding, ...)
-                versions_types_values = []          #array that has the effective values of the range (value of StartIncluding, ...)
+        if (len(cpes) == 0):
+            continue
 
-                #result of the query
-                vett_cpe23Uri[i] = cpes[i]["_source"]["cpe23Uri"]
+        for i in range(0, len(cpes)):
+            version_types_list = ['versionStartIncluding', 'versionStartExcluding', 'versionEndIncluding', 'versionEndExcluding']
+            cpe23Uri_to_submit = {}
+            cpe23Uri_to_submit['cpe23Uri'] = cpes[i]["_source"]["cpe23Uri"]
+            cpe23Uri_to_submit['version_types'] = []    #array that has the type of version range (versionStartIncluding, versionStartExcluding, ...)
+            cpe23Uri_to_submit['version_types_values'] = [] #array that has the effective values of the range (value of versionStartIncluding, ...)
 
-                #for each object in the "CPEs" array, version is checked to insert the value in the right array.
-                #for instance: if versionStartIncluding the value will be insert in the versionStartIncluding array, and so on.
-                #Same for all 4 "if"
-                if "versionStartIncluding" in cpes[i]["_source"]:                           
-                    vett_versionStartIncluding[i] = cpes[i]["_source"]["versionStartIncluding"]
-                    not_null_version_types = not_null_version_types + 1                                                   
-                    versions_types.append("versionStartIncluding") 
-                    versions_types_values.append(cpes[i]["_source"]["versionStartIncluding"])
+            #for each object in the "CPEs" array, version is checked to insert the value in the right array.
+            #for instance: if versionStartIncluding the value will be insert in the versionStartIncluding array, and so on.
+            #Same for all 4 "if"
 
-                if "versionStartExcluding" in cpes[i]["_source"]:
-                    vett_versionStartExcluding[i] = cpes[i]["_source"]["versionStartExcluding"]
-                    not_null_version_types = not_null_version_types + 1
-                    versions_types.append("versionStartExcluding")
-                    versions_types_values.append(cpes[i]["_source"]["versionStartExcluding"])
+            for version_type in version_types_list:
+                if version_type in cpes[i]["_source"]:
+                    cpe23Uri_to_submit['version_types'].append(version_type) 
+                    cpe23Uri_to_submit['version_types_values'].append(cpes[i]["_source"][version_type])
+            
+            #if there is only one boundary
+            if (len(cpe23Uri_to_submit['version_types']) == 1):
+                CVEs_tempList1 = search_CVE_from_single_limit(cpe23Uri_to_submit)
+                CVEs_tempList2 = search_CVE_from_single_limit(cpe23Uri_to_submit, ".children")
 
-                if "versionEndIncluding" in cpes[i]["_source"]:
-                    vett_versionEndIncluding[i] = cpes[i]["_source"]["versionEndIncluding"]
-                    not_null_version_types = not_null_version_types + 1
-                    versions_types.append("versionEndIncluding")
-                    versions_types_values.append(cpes[i]["_source"]["versionEndIncluding"])
-                
-                if "versionEndExcluding" in cpes[i]["_source"]:
-                    vett_versionEndExcluding[i] = cpes[i]["_source"]["versionEndExcluding"]
-                    not_null_version_types = not_null_version_types + 1
-                    versions_types.append("versionEndExcluding")
-                    versions_types_values.append(cpes[i]["_source"]["versionEndExcluding"])
+            #if there are two boundaries
+            elif (len(cpe23Uri_to_submit['version_types']) == 2):
+                CVEs_tempList1 = search_CVE_from_interval(cpe23Uri_to_submit)
+                CVEs_tempList2 = search_CVE_from_interval(cpe23Uri_to_submit, ".children")
 
-                
-                #tempList and tempList1 will be used to filter the duplicates 
-                tempList = []
-                tempList1 = []
-                
-                #if there is only one boundary
-                if (len(versions_types) == 1):
-                    tempList = search_CVE_from_single_limit(vett_cpe23Uri[i], versions_types[0], versions_types_values[0])
-                    tempList1 = search_CVE_from_single_limit(vett_cpe23Uri[i], versions_types[0], versions_types_values[0], ".children")
+            #if there is the accurate version
+            else:
+                cpe23Uri = build_specific_version(cpe23Uri_to_submit['cpe23Uri'], searched_CPE)
+                CVEs_tempList1 = search_CVE(cpe23Uri)
 
-                #if there are two boundaries
-                elif (len(versions_types) == 2):
-                    tempList = search_CVE_from_interval(vett_cpe23Uri[i], versions_types, versions_types_values[0], versions_types_values[1])
-                    tempList1 = search_CVE_from_interval(vett_cpe23Uri[i], versions_types, versions_types_values[0], versions_types_values[1], ".children")
+            #check on duplicates
+            for CVEs_tempList in [CVEs_tempList1, CVEs_tempList2]:
+                if(len(CVEs_tempList)>0):
+                    CVEs_tempList = [item for item in CVEs_tempList if valid(item)]
 
-                #if there is the accurate version
-                else:
-                    temp_cpe = vett_cpe23Uri[i].split(':')
-                    temp_searched_CPE = searched_CPE.split(':')
-                    temp_cpe[5] = temp_searched_CPE[5]
-                    vett_cpe23Uri[i] = ':'.join(temp_cpe)
-                    tempList = search_CVE(vett_cpe23Uri[i])
-
-                #check on duplicates
-                tempList = [item for item in tempList if valid(item)]
-                for tmp in tempList:
-                    tmp['searchedCPE'] = searched_CPE
-                
-                if len(tempList) == 1:
-                    cves.append(tempList)
-                elif len(tempList) > 1:
-                    for t in tempList:
-                        cves.append([t])
-                else:
-                    pass
-
-
-                if(len(tempList1)>0):
-                    tempList1 = [item for item in tempList1 if valid(item)]
-
-                    for tmp in tempList1:
+                    for tmp in CVEs_tempList:
                         tmp['searchedCPE'] = searched_CPE
+                        cves.append([tmp])
 
-                    if len(tempList1) == 1:
-                        cves.append(tempList1)
-                    elif len(tempList1) > 1:
-                        for t in tempList1:
-                            cves.append([t])
+            
+        #building each rows and columns of CLI and CSV
+        for cve in cves:
+            URLs_types = ['CLI_URLs', 'CSV_URLs', 'remediations', 'exploit_URLs']
+            URLs = {}
+            for URLs_type in URLs_types:
+                URLs[URLs_type] = []
+
+            severity = ""
+            baseScore = 0
+
+            #add value in table, splitting in new lines the description and cpe
+            if (len(cve) > 0):
+                description = format_description(cve[0]['_source']['description']['description_data'][0]['value'], 60)
+                cpe = format_CPE(cve[0]['searchedCPE'], 40)
+
+
+                #enrichment, the "Vendor Advisory URL" will be placed in the "URL" field (CLI) and in the "Remediation" one (CSV)
+                #[SHOULD] actually we should control more than the "VendorAdvisory" tag and return a better result
+                for obj in cve[0]['_source']['references']['reference_data']:
+                    if("Vendor Advisory" in obj["tags"]):
+                        URLs['remediations'].append(obj["url"])
                     else:
-                        pass
+                        URLs['CSV_URLs'].append(obj["url"])
+                    URLs['CLI_URLs'].append(obj["url"])
 
                 
-            #building each rows and columns of CLI and CSV
-            for cve in cves:
+                #reasearching on the ExploitDB for the enrichment
+                cve_edbids = searchExploits(cve[0]["_id"])
+                for i in cve_edbids:
+                    try:
+                        output = subprocess.check_output('searchsploit '+ str(i) + ' -w ', shell=True, stderr=DEVNULL)
 
-                vett_URLs = []
-                vett_remediations = []
-                severity = ""
-                baseScore = 0
+                        string_output = output.decode('utf-8')
+                        splitted_string = string_output.split("\n")
 
-                #add value in table, splitting in new lines the description and cpe
-                if (len(cve) > 0):
-                    description = format_description(cve[0]['_source']['description']['description_data'][0]['value'], 60)
-                    cpe = format_CPE(cve[0]['searchedCPE'], 40) #cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'], 40)
-
-
-                    #enrichment, the "Vendor Advisory URL" will be placed in the "URL" field (CLI) and in the "Remediation" one (CSV)
-                    #[SHOULD] actually we should control more than the "VendorAdvisory" tag and return a better result
-                    for obj in cve[0]['_source']['references']['reference_data']:
-                        if("Vendor Advisory" in obj["tags"]):
-                            vett_remediations.append(obj["url"])
-                        vett_URLs.append(obj["url"])
+                        for i in range(3, len(splitted_string)-4):
+                            URLs['exploit_URLs'].append(escape_ansi(splitted_string[i].split('|')[-1][1:]))
+                            URLs['CLI_URLs'].append(escape_ansi(splitted_string[i].split('|')[-1][1:]))
+                    except Exception as e:
+                        print(e)
 
 
-                    #delete commas to deal with URLs in CLI and (first of all) in CSV 
-                    URLs_witouth_commas = delete_commas(str(vett_URLs))
-                    remediations_witouth_commas = delete_commas(str(vett_remediations))
-                    URLs = format_URLs(URLs_witouth_commas)
-                    remediations = format_URLs(remediations_witouth_commas)
+                #delete commas to deal with URLs in CLI and (first of all) in CSV 
+                for URLs_type in URLs_types:
+                    URLs[URLs_type]= format_URLs(delete_commas(str(URLs[URLs_type])))
 
 
-                    #"impactScore" is a subpart of "baseScore", this last one is reported by NIST. 
-                    if ("baseMetricV3" in cve[0]['_source']):
-                        baseScore = cve[0]['_source']['baseMetricV3']['cvssV3']['baseScore']
-                    else:
-                        baseScore = cve[0]['_source']['baseMetricV2']['cvssV2']['baseScore']
+                #"impactScore" is a subpart of "baseScore", this last one is reported by NIST. 
+                if ("baseMetricV3" in cve[0]['_source']):
+                    baseScore = cve[0]['_source']['baseMetricV3']['cvssV3']['baseScore']
+                else:
+                    baseScore = cve[0]['_source']['baseMetricV2']['cvssV2']['baseScore']
 
 
-                    #the function color_score returns 2 values, color and severity
-                    [color, severity] = color_score(baseScore)
+                #the function color_score returns 2 values, color and severity
+                [color, severity] = color_score(baseScore)
 
-                    #add CLI_data in the CLI
-                    CLI_data.append(
-                        [
-                            colorize(cpe),
-                            colorize(cve[0]["_id"]),
-                            colorize(baseScore, color, attrs="bold"),
-                            colorize(severity, color, attrs="bold"),
-                            colorize(description),
-                            colorize(URLs)
-                        ]
-                    )
+                #add CLI_data in the CLI
+                CLI_data.append(
+                    [
+                        colorize(cpe),
+                        colorize(cve[0]["_id"]),
+                        colorize(baseScore, color, attrs="bold"),
+                        colorize(severity, color, attrs="bold"),
+                        colorize(description),
+                        colorize(URLs['CLI_URLs'])
+                    ]
+                )
 
-                    exploit_URLs = []
-                    #reasearching on the ExploitDB for the enrichment
-                    cve_edbids = searchExploits(cve[0]["_id"])
-                    for i in cve_edbids:
-                        try:
-                            output = subprocess.check_output('searchsploit '+ str(i) + ' -w ', shell=True, stderr=DEVNULL)
+                
 
-                            string_output = output.decode('utf-8')
-                            splitted_string = string_output.split("\n")
-
-                            for i in range(3, len(splitted_string)-4):
-                                exploit_URLs.append(escape_ansi(splitted_string[i].split('|')[-1]))
-                        except Exception as e:
-                            print(e)
-
-                    exploit_URLs_witouth_commas = delete_commas(str(exploit_URLs))
-                    exploit_URLs = format_URLs(exploit_URLs_witouth_commas)
-
-                    CSV_data.append(
-                        [   
-                            cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
-                            cve[0]["_id"],
-                            baseScore,
-                            severity,
-                            description,
-                            URLs,
-                            remediations,
-                            cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
-                            exploit_URLs
-                        ]
-                    )
+                CSV_data.append(
+                    [   
+                        cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
+                        cve[0]["_id"],
+                        baseScore,
+                        severity,
+                        description,
+                        URLs['CSV_URLs'],
+                        URLs['remediations'],
+                        cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
+                        URLs['exploit_URLs']
+                    ]
+                )
 
 
-                    if es.exists(index=index_name, id=cve[0]["_id"]) is False:
-                        es.create(index=index_name, id=cve[0]["_id"],body={
+                if es.exists(index=index_name, id=cve[0]["_id"]) is False:
+                    es.create(index=index_name, id=cve[0]["_id"],body={
+                        "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
+                        "CVE": cve[0]["_id"],
+                        "SCORE": baseScore,
+                        "SEVERITY": severity,
+                        "DESCRIPTION": description,
+                        "REMEDIATIONS": URLs['remediations'],
+                        "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
+                        "EXPLOIT": URLs['exploit_URLs']
+                    })
+                else:  
+                    es.update(index=index_name, id=cve[0]["_id"],body={
+                        "doc": {
                             "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
                             "CVE": cve[0]["_id"],
                             "SCORE": baseScore,
                             "SEVERITY": severity,
                             "DESCRIPTION": description,
-                            "URLs": URLs,
-                            "REMEDIATIONS": remediations,
+                            "REMEDIATIONS": URLs['remediations'],
                             "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
-                            "EXPLOIT": exploit_URLs
-                        })
-                    else:  
-                        es.update(index=index_name, id=cve[0]["_id"],body={
-                            "doc": {
-                                "CPE": cve[0]['searchedCPE'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
-                                "CVE": cve[0]["_id"],
-                                "SCORE": baseScore,
-                                "SEVERITY": severity,
-                                "DESCRIPTION": description,
-                                "URLs": URLs,
-                                "REMEDIATIONS": remediations,
-                                "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
-                                "EXPLOIT": exploit_URLs
-                            }, "doc_as_upsert": True   
-                        })
+                            "EXPLOIT": URLs['exploit_URLs']
+                        }, "doc_as_upsert": True   
+                    })
                         
 
     csvName = create_csv(index_name, CSV_data)
-    vett_dashboards_links = create_dashboards(index_name)
-    vett_dashboards_links.append(csvName)
+    report_links = create_dashboards(index_name)
+    report_links.append(csvName)
     if not gui:
         cli_table(CLI_columns_headers, CLI_data, hrules=True)
 
-    return vett_dashboards_links
+    return report_links
 
 
 

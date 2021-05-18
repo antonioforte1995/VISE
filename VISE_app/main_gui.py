@@ -46,12 +46,12 @@ def returnLinks():
             f.save(temp)
             from main import start
             #I launch the search function by uploading Searching Card
-            resCve = start(elasticsearch_index, temp, True)
+            report_links = start(elasticsearch_index, temp, True)
             return render_template("returnLinks.html",
-                summaryDashboardLink=resCve[0],
-                vulnerabilityReportLink=resCve[1],
-                exploitViewLink=resCve[2],
-                csvLink=resCve[3]
+                summaryDashboardLink=report_links[0],
+                vulnerabilityReportLink=report_links[1],
+                exploitViewLink=report_links[2],
+                csvLink=report_links[3]
             )
     try:
         from main import start
@@ -61,13 +61,13 @@ def returnLinks():
         #parse from JSON to python dictionary
         parsedData = jld(data)
         #launch the search function passing the array of the Form
-        resCve = start(elasticsearch_index, parsedData, False)
+        report_links = start(elasticsearch_index, parsedData, False)
         #render the page with the generated values
         return render_template("returnLinks.html",
-            summaryDashboardLink=resCve[0],
-            vulnerabilityReportLink=resCve[1],
-            exploitViewLink=resCve[2],
-            csvLink=resCve[3]
+            summaryDashboardLink=report_links[0],
+            vulnerabilityReportLink=report_links[1],
+            exploitViewLink=report_links[2],
+            csvLink=report_links[3]
         )
     except Exception as e:
         print("AAAA")
