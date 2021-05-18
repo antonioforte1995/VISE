@@ -4,8 +4,7 @@ import os
 
 es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@localhost:9200"
 
-# this function returns an list of CPEs
-# searched cpe23Uri -> list of CPEs
+# this function returns a list of CPEs matching a searched_cpe23Uri
 # each CPE is a json object
 def search_CPEs(searched_cpe23Uri):
 
@@ -39,11 +38,11 @@ def search_CPEs(searched_cpe23Uri):
     return cpes
 
 
-#this function is used to search the CVE associated to a cpe23Uri when the corresponding CPE json object
-#specifies a single limit of version (es. versionStartIncluding)
-#version_type is the type of version limit (es. versionStartIncluding)
-#version is the value of this version limit
-def search_CVE_from_single_limit(cpe23Uri_to_submit, children = ""):
+# this function returns a list of CVEs matching:
+# 1) a searched_cpe23Uri 
+# 2) a specific version_type (e.g. versionStartIncluding)
+# 3) a specific version_type_value
+def search_CVEs_from_single_limit(cpe23Uri_to_submit, children = ""):
     es = Elasticsearch(hosts=[es_url])
 
     res = es.search(index="cve-index", body={
@@ -74,12 +73,13 @@ def search_CVE_from_single_limit(cpe23Uri_to_submit, children = ""):
     return cves
 
 
-#this function is used to search the CVE associated to a cpe23Uri when the corresponding CPE json object
-#specifies an version interval (es. versionStartIncluding and versionEndExcluding)
-#version_types is the array with the limits of the range (es. versionStartIncluding and versionEndExcluding)
-#version_start is the value of the first limit
-#version_end is the value of the second limit
-def search_CVE_from_interval(cpe23Uri_to_submit, children = ""):
+# this function returns a list of CVEs matching:
+# 1) a searched_cpe23Uri 
+# 2) a specific start limit of version range (e.g. versionStartIncluding)
+# 3) a specific start limit value of version range
+# 4) a specific end limit of version range (e.g. versionEndIncluding)
+# 5) a specific end limit value of version range
+def search_CVEs_from_interval(cpe23Uri_to_submit, children = ""):
 
     es = Elasticsearch(hosts=[es_url])
 
@@ -119,9 +119,8 @@ def search_CVE_from_interval(cpe23Uri_to_submit, children = ""):
     return cves
 
 
-#this function is used to search the CVE associated to a cpe23Uri when the corresponding CPE json object
-#specifies a specific version
-def search_CVE(cpe23Uri): 
+# this function returns a list of CVEs matching a searched_cpe23Uri that specifies a specific version
+def search_CVEs(cpe23Uri): 
     es = Elasticsearch(hosts=[es_url])
 
     res = es.search(index="cve-index", body={
