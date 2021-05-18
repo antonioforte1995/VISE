@@ -178,43 +178,35 @@ def convert_worksheet_row_to_dictionary(worksheet, package):
 
 
 def searchCPEs(package):
-    vendor_name = package['Vendor Name']
-    target_software = package['Target Software']
-    product_type = package['Product Type']
 
-    if product_type in ["Application", "application", "a", "A"]:
-        product_type = "a"
-    elif product_type in ["OS", "os", "O", "o"]:
-        product_type = "o"
-    elif product_type in ["Hardware", "hardware", "h", "H"]:
-        product_type = "h"
+    if package['Product Type'] in ["Application", "application", "a", "A"]:
+        package['Product Type'] = "a"
+    elif package['Product Type'] in ["OS", "os", "O", "o"]:
+        package['Product Type'] = "o"
+    elif package['Product Type'] in ["Hardware", "hardware", "h", "H"]:
+        package['Product Type'] = "h"
     else:
-        product_type = "a"
+        package['Product Type'] = "a"
 
-    if len(vendor_name) < 1:
-        vendor_name = ".*"
+    if (package['Vendor Name'] == ""):
+        package['Vendor Name'] = ".*"
 
-    if (target_software == ""):
-        target_software = ".*"
+    if (package['Target Software'] == ""):
+        package['Target Software'] = ".*"
 
-    cpes = search_CPEs(package['Product Name'], package['Version Number'], vendor_name, target_software, product_type)
+    searched_cpe23Uri = "cpe:2.3:{0}:{1}:{2}:{3}:.*:.*:.*:.*:{4}:.*:.*".format(package['Product Type'], package['Vendor Name'], package['Product Name'], package['Version Number'], package['Target Software'])
+    cpes = search_CPEs(searched_cpe23Uri)
 
-    if vendor_name == ".*":
-        vendor_name = "*"
+    searched_cpe23Uri = searched_cpe23Uri.replace(".*", "*")
 
-    if (target_software == ".*"):
-        target_software = "*"
-        
-    searched_CPE = "cpe:2.3:{0}:{1}:{2}:{3}:*:*:*:*:{4}:*:*".format(product_type, vendor_name, package['Product Name'], package['Version Number'], target_software)
-    
-    return searched_CPE, cpes
+    return searched_cpe23Uri, cpes
 
 
-def build_specific_version(cpe23Uri, searched_CPE):
-    temp_cpe = cpe23Uri.split(':')
-    temp_searched_CPE = searched_CPE.split(':')
-    temp_cpe[5] = temp_searched_CPE[5]
-    cpe23Uri = ':'.join(temp_cpe)
+def build_cpe23Uri_with_specific_version(cpe23Uri, searched_cpe23Uri):
+    temp_cpe23Uri = cpe23Uri.split(':')
+    temp_searched_cpe23Uri = searched_cpe23Uri.split(':')
+    temp_cpe23Uri[5] = temp_searched_cpe23Uri[5]
+    cpe23Uri = ':'.join(temp_cpe23Uri)
     return cpe23Uri
 
 # ---------------------------- MAIN ------------------------------
@@ -257,16 +249,15 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
     for package in packages:
         cpes = []
         #CVEs_tempList1 and CVEs_tempList2 will be used to filter the duplicates
-        CVEs_tempList1 = []
-        CVEs_tempList2 = []
+        CVEs_tempList = list()
         cves = []
-        searched_CPE = ""
+        searched_cpe23Uri = ""
 
         if usingXLS:
             package = convert_worksheet_row_to_dictionary(worksheet, package)
-            searched_CPE, cpes = searchCPEs(package)
+            searched_cpe23Uri, cpes = searchCPEs(package)
         else:
-            searched_CPE, cpes = searchCPEs(worksheet[package])
+            searched_cpe23Uri, cpes = searchCPEs(worksheet[package])
             
  
         #for all the CPEs that have a range or a wildcard, it should be found the start and the end of this range
@@ -291,27 +282,26 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
             
             #if there is only one boundary
             if (len(cpe23Uri_to_submit['version_types']) == 1):
-                CVEs_tempList1 = search_CVE_from_single_limit(cpe23Uri_to_submit)
-                CVEs_tempList2 = search_CVE_from_single_limit(cpe23Uri_to_submit, ".children")
+                CVEs_tempList = search_CVE_from_single_limit(cpe23Uri_to_submit)
+                CVEs_tempList += search_CVE_from_single_limit(cpe23Uri_to_submit, ".children")
 
             #if there are two boundaries
             elif (len(cpe23Uri_to_submit['version_types']) == 2):
-                CVEs_tempList1 = search_CVE_from_interval(cpe23Uri_to_submit)
-                CVEs_tempList2 = search_CVE_from_interval(cpe23Uri_to_submit, ".children")
+                CVEs_tempList = search_CVE_from_interval(cpe23Uri_to_submit)
+                CVEs_tempList += search_CVE_from_interval(cpe23Uri_to_submit, ".children")
 
             #if there is the accurate version
             else:
-                cpe23Uri = build_specific_version(cpe23Uri_to_submit['cpe23Uri'], searched_CPE)
-                CVEs_tempList1 = search_CVE(cpe23Uri)
+                cpe23Uri = build_cpe23Uri_with_specific_version(cpe23Uri_to_submit['cpe23Uri'], searched_cpe23Uri)
+                CVEs_tempList = search_CVE(cpe23Uri)
 
             #check on duplicates
-            for CVEs_tempList in [CVEs_tempList1, CVEs_tempList2]:
-                if(len(CVEs_tempList)>0):
-                    CVEs_tempList = [item for item in CVEs_tempList if valid(item)]
+            if(len(CVEs_tempList)>0):
+                CVEs_tempList = [item for item in CVEs_tempList if valid(item)]
 
-                    for tmp in CVEs_tempList:
-                        tmp['searchedCPE'] = searched_CPE
-                        cves.append([tmp])
+                for tmp in CVEs_tempList:
+                    tmp['searchedCPE'] = searched_cpe23Uri
+                    cves.append([tmp])
 
             
         #building each rows and columns of CLI and CSV

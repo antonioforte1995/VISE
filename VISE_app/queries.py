@@ -4,9 +4,10 @@ import os
 
 es_url = os.environ['ESURL'] if ('ESURL' in os.environ) else "http://elastic:changeme@localhost:9200"
 
-#this function returns an array of CPEs matching our searched products
-#this array contains the CPE json objects
-def search_CPEs(product_name, version_number, vendor_name, target_software, product_type):
+# this function returns an list of CPEs
+# searched cpe23Uri -> list of CPEs
+# each CPE is a json object
+def search_CPEs(searched_cpe23Uri):
 
     es = Elasticsearch(hosts=[es_url])
 
@@ -17,7 +18,7 @@ def search_CPEs(product_name, version_number, vendor_name, target_software, prod
                     {
                         "regexp": {
                             "cpe23Uri.keyword": {
-                                "value": "cpe:2.3:"+product_type+":"+ vendor_name +":"+ product_name +":"+ version_number +":.*:.*:.*:.*:"+ target_software +":.*:.*",
+                                "value": searched_cpe23Uri,
                                 "boost": 1.0
                             }
                         }
@@ -25,7 +26,7 @@ def search_CPEs(product_name, version_number, vendor_name, target_software, prod
                     {
                         "regexp": {
                             "cpe_name.cpe23Uri.keyword": {
-                                "value": "cpe:2.3:"+product_type+":"+ vendor_name +":"+ product_name +":"+ version_number +":.*:.*:.*:.*:"+ target_software +":.*:.*",
+                                "value": searched_cpe23Uri,
                                 "boost": 1.0
                             }
                         }
