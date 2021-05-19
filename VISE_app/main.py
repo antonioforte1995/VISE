@@ -14,7 +14,6 @@ import subprocess
 import sys
 import textwrap                 # to split long strings in more lines
 import time
-from pprint import pprint
 import colored                  # to colorize the score and severity fields
 import cve_searchsploit         # to search exploits related to a cveid
 import prettytable              # to make the CLI

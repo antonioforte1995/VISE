@@ -7,7 +7,6 @@ This script creates cpe-match index on Elasticsearch
 import sys
 import json
 import os
-import urllib.request
 import elasticsearch
 import elasticsearch.helpers
 from elasticsearch import Elasticsearch

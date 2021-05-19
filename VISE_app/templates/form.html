@@ -28,9 +28,13 @@
         </style>
 
         <script>
-            function deleteRow(r) {
-                var i = r.parentNode.parentNode.rowIndex;
+            function deleteRow(deleteElement) {
+                // deleteElement.parentNode is a Table Data Cell element
+                // deleteElement.parentNode.parentNode is a Table Row element
+                var i = deleteElement.parentNode.parentNode.rowIndex;
+                // remove row from table
                 document.getElementById("tableID").deleteRow(i);
+                // remove correct dictionary from valueToSubmit array
                 valueToSubmit.splice(i-2, 1)
             }
         </script>
@@ -44,21 +48,32 @@
                 var tBody = table.getElementsByTagName('tbody')[0];
                 var row = tBody.insertRow(0);
                 
-                // Structured like the "for" in order to lighten the code
+                // define an array with table headers
                 var cellNames = ["Product Name","Version Number","Vendor Name","Target Software","Product Type"];
                 var i;
+                // define a temporary dictionary
                 var tempDict = {};
+                // iterate on all table columns to add iteratively a new cell in the current table row
                 for(i=0; i<cellNames.length; i++){
+                    // the dictionary key is the specific column header
                     var key = cellNames[i];
+                    // retrieve a specific value from a specific form field
+                    // (each form field has as id a name of a column header)
                     var value = document.getElementById(key).value;
+                    // add new cell to current row
                     var tCell = row.insertCell(i);
+                    // the value displayed in this cell is the same of the related form field
                     tCell.innerHTML = value;
+                    // add key-value pair to the temporary dictionary
                     tempDict[key] = value;
                 }
+                // add current temporary dictionary in head of the valueToSubmit array
                 valueToSubmit.unshift(tempDict);
 
+                // add new cell to current row to remove element
                 var cell6 = row.insertCell(5);
                 var deleteElement = '<input type="button" style="font-family: helvetica; color:red;" onclick="deleteRow(this)" value="x">'
+                // the content of this cell is an input field of button type. A click on the current cell invoke the deleteRow() function
                 cell6.innerHTML = deleteElement;
             }
 
