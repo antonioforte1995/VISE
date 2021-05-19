@@ -299,9 +299,9 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
         for cve in cves:
             severity = ""
             baseScore = 0
-            URLs_types = ['CLI_URLs', 'CSV_URLs', 'remediations', 'exploit_URLs']
+            URLs_types = ['CLI_URLs', 'CSV_URLs', 'remediations_URLs', 'exploit_URLs']
             URLs = {}
-            # build URLs dictionary with (CLI_URLs', 'CSV_URLs', 'remediations', 'exploit_URLs') fields
+            # build URLs dictionary with (CLI_URLs', 'CSV_URLs', 'remediations_URLs', 'exploit_URLs') fields
             for URLs_type in URLs_types:
                 URLs[URLs_type] = []
             
@@ -312,11 +312,11 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                 searched_cpe23Uri = format_CPE(cve[0]['searched_cpe23Uri'], 40)
 
 
-                # the "Vendor Advisory URL" will be placed in the "CLI_URLs" field and in the "remediations" one
+                # the "Vendor Advisory URL" will be placed in the "CLI_URLs" field and in the "remediations_URLs" one
                 # others URLs will be placed in the "CLI_URLs" field and in the "CSV_URLs" one
                 for obj in cve[0]['_source']['references']['reference_data']:
                     if("Vendor Advisory" in obj["tags"]):
-                        URLs['remediations'].append(obj["url"])
+                        URLs['remediations_URLs'].append(obj["url"])
                     else:
                         URLs['CSV_URLs'].append(obj["url"])
                     URLs['CLI_URLs'].append(obj["url"])
@@ -376,7 +376,7 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                         severity,
                         description,
                         URLs['CSV_URLs'],
-                        URLs['remediations'],
+                        URLs['remediations_URLs'],
                         cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
                         URLs['exploit_URLs']
                     ]
@@ -390,19 +390,19 @@ def start(index_name, worksheet = None, usingXLS = True, gui=True):
                         "SCORE": baseScore,
                         "SEVERITY": severity,
                         "DESCRIPTION": description,
-                        "REMEDIATIONS": URLs['remediations'],
+                        "REMEDIATIONS": URLs['remediations_URLs'],
                         "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
                         "EXPLOIT": URLs['exploit_URLs']
                     })
                 else:  
                     es.update(index=index_name, id=cve[0]["_id"],body={
                         "doc": {
-                            "CPE": cve[0]['searched_cpe23Uri'],#cve[0]['_source']['vuln']['nodes'][0]['cpe_match'][0]['cpe23Uri'],
+                            "CPE": cve[0]['searched_cpe23Uri'],
                             "CVE": cve[0]["_id"],
                             "SCORE": baseScore,
                             "SEVERITY": severity,
                             "DESCRIPTION": description,
-                            "REMEDIATIONS": URLs['remediations'],
+                            "REMEDIATIONS": URLs['remediations_URLs'],
                             "CWE": cve[0]['_source']['problemtype']['problemtype_data'][0]['description'][0]['value'],
                             "EXPLOIT": URLs['exploit_URLs']
                         }, "doc_as_upsert": True   
