@@ -15,7 +15,7 @@ The information can be exctracted by:
 
  2) uploading a searching card:
 <!-- ![alt text] -->
-![](https://raw.githubusercontent.com/antonioforte1995/VISE/master/VISE_app/static/assets/img/scenery/searching_card.PNG)
+![](https://github.com/antonioforte1995/VISE/blob/master/VISE_app/static/assets/img/scenery/searching_card.PNG)
 
 As a result, in both cases can be obtained three dashboards hosted on Kibana, describing respectivelly:
 
