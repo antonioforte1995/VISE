@@ -23,12 +23,12 @@ es = Elasticsearch([es_url], timeout = 30000)
 class CPE:
 
     def __init__(self):
-        self.ids = []
+        self.actions = []
         self.current = -1
 
     def add(self, i, id):
         # Bulk inserting is a way to add multiple documents to Elasticsearch in a single request
-        cpe_bulk = {
+        action = {
                     # the action is update
                     "_op_type": "update",
                     "_index":   "cpe-index",
@@ -38,22 +38,22 @@ class CPE:
                     "doc":  i
                    }
         # append new bulk to ids
-        self.ids.append(cpe_bulk)
+        self.actions.append(action)
 
     def __next__(self):
         "Handle a call to next()"
 
         self.current = self.current + 1
-        if self.current >= len(self.ids):
+        if self.current >= len(self.actions):
             raise StopIteration
 
-        return self.ids[self.current]
+        return self.actions[self.current]
 
     def __iter__(self):
         return self
 
     def __len__(self):
-        return len(self.ids)
+        return len(self.actions)
 
 
 def main():
