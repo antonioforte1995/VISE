@@ -15,6 +15,6 @@ progressbar2==3.53.1
 python-utils==2.4.0
 requests==2.24.0
 six==1.15.0
-urllib3==1.25.10
+urllib3==1.26.5
 Werkzeug==1.0.1
 xlrd==1.2.0
